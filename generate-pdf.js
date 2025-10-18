@@ -24,7 +24,7 @@ class StoryBookGenerator {
 
         this.pageWidth = 148;
         this.pageHeight = 210;
-        this.margin = 15;
+        this.margin = 7;
         this.contentWidth = this.pageWidth - (this.margin * 2);
         this.contentHeight = this.pageHeight - (this.margin * 2);
 
@@ -301,7 +301,7 @@ class StoryBookGenerator {
 
         // Story text - using Chelsea Market style
         this.pdf.setTextColor(0, 0, 0); // Reset to black
-        this.pdf.setFontSize(10);
+        this.pdf.setFontSize(12);
         const storyFont = this.getChelseaMarketFont('normal');
         this.pdf.setFont(storyFont.font, storyFont.style);
 
@@ -338,7 +338,7 @@ class StoryBookGenerator {
         // Add choices/actions
         if (node.choices && node.choices.length > 0) {
             this.pdf.setTextColor(0, 0, 0); // Black color
-            this.pdf.setFontSize(10);
+            this.pdf.setFontSize(12);
             const choiceFont = this.getChelseaMarketFont('normal');
             this.pdf.setFont(choiceFont.font, choiceFont.style);
 
