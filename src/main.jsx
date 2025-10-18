@@ -1,0 +1,737 @@
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import * as d3 from 'd3'
+import './styles.css'
+
+// D3.js Graph Visualizer Component
+const D3StoryGraph = ({ story }) => {
+  const svgRef = React.useRef()
+
+  React.useEffect(() => {
+    if (!story) return
+
+    const svg = d3.select(svgRef.current)
+    svg.selectAll("*").remove() // Clear previous render
+
+    const width = 1200
+    const height = 800
+
+    // Set up SVG
+    svg.attr("width", width).attr("height", height)
+
+    // Create zoom behavior
+    const zoom = d3.zoom()
+      .scaleExtent([0.1, 4])
+      .on("zoom", (event) => {
+        container.attr("transform", event.transform)
+      })
+
+    svg.call(zoom)
+
+    const container = svg.append("g")
+
+    // Prepare data
+    const { nodes, links, missingNodes } = prepareGraphData(story)
+
+    // Create force simulation
+    const simulation = d3.forceSimulation(nodes)
+      .force("link", d3.forceLink(links).id(d => d.id).distance(100))
+      .force("charge", d3.forceManyBody().strength(-300))
+      .force("center", d3.forceCenter(width / 2, height / 2))
+      .force("collision", d3.forceCollide().radius(40))
+
+    // Create arrow markers
+    svg.append("defs").selectAll("marker")
+      .data(["arrow"])
+      .enter().append("marker")
+      .attr("id", d => d)
+      .attr("viewBox", "0 -5 10 10")
+      .attr("refX", 25)
+      .attr("refY", 0)
+      .attr("markerWidth", 6)
+      .attr("markerHeight", 6)
+      .attr("orient", "auto")
+      .append("path")
+      .attr("d", "M0,-5L10,0L0,5")
+      .attr("fill", "#999")
+
+    // Create links
+    const link = container.append("g")
+      .selectAll("line")
+      .data(links)
+      .enter().append("line")
+      .attr("stroke", "#999")
+      .attr("stroke-opacity", 0.6)
+      .attr("stroke-width", 2)
+      .attr("marker-end", "url(#arrow)")
+
+    // Create nodes
+    const node = container.append("g")
+      .selectAll("g")
+      .data(nodes)
+      .enter().append("g")
+      .attr("class", "graph-node")
+      .call(d3.drag()
+        .on("start", dragstarted)
+        .on("drag", dragged)
+        .on("end", dragended))
+
+    // Add circles for nodes
+    node.append("circle")
+      .attr("r", 20)
+      .attr("fill", d => {
+        if (d.missing) return "#ff6b6b"
+        if (d.isStart) return "#48bb78"
+        if (d.isEnd) return "#f56565"
+        return "#667eea"
+      })
+      .attr("stroke", "#fff")
+      .attr("stroke-width", 2)
+
+    // Add labels
+    node.append("text")
+      .text(d => d.id)
+      .attr("x", 0)
+      .attr("y", -25)
+      .attr("text-anchor", "middle")
+      .attr("font-size", "12px")
+      .attr("font-weight", "bold")
+      .attr("fill", "#333")
+
+    // Add choice count
+    node.append("text")
+      .text(d => d.missing ? "❌" : `${d.choiceCount} choices`)
+      .attr("x", 0)
+      .attr("y", 35)
+      .attr("text-anchor", "middle")
+      .attr("font-size", "10px")
+      .attr("fill", "#666")
+
+    // Add tooltips
+    node.append("title")
+      .text(d => d.missing ? `Missing node: ${d.id}` : `${d.id}\n${d.text.substring(0, 100)}...`)
+
+    // Update positions on simulation tick
+    simulation.on("tick", () => {
+      link
+        .attr("x1", d => d.source.x)
+        .attr("y1", d => d.source.y)
+        .attr("x2", d => d.target.x)
+        .attr("y2", d => d.target.y)
+
+      node
+        .attr("transform", d => `translate(${d.x},${d.y})`)
+    })
+
+    // Drag functions
+    function dragstarted(event, d) {
+      if (!event.active) simulation.alphaTarget(0.3).restart()
+      d.fx = d.x
+      d.fy = d.y
+    }
+
+    function dragged(event, d) {
+      d.fx = event.x
+      d.fy = event.y
+    }
+
+    function dragended(event, d) {
+      if (!event.active) simulation.alphaTarget(0)
+      d.fx = null
+      d.fy = null
+    }
+
+  }, [story])
+
+  return <svg ref={svgRef} style={{ width: '100%', height: '100%', border: '1px solid #ddd' }}></svg>
+}
+
+// Prepare data for D3 graph
+const prepareGraphData = (story) => {
+  const existingNodes = new Set(Object.keys(story.nodes))
+  const referencedNodes = new Set()
+  const missingNodeIds = new Set()
+
+  // Collect all referenced nodes
+  Object.values(story.nodes).forEach(node => {
+    if (node.choices) {
+      node.choices.forEach(choice => {
+        referencedNodes.add(choice.next)
+        if (!existingNodes.has(choice.next)) {
+          missingNodeIds.add(choice.next)
+        }
+      })
+    }
+  })
+
+  // Create nodes array
+  const nodes = []
+  
+  // Add existing nodes
+  Object.entries(story.nodes).forEach(([nodeId, nodeData]) => {
+    nodes.push({
+      id: nodeId,
+      text: nodeData.text,
+      isStart: nodeId === story.startNode,
+      isEnd: nodeData.isEnd || false,
+      choiceCount: nodeData.choices ? nodeData.choices.length : 0,
+      missing: false
+    })
+  })
+
+  // Add missing nodes
+  missingNodeIds.forEach(nodeId => {
+    nodes.push({
+      id: nodeId,
+      text: "Missing node",
+      isStart: false,
+      isEnd: false,
+      choiceCount: 0,
+      missing: true
+    })
+  })
+
+  // Create links array
+  const links = []
+  Object.entries(story.nodes).forEach(([nodeId, nodeData]) => {
+    if (nodeData.choices) {
+      nodeData.choices.forEach(choice => {
+        links.push({
+          source: nodeId,
+          target: choice.next,
+          choiceText: choice.text
+        })
+      })
+    }
+  })
+
+  return {
+    nodes,
+    links,
+    missingNodes: Array.from(missingNodeIds)
+  }
+}
+
+// React component for the Story Editor
+const StoryEditor = ({ story, onClose }) => {
+  const { missingNodes } = story ? prepareGraphData(story) : { missingNodes: [] }
+
+  return (
+    <div style={{ width: '100%', height: '100%' }}>
+      <div className="visualization-header">
+        <h2>Story Decision Graph</h2>
+        <button className="close-btn" onClick={onClose}>✕</button>
+      </div>
+      
+      {missingNodes.length > 0 && (
+        <div className="missing-nodes-warning" style={{ margin: '10px 20px' }}>
+          <h4>⚠️ Missing Nodes ({missingNodes.length}):</h4>
+          <div className="missing-list">
+            {missingNodes.map(nodeId => (
+              <span key={nodeId} className="missing-node">{nodeId}</span>
+            ))}
+          </div>
+        </div>
+      )}
+      
+      <div className="graph-legend" style={{ margin: '10px 20px', fontSize: '12px' }}>
+        <span style={{ color: '#48bb78' }}>🟢 Start Node</span> | 
+        <span style={{ color: '#f56565' }}> 🔴 End Node</span> | 
+        <span style={{ color: '#667eea' }}> 🔵 Regular Node</span> | 
+        <span style={{ color: '#ff6b6b' }}> ❌ Missing Node</span>
+        <br />
+        <em>Drag nodes to rearrange • Zoom with mouse wheel • Hover for details</em>
+      </div>
+      
+      <div style={{ height: 'calc(100% - 120px)' }}>
+        <D3StoryGraph story={story} />
+      </div>
+    </div>
+  )
+}
+
+class StoryGame {
+    constructor() {
+        this.story = null
+        this.currentNode = null
+        this.flumeRoot = null
+        this.nodeHistory = [] // Track visited nodes for back button
+        this.saveKey = 'wiggly-diamond-quest-save'
+        this.speechKey = 'wiggly-speech-enabled'
+        this.currentSpeech = null // Track current speech synthesis
+        this.speechEnabled = this.loadSpeechSetting() // Load speech setting from localStorage
+        this.speechActivated = false // Track if user has activated speech
+        this.init()
+    }
+
+    async init() {
+        await this.loadStory()
+        this.setupEventListeners()
+        this.loadGameState()
+    }
+
+    async loadStory() {
+        try {
+            const response = await fetch('/story.json')
+            this.story = await response.json()
+            console.log('Story loaded successfully:', this.story)
+        } catch (error) {
+            console.error('Failed to load story:', error)
+        }
+    }
+
+    setupEventListeners() {
+        // Tab switching
+        document.getElementById('gameTab').addEventListener('click', () => {
+            this.showView('gameView')
+            this.setActiveTab('gameTab')
+        })
+
+        document.getElementById('visualizeTab').addEventListener('click', () => {
+            this.showView('visualizeView')
+            this.setActiveTab('visualizeTab')
+            this.renderStoryMap()
+        })
+
+        // Restart button
+        document.getElementById('restartBtn').addEventListener('click', () => {
+            this.startGame()
+        })
+
+        // Back button (we'll add this to the HTML)
+        document.getElementById('backBtn').addEventListener('click', () => {
+            this.goBack()
+        })
+
+        // Top restart button
+        document.getElementById('topRestartBtn').addEventListener('click', () => {
+            this.confirmRestart()
+        })
+
+        // Speech toggle button
+        document.getElementById('speechToggle').addEventListener('click', () => {
+            this.toggleSpeech()
+        })
+
+        // Initialize speech button state
+        this.updateSpeechButton()
+    }
+
+    showView(viewId) {
+        document.querySelectorAll('.view').forEach(view => {
+            view.classList.remove('active')
+        })
+        document.getElementById(viewId).classList.add('active')
+    }
+
+    setActiveTab(tabId) {
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('active')
+        })
+        document.getElementById(tabId).classList.add('active')
+    }
+
+    startGame() {
+        if (!this.story) return
+
+        this.currentNode = this.story.startNode
+        this.nodeHistory = [] // Reset history when starting new game
+        this.saveGameState()
+        this.renderCurrentNode()
+        document.getElementById('restartBtn').style.display = 'none'
+    }
+
+    confirmRestart() {
+        const confirmed = confirm('🎮 Start a new game? This will erase your current progress!')
+        if (confirmed) {
+            this.clearSaveData()
+            this.startGame()
+        }
+    }
+
+    saveGameState() {
+        const gameState = {
+            currentNode: this.currentNode,
+            nodeHistory: this.nodeHistory,
+            diamondsCollected: this.getDiamondsCollected(),
+            timestamp: Date.now()
+        }
+        localStorage.setItem(this.saveKey, JSON.stringify(gameState))
+        console.log('Game state saved:', gameState)
+    }
+
+    getDiamondsCollected() {
+        // Check which diamonds have been collected based on visited nodes
+        const diamonds = {
+            red: this.nodeHistory.includes('dino_jumping_contest') || this.currentNode === 'dino_jumping_contest',
+            blue: this.nodeHistory.includes('rocks_love_speech') || this.currentNode === 'rocks_love_speech',
+            green: this.nodeHistory.includes('roman_salute') || this.currentNode === 'roman_salute',
+            yellow: this.nodeHistory.includes('egypt_riddle_correct') || this.currentNode === 'egypt_riddle_correct',
+            purple: this.nodeHistory.includes('space_walk_moves') || this.currentNode === 'space_walk_moves'
+        }
+        return diamonds
+    }
+
+    updateProgressBar() {
+        const diamonds = this.getDiamondsCollected()
+        const progressBar = document.getElementById('progressBar')
+        
+        // Show progress bar after accepting the mission
+        if (this.nodeHistory.includes('accept_mission') || this.currentNode === 'accept_mission') {
+            progressBar.style.display = 'block'
+            
+            // Update diamond indicators
+            Object.entries(diamonds).forEach(([color, collected]) => {
+                const slot = document.querySelector(`[data-diamond="${color}"]`)
+                if (slot) {
+                    slot.style.opacity = collected ? '1' : '0.3'
+                    slot.style.transform = collected ? 'scale(1.2)' : 'scale(1)'
+                }
+            })
+        } else {
+            progressBar.style.display = 'none'
+        }
+    }
+
+    loadGameState() {
+        try {
+            const savedState = localStorage.getItem(this.saveKey)
+            if (savedState) {
+                const gameState = JSON.parse(savedState)
+                this.currentNode = gameState.currentNode
+                this.nodeHistory = gameState.nodeHistory || []
+                console.log('Game state loaded:', gameState)
+                this.renderCurrentNode()
+                
+                // Show a welcome back message
+                this.showWelcomeBackMessage()
+            } else {
+                // No saved game, start fresh
+                this.startGame()
+            }
+        } catch (error) {
+            console.error('Error loading game state:', error)
+            this.startGame()
+        }
+    }
+
+    clearSaveData() {
+        localStorage.removeItem(this.saveKey)
+        console.log('Save data cleared')
+    }
+
+    loadSpeechSetting() {
+        try {
+            const saved = localStorage.getItem(this.speechKey)
+            return saved !== null ? JSON.parse(saved) : true // Default to enabled
+        } catch (error) {
+            return true // Default to enabled if error
+        }
+    }
+
+    saveSpeechSetting() {
+        localStorage.setItem(this.speechKey, JSON.stringify(this.speechEnabled))
+    }
+
+    showWelcomeBackMessage() {
+        this.showToast('💾 Welcome back! Your adventure continues...', 4000)
+    }
+
+    showToast(message, duration = 3000) {
+        // Create toast element
+        const toast = document.createElement('div')
+        toast.className = 'toast-notification'
+        toast.textContent = message
+        
+        // Add toast styles
+        toast.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.95) 0%, rgba(118, 75, 162, 0.95) 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            z-index: 2000;
+            font-size: 14px;
+            font-weight: bold;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transform: translateX(100%);
+            transition: transform 0.3s ease;
+            max-width: 300px;
+        `
+        
+        // Add to page
+        document.body.appendChild(toast)
+        
+        // Animate in
+        setTimeout(() => {
+            toast.style.transform = 'translateX(0)'
+        }, 100)
+        
+        // Remove after duration
+        setTimeout(() => {
+            toast.style.transform = 'translateX(100%)'
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.parentNode.removeChild(toast)
+                }
+            }, 300)
+        }, duration)
+    }
+
+    renderCurrentNode() {
+        const node = this.story.nodes[this.currentNode]
+        if (!node) return
+
+        // Update story text
+        document.getElementById('storyText').textContent = node.text
+
+        // Update or add image if available
+        this.updateNodeImage(this.currentNode)
+
+        // Read the text aloud with a small delay to ensure DOM is updated
+        setTimeout(() => {
+            this.speakText(node.text)
+        }, 100)
+
+        // Clear and update choices
+        const choicesContainer = document.getElementById('choices')
+        choicesContainer.innerHTML = ''
+
+        if (node.choices && node.choices.length > 0) {
+            node.choices.forEach((choice) => {
+                const button = document.createElement('button')
+                button.className = 'choice-btn'
+                button.textContent = choice.text
+                button.addEventListener('click', () => {
+                    this.makeChoice(choice.next)
+                })
+                choicesContainer.appendChild(button)
+            })
+        } else if (node.isEnd) {
+            // Show restart button for end nodes
+            document.getElementById('restartBtn').style.display = 'block'
+        }
+
+        // Show/hide back button
+        const backBtn = document.getElementById('backBtn')
+        if (this.nodeHistory.length > 0) {
+            backBtn.style.display = 'block'
+        } else {
+            backBtn.style.display = 'none'
+        }
+
+        // Update progress bar
+        this.updateProgressBar()
+    }
+
+    makeChoice(nextNodeId) {
+        // Stop current speech before moving to next node
+        this.stopSpeech()
+        
+        // Add current node to history before moving
+        if (this.currentNode && !this.nodeHistory.includes(this.currentNode)) {
+            this.nodeHistory.push(this.currentNode)
+        }
+        
+        this.currentNode = nextNodeId
+        this.saveGameState() // Auto-save after each choice
+        this.renderCurrentNode()
+    }
+
+    goBack() {
+        if (this.nodeHistory.length > 0) {
+            // Stop current speech before going back
+            this.stopSpeech()
+            
+            this.currentNode = this.nodeHistory.pop()
+            this.saveGameState() // Auto-save when going back
+            this.renderCurrentNode()
+        }
+    }
+
+    renderStoryMap() {
+        console.log('Rendering story map with story:', this.story)
+        const container = document.getElementById('flume-editor')
+        
+        if (this.flumeRoot) {
+            this.flumeRoot.unmount()
+        }
+
+        if (!this.story) {
+            console.error('No story data available for visualization')
+            return
+        }
+
+        this.flumeRoot = ReactDOM.createRoot(container)
+        this.flumeRoot.render(
+            React.createElement(StoryEditor, {
+                story: this.story,
+                onClose: () => {
+                    this.showView('gameView')
+                    this.setActiveTab('gameTab')
+                }
+            })
+        )
+    }
+
+    updateNodeImage(nodeId) {
+        // Check if image exists for this node
+        const imagePath = `/generated-images/${nodeId}.png`
+        
+        // Get the existing image container
+        const imageContainer = document.getElementById('nodeImage')
+        if (!imageContainer) return
+        
+        // Try to load the image
+        const img = new Image()
+        img.onload = () => {
+            // Image exists, display it
+            imageContainer.innerHTML = `
+                <img src="${imagePath}" alt="Scene illustration for ${nodeId}" class="node-image" />
+            `
+            imageContainer.style.display = 'flex'
+        }
+        img.onerror = () => {
+            // Image doesn't exist, show placeholder
+            imageContainer.innerHTML = `
+                <div style="color: rgba(255,255,255,0.6); text-align: center; font-style: italic;">
+                    🎨<br>No illustration<br>available
+                </div>
+            `
+            imageContainer.style.display = 'flex'
+        }
+        img.src = imagePath
+    }
+
+    speakText(text) {
+        // Don't speak if speech is disabled
+        if (!this.speechEnabled) {
+            return
+        }
+
+        // Stop any currently playing speech
+        if (this.currentSpeech) {
+            speechSynthesis.cancel()
+        }
+
+        // Check if speech synthesis is supported
+        if (!('speechSynthesis' in window)) {
+            console.log('Speech synthesis not supported')
+            return
+        }
+
+        // Clean up the text for better speech
+        let cleanText = text
+            .replace(/🚨/g, 'Alarm!')
+            .replace(/🦕/g, 'dinosaur')
+            .replace(/💎/g, 'diamond')
+            .replace(/⚔️/g, 'sword')
+            .replace(/🏺/g, 'ancient')
+            .replace(/🚀/g, 'rocket')
+            .replace(/🎉/g, 'celebration')
+            .replace(/'/g, "'") // Fix smart quotes
+            .replace(/'/g, "'")
+            .replace(/"/g, '"')
+            .replace(/"/g, '"')
+
+
+
+        // Create speech synthesis utterance
+        this.currentSpeech = new SpeechSynthesisUtterance(cleanText)
+        
+        // Configure speech settings
+        this.currentSpeech.rate = 0.9
+        this.currentSpeech.pitch = 1.1
+        this.currentSpeech.volume = 0.8
+
+        // Wait for voices to load, then set voice and speak
+        const speakWithVoice = () => {
+            const voices = speechSynthesis.getVoices()
+            
+            if (voices.length > 0) {
+                // Try to find a good English voice
+                const preferredVoice = voices.find(voice => 
+                    voice.lang.startsWith('en') && 
+                    (voice.name.includes('Google') || voice.name.includes('Microsoft') || voice.name.includes('Samantha') || voice.name.includes('Alex'))
+                ) || voices.find(voice => voice.lang.startsWith('en')) || voices[0]
+                
+                if (preferredVoice) {
+                    this.currentSpeech.voice = preferredVoice
+                }
+            }
+
+            // Add event listeners
+            this.currentSpeech.onend = () => {
+                this.currentSpeech = null
+            }
+
+            this.currentSpeech.onerror = (event) => {
+                this.currentSpeech = null
+            }
+
+            // Speak the text
+            speechSynthesis.speak(this.currentSpeech)
+        }
+
+        // Check if voices are already loaded
+        if (speechSynthesis.getVoices().length > 0) {
+            speakWithVoice()
+        } else {
+            // Wait for voices to load
+            speechSynthesis.addEventListener('voiceschanged', speakWithVoice, { once: true })
+            
+            // Fallback timeout in case voiceschanged doesn't fire
+            setTimeout(() => {
+                if (this.currentSpeech && speechSynthesis.getVoices().length === 0) {
+                    speechSynthesis.speak(this.currentSpeech)
+                }
+            }, 1000)
+        }
+    }
+
+    stopSpeech() {
+        if (speechSynthesis.speaking) {
+            speechSynthesis.cancel()
+        }
+        this.currentSpeech = null
+    }
+
+    toggleSpeech() {
+        this.speechEnabled = !this.speechEnabled
+        this.saveSpeechSetting() // Save the setting
+        this.updateSpeechButton()
+        
+        if (!this.speechEnabled) {
+            this.stopSpeech() // Stop any current speech when disabling
+        }
+    }
+
+    updateSpeechButton() {
+        const speechButton = document.getElementById('speechToggle')
+        if (!speechButton) return
+        
+        if (this.speechEnabled) {
+            speechButton.textContent = '🔊 Speech'
+            speechButton.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+        } else {
+            speechButton.textContent = '🔇 Muted'
+            speechButton.style.background = 'linear-gradient(135deg, #6b7280 0%, #4b5563 100%)'
+        }
+    }
+
+
+
+    truncateText(text, maxLength) {
+        if (text.length <= maxLength) return text
+        return text.substring(0, maxLength) + '...'
+    }
+}
+
+// Initialize the game when the page loads
+document.addEventListener('DOMContentLoaded', () => {
+    new StoryGame()
+})

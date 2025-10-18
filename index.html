@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiggly's Diamond Quest</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Chelsea+Market&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/src/styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Wiggly's Diamond Quest</h1>
+            <nav>
+                <button id="gameTab" class="tab-btn active">Play Game</button>
+                <button id="visualizeTab" class="tab-btn">Story Map</button>
+                <button id="speechToggle" class="undo-btn">🔊 Speech</button>
+                <button id="backBtn" class="undo-btn" style="display: none;">↶ Undo</button>
+                <button id="topRestartBtn" class="restart-top-btn">🔄 New Game</button>
+            </nav>
+        </header>
+
+        <main>
+            <!-- Game Interface -->
+            <div id="gameView" class="view active">
+                <div class="game-container">
+                    <div class="game-layout">
+                        <div class="image-panel">
+                            <div id="nodeImage" class="node-image-container" style="display: none;">
+                                <!-- Image will be inserted here -->
+                            </div>
+                        </div>
+                        <div class="content-panel">
+                            <div id="progressBar" class="progress-bar" style="display: none;">
+                                <div class="progress-label">💎 Diamonds Collected:</div>
+                                <div id="diamondProgress" class="diamond-progress">
+                                    <span class="diamond-slot" data-diamond="red">🔴</span>
+                                    <span class="diamond-slot" data-diamond="blue">🔵</span>
+                                    <span class="diamond-slot" data-diamond="green">🟢</span>
+                                    <span class="diamond-slot" data-diamond="yellow">🟡</span>
+                                    <span class="diamond-slot" data-diamond="purple">🟣</span>
+                                </div>
+                            </div>
+                            <div id="storyText" class="story-text"></div>
+                            <div id="choices" class="choices"></div>
+                            <div class="game-buttons">
+                                <button id="restartBtn" class="restart-btn" style="display: none;">🔄 Restart Game</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Story Visualization -->
+            <div id="visualizeView" class="view">
+                <div class="visualization-container">
+                    <div id="flume-editor"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script type="module" src="/src/main.jsx"></script>
+</body>
+</html>

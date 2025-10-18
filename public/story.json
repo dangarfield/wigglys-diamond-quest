@@ -1,0 +1,1380 @@
+{
+  "title": "Wiggly's Diamond Quest",
+  "startNode": "start",
+  "nodes": {
+    "start": {
+      "text": "🚨 ALARM! ALARM! 🚨 You are Wiggly McJiggly Head, a 7-year-old boy with the craziest hair in the world! You're visiting the Natural History Museum when suddenly alarms start blaring. The Museum Curator runs up to you, looking very worried. 'Wiggly! Someone has stolen our 5 precious diamonds from different sections of the museum! We need your help - you're the only one brave enough and bouncy enough to get them back!' What do you do?",
+      "music": "museum-main-hall.mp3",
+      "choices": [
+        {
+          "text": "Do a backflip and say 'I'LL SAVE THE DIAMONDS!'",
+          "next": "accept_mission"
+        },
+        {
+          "text": "Ask the curator which diamonds were stolen",
+          "next": "ask_about_diamonds"
+        },
+        {
+          "text": "Look around the main hall for clues",
+          "next": "search_main_hall"
+        }
+      ],
+      "image-text": "Museum main hall with alarms blaring, boy with crazy hair and rainbow t-shirt with wild hair talking to worried curator about stolen diamonds"
+    },
+    "accept_mission": {
+      "text": "You do an amazing backflip that makes your crazy hair bounce everywhere! The curator claps excitedly. 'Wonderful! The thief took 5 colored diamonds: Red from Dinosaurs, Blue from Rocks & Minerals, Green from Romans, Yellow from Ancient Egypt, and Purple from Space! Each section has a monster guarding the stolen diamond now. Take this!' He gives you a hammer, sword, and shield. Where do you want to start?",
+      "music": "museum-main-hall.mp3",
+      "choices": [
+        {
+          "text": "Go to the Dinosaur section first! 🦕",
+          "next": "dinosaur_entrance"
+        },
+        {
+          "text": "Go back and ask more questions",
+          "next": "start"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt doing backflip in museum hall, curator giving him hammer/sword/shield, excited mission acceptance scene"
+    },
+    "ask_about_diamonds": {
+      "text": "The curator's eyes light up! 'Oh Wiggly, these weren't just any diamonds! They were the Rainbow Diamonds - each one sparkles with magical colors! Red like a T-Rex's roar, Blue like the deepest ocean, Green like Roman emeralds, Yellow like Egyptian gold, and Purple like the cosmos! They've been in our museum for 100 years!' He looks very sad. 'Without them, the museum will lose its magic!'",
+      "music": "museum-main-hall.mp3",
+      "choices": [
+        {
+          "text": "Promise to get them all back!",
+          "next": "accept_mission"
+        },
+        {
+          "text": "Ask who might have stolen them",
+          "next": "ask_about_thief"
+        },
+        {
+          "text": "Go back to the beginning",
+          "next": "start"
+        }
+      ],
+      "image-text": "Curator explaining magical Rainbow Diamonds with sparkly colors, sad expression about museum losing magic"
+    },
+    "search_main_hall": {
+      "text": "You bounce around the main hall, your crazy hair helping you see into high places! You find muddy footprints leading to different sections, a torn piece of black cloth, and... wait! A note that says 'I LOVE DIAMONDS MORE THAN ANYONE! - Mr. ???' The last part is smudged. This is definitely a clue!",
+      "music": "museum-main-hall.mp3",
+      "choices": [
+        {
+          "text": "Follow the muddy footprints",
+          "next": "follow_footprints"
+        },
+        {
+          "text": "Show the note to the curator",
+          "next": "show_note_curator"
+        },
+        {
+          "text": "Keep the clue secret and start your quest",
+          "next": "accept_mission"
+        },
+        {
+          "text": "Go back to talk to the curator",
+          "next": "start"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt bouncing around museum hall investigating, finding muddy footprints and mysterious note clues"
+    },
+    "ask_about_thief": {
+      "text": "The curator scratches his head. 'Well, there have been some suspicious people around lately. There's Mr. Bad Guy who visits every day and always stares at the diamonds with sparkly eyes. And there's also the mysterious janitor who works at night. But I can't believe anyone would actually steal our precious diamonds!' He sighs deeply.",
+      "music": "museum-main-hall.mp3",
+      "choices": [
+        {
+          "text": "Ask more about Mr. Bad Guy",
+          "next": "ask_mr_bad_guy"
+        },
+        {
+          "text": "Ask about the mysterious janitor",
+          "next": "ask_janitor"
+        },
+        {
+          "text": "Start your diamond rescue mission!",
+          "next": "accept_mission"
+        },
+        {
+          "text": "Go back to ask other questions",
+          "next": "start"
+        }
+      ],
+      "image-text": "Curator discussing suspicious visitors - evil mustache man with sparkly eyes and mysterious hooded janitor"
+    },
+    "dinosaur_entrance": {
+      "text": "🦕 You enter the Dinosaur section and your hair stands up even more from excitement! Fossil bones tower above you, and you can hear mysterious roaring sounds. Suddenly, a GIANT ROBOT T-REX stomps out from behind a display! Its eyes glow red and you can see the RED DIAMOND stuck in its metal teeth! 'ROAAAAR! WHO DARES ENTER MY DOMAIN!' it bellows.",
+      "music": "dinosaur-theme.mp3",
+      "choices": [
+        {
+          "text": "Challenge it to a jumping contest!",
+          "next": "dino_jumping_contest"
+        },
+        {
+          "text": "Use your hammer to fight!",
+          "next": "dino_hammer_fight"
+        },
+        {
+          "text": "Try to sneak around it",
+          "next": "dino_sneak"
+        },
+        {
+          "text": "Go back to the main hall",
+          "next": "accept_mission"
+        }
+      ],
+      "image-text": "Dinosaur exhibit with towering fossils, giant robot T-Rex with glowing red eyes and red diamond in teeth"
+    },
+    "dino_jumping_contest": {
+      "text": "You do your highest jump ever - so high your crazy hair touches the ceiling! The Robot T-Rex is impressed. 'ROAAAAR! THAT WAS AMAZING! I HAVEN'T SEEN JUMPING LIKE THAT SINCE THE REAL DINOSAURS!' It spits out the RED DIAMOND! 'YOU WIN, BOUNCY HUMAN! TAKE THE DIAMOND!' You catch it and do a victory backflip! 💎 RED DIAMOND COLLECTED! (1/5)",
+      "music": "victory-fanfare.mp3",
+      "choices": [
+        {
+          "text": "Thank the T-Rex and go to Rocks & Minerals",
+          "next": "rocks_entrance"
+        },
+        {
+          "text": "Ask the T-Rex if it saw who put the diamond there",
+          "next": "dino_ask_thief"
+        },
+        {
+          "text": "Do another backflip for fun!",
+          "next": "dino_extra_flip"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt jumping incredibly high with hair touching ceiling, impressed robot T-Rex spitting out red diamond"
+    },
+    "rocks_entrance": {
+      "text": "💎 You bounce into the Rocks & Minerals section, and it's like entering a sparkling cave! Crystals and gems shine everywhere, making your eyes twinkle. But wait - there's a GIANT CRYSTAL GOLEM blocking the path! It's made of purple amethyst and has the BLUE DIAMOND embedded in its chest! 'CLANK CLANK! ONLY THOSE WHO TRULY LOVE ROCKS MAY PASS!' it rumbles.",
+      "music": "crystal-cave-theme.mp3",
+      "choices": [
+        {
+          "text": "Tell it about your love for gems and diamonds!",
+          "next": "rocks_love_speech"
+        },
+        {
+          "text": "Challenge it to a rock-skipping contest",
+          "next": "rocks_skipping_contest"
+        },
+        {
+          "text": "Use your shield to reflect its crystal attacks",
+          "next": "rocks_shield_fight"
+        },
+        {
+          "text": "Go back to choose a different section",
+          "next": "accept_mission"
+        }
+      ],
+      "image-text": "Sparkling crystal cave-like minerals section, giant purple amethyst crystal golem with blue diamond in chest"
+    },
+    "rocks_love_speech": {
+      "text": "Your eyes light up like diamonds as you tell the Crystal Golem about your passion! 'I LOVE rocks and gems and crystals and especially DIAMONDS! They're so sparkly and beautiful and each one is special and unique and they make me so happy I could bounce to the moon!' The Golem's crystal heart glows warmly. 'CLANK! YOUR LOVE IS TRUE! TAKE THE BLUE DIAMOND!' 💎 BLUE DIAMOND COLLECTED! (2/5)",
+      "music": "victory-fanfare.mp3",
+      "choices": [
+        {
+          "text": "Thank the Golem and head to the Roman section",
+          "next": "roman_entrance"
+        },
+        {
+          "text": "Ask the Golem about the thief",
+          "next": "rocks_ask_thief"
+        },
+        {
+          "text": "Admire more crystals before leaving",
+          "next": "rocks_admire_crystals"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt passionately talking about loving gems, crystal golem's heart glowing warmly, giving blue diamond"
+    },
+    "roman_entrance": {
+      "text": "⚔️ You march into the Roman section like a tiny gladiator! Ancient armor, shields, and swords surround you. Suddenly, a ROMAN CENTURION GHOST appears! He's see-through and glowing, with the GREEN DIAMOND attached to his ghostly armor! 'HALT! WHO GOES THERE? ONLY THE BRAVEST MAY CLAIM THE EMERALD OF ROME!' he declares in a spooky but not-too-scary voice.",
+      "music": "roman-march-theme.mp3",
+      "choices": [
+        {
+          "text": "Salute like a Roman soldier!",
+          "next": "roman_salute"
+        },
+        {
+          "text": "Challenge him to a sword duel!",
+          "next": "roman_sword_duel"
+        },
+        {
+          "text": "Ask him about Roman history",
+          "next": "roman_history_chat"
+        },
+        {
+          "text": "Go back to choose another section",
+          "next": "accept_mission"
+        }
+      ],
+      "image-text": "Roman exhibit with ancient armor and weapons, translucent glowing centurion ghost with green diamond"
+    },
+    "roman_salute": {
+      "text": "You give the most respectful Roman salute ever, your crazy hair bouncing as you stand at attention! The Centurion Ghost is so impressed he starts clapping with his ghostly hands! 'EXCELLENT FORM, YOUNG WARRIOR! YOU SHOW PROPER RESPECT FOR ROME! THE GREEN DIAMOND IS YOURS!' He removes it from his armor and it floats to you! 💎 GREEN DIAMOND COLLECTED! (3/5)",
+      "music": "victory-fanfare.mp3",
+      "choices": [
+        {
+          "text": "Thank the Centurion and go to Ancient Egypt",
+          "next": "egypt_entrance"
+        },
+        {
+          "text": "Ask the ghost if he saw the thief",
+          "next": "roman_ask_thief"
+        },
+        {
+          "text": "Learn a Roman battle cry",
+          "next": "roman_battle_cry"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt giving respectful Roman salute with bouncing hair, impressed ghost centurion clapping and giving green diamond"
+    },
+    "egypt_entrance": {
+      "text": "🏺 You bounce into the Ancient Egypt section and feel like you're in a real pyramid! Hieroglyphs cover the walls, and golden treasures sparkle everywhere. But blocking your path is a MUMMY PHARAOH! He's wrapped in golden bandages and has the YELLOW DIAMOND in his crown! 'WHO DISTURBS THE ETERNAL REST OF PHARAOH BANDAGE-HOTEP?' he asks in a deep, echoey voice.",
+      "music": "egyptian-mystery-theme.mp3",
+      "choices": [
+        {
+          "text": "Bow respectfully to the Pharaoh",
+          "next": "egypt_bow"
+        },
+        {
+          "text": "Offer to help organize his tomb",
+          "next": "egypt_help_organize"
+        },
+        {
+          "text": "Challenge him to a riddle contest",
+          "next": "egypt_riddle_contest"
+        },
+        {
+          "text": "Go back to choose another section",
+          "next": "accept_mission"
+        }
+      ],
+      "image-text": "Egyptian pyramid-like section with hieroglyphs and golden treasures, mummy pharaoh with yellow diamond crown"
+    },
+    "egypt_bow": {
+      "text": "You give the most respectful bow ever, your crazy hair flopping forward politely! The Mummy Pharaoh nods approvingly. 'GOOD MANNERS, YOUNG ONE! YOU SHOW PROPER RESPECT FOR THE ANCIENT WAYS! BUT TO EARN THE YELLOW DIAMOND, YOU MUST ANSWER THIS: WHAT HAS FOUR LEGS IN THE MORNING, TWO LEGS AT NOON, AND THREE LEGS IN THE EVENING?' (It's the famous Sphinx riddle!)",
+      "music": "egyptian-mystery-theme.mp3",
+      "choices": [
+        {
+          "text": "A person! (baby crawls, adult walks, elderly use cane)",
+          "next": "egypt_riddle_correct"
+        },
+        {
+          "text": "A chair that gets broken during the day?",
+          "next": "egypt_riddle_wrong"
+        },
+        {
+          "text": "I don't know, can you give me a hint?",
+          "next": "egypt_riddle_hint"
+        },
+        {
+          "text": "Go back and try a different approach",
+          "next": "egypt_entrance"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt bowing respectfully with hair flopping forward, mummy pharaoh asking the famous sphinx riddle"
+    },
+    "egypt_riddle_correct": {
+      "text": "The Mummy Pharaoh's eyes glow with golden light! 'CORRECT! YOU ARE WISE BEYOND YOUR YEARS, YOUNG WIGGLY! THE ANSWER IS INDEED A HUMAN - CRAWLING AS A BABY, WALKING AS AN ADULT, AND USING A CANE WHEN OLD!' He removes the YELLOW DIAMOND from his crown! 'YOU HAVE EARNED THIS TREASURE!' 💎 YELLOW DIAMOND COLLECTED! (4/5)",
+      "music": "victory-fanfare.mp3",
+      "choices": [
+        {
+          "text": "Thank the Pharaoh and head to the Space section",
+          "next": "space_entrance"
+        },
+        {
+          "text": "Ask the Pharaoh about the thief",
+          "next": "egypt_ask_thief"
+        },
+        {
+          "text": "Ask to see more Egyptian treasures",
+          "next": "egypt_treasures"
+        }
+      ],
+      "image-text": "Mummy pharaoh's eyes glowing golden, celebrating correct riddle answer, removing yellow diamond from crown"
+    },
+    "space_entrance": {
+      "text": "🚀 You float into the Space section (okay, you're not really floating, but you're bouncing so much it feels like zero gravity)! Planets, rockets, and stars surround you. Suddenly, a ROBOT ASTRONAUT appears! It's silver and shiny with the PURPLE DIAMOND glowing in its helmet! 'BEEP BEEP! GREETINGS EARTHLING! TO CLAIM THE COSMIC DIAMOND, YOU MUST PROVE YOU'RE READY FOR SPACE!' it says in a robotic voice.",
+      "music": "space-adventure-theme.mp3",
+      "choices": [
+        {
+          "text": "Show off your best space walk moves!",
+          "next": "space_walk_moves"
+        },
+        {
+          "text": "Recite the planets in order",
+          "next": "space_planets"
+        },
+        {
+          "text": "Ask about life on other planets",
+          "next": "space_alien_chat"
+        },
+        {
+          "text": "Go back to choose another section",
+          "next": "accept_mission"
+        }
+      ],
+      "image-text": "Space exhibit with planets and rockets, silver shiny robot astronaut with purple diamond glowing in helmet"
+    },
+    "space_walk_moves": {
+      "text": "You do the most amazing slow-motion bouncing moves, pretending to float in zero gravity! Your crazy hair waves around like you're really in space! The Robot Astronaut is so impressed its lights start flashing! 'BEEP BEEP! EXCELLENT SPACE MOVES! YOU'RE READY FOR THE COSMOS!' It hands you the PURPLE DIAMOND! 💎 PURPLE DIAMOND COLLECTED! (5/5) - YOU GOT THEM ALL!",
+      "music": "victory-fanfare.mp3",
+      "choices": [
+        {
+          "text": "Celebrate with a space backflip!",
+          "next": "all_diamonds_celebration"
+        },
+        {
+          "text": "Ask the Robot about the thief",
+          "next": "space_ask_thief"
+        },
+        {
+          "text": "Head back to the curator immediately!",
+          "next": "return_to_curator"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt doing slow-motion space moves with floating hair, robot astronaut with flashing lights giving purple diamond"
+    },
+    "all_diamonds_celebration": {
+      "text": "You do the most epic space backflip ever, and all 5 diamonds sparkle in your hands like a rainbow! Red, Blue, Green, Yellow, and Purple - they're all so beautiful! Your crazy hair is practically glowing with excitement! But wait... you hear footsteps behind you. Someone is clapping slowly. 'Well, well, well... if it isn't Wiggly McJiggly Head...'",
+      "music": "mysterious-villain-theme.mp3",
+      "choices": [
+        {
+          "text": "Turn around to see who it is",
+          "next": "reveal_thief"
+        },
+        {
+          "text": "Hide the diamonds quickly",
+          "next": "hide_diamonds"
+        },
+        {
+          "text": "Ask 'Who's there?'",
+          "next": "ask_who_there"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt doing epic backflip holding all 5 rainbow diamonds, hair glowing with excitement, mysterious footsteps approaching"
+    },
+    "reveal_thief": {
+      "text": "You turn around and gasp! It's MR. BAD GUY! He's wearing a black cape and has a sneaky mustache that he's twirling with his finger! 'Surprise! It was me all along! I LOVE diamonds more than anyone in the whole world, and I wanted them all for myself! But you've ruined my perfect plan!' He looks very grumpy but also kind of silly.",
+      "music": "villain-reveal-theme.mp3",
+      "choices": [
+        {
+          "text": "Ask him why he loves diamonds so much",
+          "next": "ask_why_diamonds"
+        },
+        {
+          "text": "Tell him stealing is wrong",
+          "next": "lecture_stealing"
+        },
+        {
+          "text": "Challenge him to a final showdown",
+          "next": "final_showdown"
+        },
+        {
+          "text": "Try to run away with the diamonds",
+          "next": "run_away_attempt"
+        }
+      ],
+      "image-text": "evil mustache man revealed with black cape and twirly mustache, looking grumpy but silly, dramatic villain pose"
+    },
+    "ask_why_diamonds": {
+      "text": "Mr. Bad Guy's eyes get all sparkly and dreamy! 'Oh Wiggly, diamonds are the most beautiful things in the universe! They sparkle like stars and shine like rainbows and they make me feel so happy inside! But I thought if I had them all to myself, I'd be the happiest person ever!' He looks a bit sad now. 'But stealing them just made me feel bad inside...'",
+      "music": "emotional-realization-theme.mp3",
+      "choices": [
+        {
+          "text": "Tell him he can visit the diamonds anytime at the museum",
+          "next": "offer_museum_visits"
+        },
+        {
+          "text": "Suggest he could work at the museum",
+          "next": "suggest_museum_job"
+        },
+        {
+          "text": "Share your love of diamonds with him",
+          "next": "share_diamond_love"
+        },
+        {
+          "text": "Ask him to help return the diamonds",
+          "next": "ask_help_return"
+        }
+      ],
+      "image-text": "evil mustache man with sparkly dreamy eyes explaining his love for diamonds, looking sad about stealing"
+    },
+    "offer_museum_visits": {
+      "text": "Your crazy hair bounces as you smile the biggest smile ever! 'Mr. Bad Guy, you can come see the diamonds every single day at the museum! They're here for EVERYONE to enjoy and love! And maybe... maybe we could be diamond-loving friends?' Mr. Bad Guy's mustache stops twirling and he smiles too! 'Really? I could visit them every day? And we could be friends?' He looks so happy!",
+      "music": "friendship-theme.mp3",
+      "choices": [
+        {
+          "text": "Yes! Let's go return the diamonds together!",
+          "next": "happy_ending"
+        },
+        {
+          "text": "Promise to show him your favorite diamond facts",
+          "next": "diamond_facts_promise"
+        },
+        {
+          "text": "Suggest having a diamond appreciation club",
+          "next": "diamond_club_idea"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt smiling hugely with bouncing hair, evil mustache man's mustache stopping twirling, both looking happy about friendship"
+    },
+    "game_over_caught": {
+      "text": "Oh no! You got caught by the monster! But don't worry - this is just a learning adventure! Your crazy hair is a bit messy, but you're totally fine! The museum curator finds you and says 'Don't give up, Wiggly! Every great diamond detective faces challenges!' You can try again!",
+      "music": "game-over-theme.mp3",
+      "choices": [
+        {
+          "text": "Try again from the beginning!",
+          "next": "start"
+        },
+        {
+          "text": "Go back to the main hall",
+          "next": "accept_mission"
+        }
+      ],
+      "image-text": "Gentle game over scene with slightly messy-haired boy with crazy hair and rainbow t-shirt, encouraging curator, bright and non-scary atmosphere"
+    },
+    "dino_hammer_fight": {
+      "text": "You swing your hammer bravely, but the Robot T-Rex is too strong! It gently picks you up with its metal teeth (don't worry, it doesn't hurt!) and puts you outside the dinosaur section. 'ROAAAAR! COME BACK WHEN YOU'RE READY FOR A DIFFERENT CHALLENGE!' it says. Maybe fighting isn't always the answer!",
+      "music": "game-over-theme.mp3",
+      "choices": [
+        {
+          "text": "Try a different approach with the T-Rex",
+          "next": "dinosaur_entrance"
+        },
+        {
+          "text": "Go back to the main hall",
+          "next": "accept_mission"
+        },
+        {
+          "text": "Start over from the beginning",
+          "next": "start"
+        }
+      ],
+      "image-text": "Robot T-Rex gently picking up boy with crazy hair and rainbow t-shirt with metal teeth, placing him outside dinosaur section, teaching moment"
+    },
+    "egypt_riddle_wrong": {
+      "text": "The Mummy Pharaoh shakes his bandaged head sadly. 'INCORRECT, YOUNG ONE! THE ANSWER IS NOT A CHAIR! BUT DO NOT DESPAIR - EVEN THE WISEST PHARAOHS NEEDED TIME TO LEARN!' He gently guides you out of the Egyptian section. 'RETURN WHEN YOU HAVE PONDERED THE RIDDLE MORE!'",
+      "music": "game-over-theme.mp3",
+      "choices": [
+        {
+          "text": "Think about the riddle and try again",
+          "next": "egypt_entrance"
+        },
+        {
+          "text": "Go back to the main hall",
+          "next": "accept_mission"
+        },
+        {
+          "text": "Start over from the beginning",
+          "next": "start"
+        }
+      ],
+      "image-text": "Mummy pharaoh shaking bandaged head sadly but kindly, guiding boy with crazy hair and rainbow t-shirt out of Egyptian section encouragingly"
+    },
+    "follow_footprints": {
+      "text": "You follow the muddy footprints through the museum! They lead you past the dinosaurs, through the rocks section, and end at... the janitor's closet! But wait, the footprints are too small to be the janitor's. They look more like they belong to someone who visits the museum a lot. Suspicious!",
+      "music": "mystery-theme.mp3",
+      "choices": [
+        {
+          "text": "Investigate the janitor's closet",
+          "next": "investigate_closet"
+        },
+        {
+          "text": "Go back and tell the curator what you found",
+          "next": "tell_curator_footprints"
+        },
+        {
+          "text": "Start your diamond rescue mission",
+          "next": "accept_mission"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt following muddy trail through museum sections, ending at janitor's closet, detective investigation scene"
+    },
+    "show_note_curator": {
+      "text": "You show the note to the curator. His eyes widen! 'Oh my! This handwriting looks familiar... I think I've seen it in our visitor's book! But I can't remember who... Well, the important thing is getting those diamonds back first. Once we have them safe, we can solve the mystery of who wrote this!'",
+      "music": "museum-main-hall.mp3",
+      "choices": [
+        {
+          "text": "Agree and start the diamond rescue mission",
+          "next": "accept_mission"
+        },
+        {
+          "text": "Ask to see the visitor's book",
+          "next": "check_visitors_book"
+        },
+        {
+          "text": "Keep investigating the main hall",
+          "next": "search_main_hall"
+        }
+      ],
+      "image-text": "Curator examining mysterious note with widened eyes, recognizing handwriting, thoughtful museum hall scene"
+    },
+    "ask_mr_bad_guy": {
+      "text": "The curator whispers, 'Mr. Bad Guy comes here every single day! He always wears a black cape and has a twirly mustache. He spends hours staring at the diamonds with the biggest, sparkliest eyes I've ever seen! But surely someone who loves diamonds so much wouldn't steal them... would they?'",
+      "music": "suspicious-theme.mp3",
+      "choices": [
+        {
+          "text": "Ask what Mr. Bad Guy looks like",
+          "next": "mr_bad_guy_description"
+        },
+        {
+          "text": "Start your mission to find the diamonds",
+          "next": "accept_mission"
+        },
+        {
+          "text": "Ask about the janitor instead",
+          "next": "ask_janitor"
+        }
+      ],
+      "image-text": "Curator whispering about suspicious evil mustache man with cape and mustache, staring at diamonds with sparkly eyes"
+    },
+    "ask_janitor": {
+      "text": "The curator scratches his chin. 'The night janitor is very mysterious. He only works when the museum is closed, and he always wears a hood so no one can see his face. Some say he talks to himself about 'precious sparkly things' while he cleans. Very strange indeed!'",
+      "music": "mysterious-theme.mp3",
+      "choices": [
+        {
+          "text": "That sounds suspicious! Start investigating",
+          "next": "accept_mission"
+        },
+        {
+          "text": "Ask more about Mr. Bad Guy instead",
+          "next": "ask_mr_bad_guy"
+        },
+        {
+          "text": "Focus on rescuing the diamonds first",
+          "next": "accept_mission"
+        }
+      ],
+      "image-text": "Curator describing mysterious hooded night janitor, scratching chin thoughtfully, suspicious atmosphere"
+    },
+    "dino_ask_thief": {
+      "text": "The Robot T-Rex thinks hard, steam coming out of its metal ears! 'ROAAAAR! YES! I SAW A SNEAKY HUMAN WITH A TWIRLY MUSTACHE! HE PUT THE DIAMOND IN MY TEETH AND SAID \"GUARD THIS WELL, METAL BEAST!\" THEN HE CACKLED AND RAN AWAY! VERY RUDE!'",
+      "music": "clue-discovery-theme.mp3",
+      "choices": [
+        {
+          "text": "A twirly mustache! That's a great clue!",
+          "next": "note_mustache_clue"
+        },
+        {
+          "text": "Thank the T-Rex and continue to Rocks & Minerals",
+          "next": "rocks_entrance"
+        },
+        {
+          "text": "Ask if the T-Rex saw anything else",
+          "next": "dino_more_clues"
+        }
+      ],
+      "image-text": "Robot T-Rex thinking hard with steam from metal ears, remembering sneaky human with twirly mustache"
+    },
+    "dino_extra_flip": {
+      "text": "You do THREE more backflips in a row! Your crazy hair spins like a helicopter! The Robot T-Rex is so amazed it starts doing its own robot dance! 'ROAAAAR! YOU ARE THE MOST BOUNCY HUMAN I HAVE EVER SEEN! I WISH ALL VISITORS WERE AS FUN AS YOU!'",
+      "music": "fun-celebration-theme.mp3",
+      "choices": [
+        {
+          "text": "Teach the T-Rex how to backflip!",
+          "next": "teach_trex_backflip"
+        },
+        {
+          "text": "Thank your new friend and head to Rocks & Minerals",
+          "next": "rocks_entrance"
+        },
+        {
+          "text": "Ask the T-Rex about the thief",
+          "next": "dino_ask_thief"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt doing three backflips with helicopter-spinning hair, robot T-Rex doing robot dance, fun celebration"
+    },
+    "rocks_ask_thief": {
+      "text": "The Crystal Golem's amethyst eyes glow thoughtfully. 'CLANK! YES, I SAW THE DIAMOND THIEF! A SMALL HUMAN WITH SPARKLY EYES AND A CAPE! HE SAID \"KEEP THIS SAFE, ROCK FRIEND!\" BUT HIS ENERGY FELT... LONELY. I THINK HE JUST WANTED TO BE CLOSE TO BEAUTIFUL STONES!'",
+      "music": "crystal-wisdom-theme.mp3",
+      "choices": [
+        {
+          "text": "That's sad... maybe he just needs a friend",
+          "next": "sympathize_thief"
+        },
+        {
+          "text": "Continue to the Roman section",
+          "next": "roman_entrance"
+        },
+        {
+          "text": "Ask the Golem for more details",
+          "next": "rocks_more_details"
+        }
+      ],
+      "image-text": "Crystal golem with glowing amethyst eyes, thoughtfully describing lonely diamond thief with cape and sparkly eyes"
+    },
+    "rocks_admire_crystals": {
+      "text": "You spend time looking at all the beautiful crystals! There are purple amethysts, clear quartz, sparkly pyrite, and so many more! The Crystal Golem is happy to see someone who appreciates the beauty of rocks. 'CLANK! YOU HAVE A TRUE ROCK LOVER'S HEART, YOUNG WIGGLY!'",
+      "music": "peaceful-crystal-theme.mp3",
+      "choices": [
+        {
+          "text": "Ask the Golem to teach you about crystals",
+          "next": "crystal_lesson"
+        },
+        {
+          "text": "Thank the Golem and head to Romans",
+          "next": "roman_entrance"
+        },
+        {
+          "text": "Ask about the diamond thief",
+          "next": "rocks_ask_thief"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt examining beautiful crystals (amethysts, quartz, pyrite), crystal golem happily watching, peaceful scene"
+    },
+    "roman_ask_thief": {
+      "text": "The Roman Ghost strokes his ghostly beard. 'AH YES! I SAW THE SCOUNDREL! A MORTAL WITH A DARK CAPE AND FACIAL HAIR THAT TWIRLED! HE SPOKE OF LOVING SHINY THINGS MORE THAN ANYONE! BUT HIS HEART SEEMED HEAVY WITH SADNESS. PERHAPS HE NEEDS THE WISDOM OF ROME!'",
+      "music": "roman-wisdom-theme.mp3",
+      "choices": [
+        {
+          "text": "What kind of wisdom?",
+          "next": "roman_wisdom_advice"
+        },
+        {
+          "text": "Continue to Ancient Egypt",
+          "next": "egypt_entrance"
+        },
+        {
+          "text": "Thank the Centurion for the information",
+          "next": "thank_centurion"
+        }
+      ],
+      "image-text": "Roman ghost stroking ghostly beard, describing caped scoundrel with twirly facial hair, wise expression"
+    },
+    "roman_battle_cry": {
+      "text": "The Roman Ghost teaches you an ancient battle cry! 'REPEAT AFTER ME: \"FOR HONOR AND DIAMONDS!\"' You shout it with all your might, your crazy hair bouncing with each word! 'EXCELLENT! YOU HAVE THE SPIRIT OF A TRUE ROMAN WARRIOR!'",
+      "music": "roman-training-theme.mp3",
+      "choices": [
+        {
+          "text": "Practice the battle cry again!",
+          "next": "practice_battle_cry"
+        },
+        {
+          "text": "Head to Ancient Egypt with your new battle cry",
+          "next": "egypt_entrance"
+        },
+        {
+          "text": "Ask the ghost about the thief",
+          "next": "roman_ask_thief"
+        }
+      ],
+      "image-text": "Roman ghost teaching battle cry, boy with crazy hair and rainbow t-shirt shouting with bouncing hair, warrior training scene"
+    },
+    "egypt_ask_thief": {
+      "text": "The Mummy Pharaoh's golden eyes gleam with ancient wisdom. 'INDEED, I SAW THE TOMB ROBBER! A MORTAL WITH TWISTED FACIAL HAIR AND EYES THAT SPARKLED LIKE THE NILE! BUT HIS AURA SPOKE OF LONELINESS, NOT EVIL. PERHAPS HE SEEKS WHAT ALL MORTALS SEEK - CONNECTION AND BEAUTY!'",
+      "music": "egyptian-wisdom-theme.mp3",
+      "choices": [
+        {
+          "text": "That's very wise, great Pharaoh",
+          "next": "praise_pharaoh_wisdom"
+        },
+        {
+          "text": "Head to the Space section",
+          "next": "space_entrance"
+        },
+        {
+          "text": "Ask about ancient Egyptian treasures",
+          "next": "egypt_treasures"
+        }
+      ],
+      "image-text": "Mummy pharaoh with gleaming golden eyes, describing tomb robber with twisted facial hair, ancient wisdom"
+    },
+    "egypt_treasures": {
+      "text": "The Mummy Pharaoh's eyes light up! 'AH, YOU WISH TO LEARN OF EGYPT'S TREASURES! BEHOLD!' Golden artifacts appear around you - scarab beetles, ankhs, and beautiful jewelry! 'THESE TREASURES WERE MADE WITH LOVE AND SHARED WITH JOY! TRUE TREASURE IS MEANT TO BE SHARED, NOT HOARDED!'",
+      "music": "egyptian-treasure-theme.mp3",
+      "choices": [
+        {
+          "text": "That's a beautiful lesson!",
+          "next": "treasure_lesson_learned"
+        },
+        {
+          "text": "Head to the Space section",
+          "next": "space_entrance"
+        },
+        {
+          "text": "Ask the Pharaoh about the thief",
+          "next": "egypt_ask_thief"
+        }
+      ],
+      "image-text": "Golden Egyptian artifacts appearing, scarab beetles, ankhs, jewelry"
+    },
+    "space_ask_thief": {
+      "text": "The Robot Astronaut's lights blink in a pattern. 'BEEP BEEP! AFFIRMATIVE! SUSPICIOUS HUMANOID DETECTED EARLIER! SUBJECT HAD FACIAL HAIR CONFIGURATION: TWIRLY. EMOTIONAL READING: LONELY AND DIAMOND-OBSESSED. RECOMMENDATION: FRIENDSHIP PROTOCOL ACTIVATED!'",
+      "music": "space-analysis-theme.mp3",
+      "choices": [
+        {
+          "text": "Friendship protocol sounds perfect!",
+          "next": "friendship_protocol"
+        },
+        {
+          "text": "Celebrate getting all the diamonds!",
+          "next": "all_diamonds_celebration"
+        },
+        {
+          "text": "Head back to the curator",
+          "next": "return_to_curator"
+        }
+      ],
+      "image-text": "Robot astronaut with blinking lights analyzing suspicious humanoid, recommending friendship protocol activation"
+    },
+    "return_to_curator": {
+      "text": "You bounce back to the main hall with all 5 diamonds sparkling in your hands! The curator sees you and jumps for joy! 'WIGGLY! YOU DID IT! YOU GOT ALL THE RAINBOW DIAMONDS BACK!' But just then, you hear slow clapping behind you...",
+      "music": "dramatic-return-theme.mp3",
+      "choices": [
+        {
+          "text": "Turn around to see who's clapping",
+          "next": "reveal_thief"
+        },
+        {
+          "text": "Quickly give the diamonds to the curator",
+          "next": "quick_handover"
+        },
+        {
+          "text": "Ask 'Who's there?'",
+          "next": "ask_who_there"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt bouncing back to main hall with 5 sparkling diamonds, curator jumping for joy, dramatic clapping behind"
+    },
+    "hide_diamonds": {
+      "text": "You quickly try to hide the diamonds behind your back, but they're so sparkly they keep glowing through your fingers! 'Nice try, Wiggly,' says the mysterious voice, 'but diamonds that beautiful can't be hidden!' You turn around to see... MR. BAD GUY!",
+      "music": "caught-theme.mp3",
+      "choices": [
+        {
+          "text": "Gasp in surprise!",
+          "next": "reveal_thief"
+        },
+        {
+          "text": "Ask why he stole the diamonds",
+          "next": "ask_why_diamonds"
+        },
+        {
+          "text": "Try to run away",
+          "next": "run_away_attempt"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt with wild crazy hair in museum scene in museum main hall, mysterious atmosphere, colorful cartoon style suitable for children"
+    },
+    "ask_who_there": {
+      "text": "You call out bravely, 'Who's there? Show yourself!' Your crazy hair stands up with courage! From the shadows steps... MR. BAD GUY! He's twirling his mustache and wearing a dramatic black cape! 'It is I, the diamond lover extraordinaire!'",
+      "music": "villain-entrance-theme.mp3",
+      "choices": [
+        {
+          "text": "So YOU'RE the diamond thief!",
+          "next": "reveal_thief"
+        },
+        {
+          "text": "Ask why he loves diamonds so much",
+          "next": "ask_why_diamonds"
+        },
+        {
+          "text": "Challenge him to explain himself",
+          "next": "demand_explanation"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt with wild crazy hair in museum scene, villain with black cape and twirly mustache in museum main hall, colorful cartoon style suitable for children"
+    },
+    "diamond_facts_promise": {
+      "text": "Mr. Good Guy's eyes sparkle with excitement! 'Really? You'd share diamond facts with me? I'd love that!' You tell him about how diamonds are formed deep in the Earth, how they're the hardest natural substance, and how each one is billions of years old! 'WOW! That makes them even more amazing!' he says.",
+      "music": "educational-fun-theme.mp3",
+      "choices": [
+        {
+          "text": "Let's go return the diamonds and start our friendship!",
+          "next": "happy_ending"
+        },
+        {
+          "text": "Promise to teach him more facts every day",
+          "next": "daily_facts_promise"
+        },
+        {
+          "text": "Suggest starting a diamond club",
+          "next": "diamond_club_idea"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt with wild crazy hair in museum scene in museum main hall, colorful cartoon style suitable for children"
+    },
+    "diamond_club_idea": {
+      "text": "Your crazy hair bounces with excitement! 'We could start the Museum Diamond Appreciation Club! We could meet every week and learn about different gems and crystals!' Mr. Good Guy claps his hands! 'That sounds AMAZING! We could invite other people who love sparkly things too!'",
+      "music": "club-formation-theme.mp3",
+      "choices": [
+        {
+          "text": "Yes! Let's make it official!",
+          "next": "happy_ending"
+        },
+        {
+          "text": "We could have diamond-themed snacks!",
+          "next": "diamond_snacks_idea"
+        },
+        {
+          "text": "Let's go return the diamonds first",
+          "next": "happy_ending"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt with wild crazy hair in museum scene in sparkling crystal cave-like minerals section, colorful cartoon style suitable for children"
+    },
+    "dino_sneak": {
+      "text": "You try to sneak around the Robot T-Rex, but your crazy hair is so bouncy it makes noise! The T-Rex spots you immediately! 'ROAAAAR! SNEAKY HUMAN DETECTED! BUT I ADMIRE YOUR STEALTH ATTEMPT!' It gently blocks your path. 'TO PASS, YOU MUST PROVE YOUR WORTHINESS ANOTHER WAY!'",
+      "music": "caught-sneaking-theme.mp3",
+      "choices": [
+        {
+          "text": "Challenge it to a jumping contest instead",
+          "next": "dino_jumping_contest"
+        },
+        {
+          "text": "Apologize and try a different approach",
+          "next": "dinosaur_entrance"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt with wild crazy hair in museum scene, giant robot T-Rex with glowing eyes in museum main hall, colorful cartoon style suitable for children"
+    },
+    "rocks_skipping_contest": {
+      "text": "You challenge the Crystal Golem to a rock-skipping contest! But wait... you're inside a museum! The Golem chuckles with a sound like wind chimes. 'CLANK CLANK! CLEVER HUMAN! WE SHALL SKIP IMAGINARY ROCKS ACROSS AN IMAGINARY POND!' You both pretend to skip rocks, and your enthusiasm wins the day!",
+      "music": "playful-contest-theme.mp3",
+      "choices": [
+        {
+          "text": "Celebrate your creative victory!",
+          "next": "rocks_love_speech"
+        },
+        {
+          "text": "Ask the Golem to teach you about crystals",
+          "next": "crystal_lesson"
+        },
+        {
+          "text": "Thank the Golem and continue your quest",
+          "next": "rocks_love_speech"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt with wild crazy hair in museum scene, purple crystal golem in sparkling crystal cave-like minerals section, colorful cartoon style suitable for children"
+    },
+    "rocks_shield_fight": {
+      "text": "You raise your shield bravely! The Crystal Golem shoots sparkly crystal beams that bounce off your shield in beautiful rainbow patterns! 'CLANK! IMPRESSIVE DEFENSE, YOUNG WARRIOR! YOUR SHIELD WORK SHOWS TRUE APPRECIATION FOR CRYSTAL BEAUTY!' The Golem is so impressed it gives you the diamond!",
+      "music": "crystal-battle-theme.mp3",
+      "choices": [
+        {
+          "text": "Thank the Golem for the fun battle!",
+          "next": "rocks_love_speech"
+        },
+        {
+          "text": "Ask about the beautiful crystal patterns",
+          "next": "crystal_lesson"
+        },
+        {
+          "text": "Continue to the Roman section",
+          "next": "roman_entrance"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt with wild crazy hair in museum scene, purple crystal golem in sparkling crystal cave-like minerals section, colorful cartoon style suitable for children"
+    },
+    "roman_sword_duel": {
+      "text": "You draw your sword and salute the Roman Ghost! 'EN GARDE!' you shout! The ghost is delighted! 'EXCELLENT FORM! A TRUE WARRIOR'S SPIRIT!' You have an epic (but safe) sword fight with glowing ghostly swords! Your enthusiasm and respect for Roman traditions wins the day!",
+      "music": "epic-sword-duel-theme.mp3",
+      "choices": [
+        {
+          "text": "Bow respectfully after the duel",
+          "next": "roman_salute"
+        },
+        {
+          "text": "Ask the ghost to teach you Roman fighting techniques",
+          "next": "roman_battle_cry"
+        },
+        {
+          "text": "Thank the Centurion for the honor",
+          "next": "thank_centurion"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt with wild crazy hair in museum scene, translucent Roman centurion ghost in Roman exhibit with ancient armor, colorful cartoon style suitable for children"
+    },
+    "roman_history_chat": {
+      "text": "You ask the Roman Ghost about ancient Rome! His ghostly eyes light up! 'AH, A SCHOLAR! LET ME TELL YOU OF THE GREAT COLOSSEUM, THE MIGHTY LEGIONS, AND THE WISDOM OF THE EMPERORS!' He tells you fascinating stories about gladiators, Roman engineering, and ancient battles!",
+      "music": "educational-roman-theme.mp3",
+      "choices": [
+        {
+          "text": "Ask about Roman treasures and gems",
+          "next": "roman_wisdom_advice"
+        },
+        {
+          "text": "Thank him and earn the green diamond",
+          "next": "roman_salute"
+        },
+        {
+          "text": "Ask if he saw the diamond thief",
+          "next": "roman_ask_thief"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt with wild crazy hair in museum scene, translucent Roman centurion ghost in Roman exhibit with ancient armor, colorful cartoon style suitable for children"
+    },
+    "egypt_help_organize": {
+      "text": "You offer to help organize the Pharaoh's tomb! 'WONDERFUL!' he exclaims! 'THESE ARTIFACTS HAVE BEEN SCATTERED FOR CENTURIES!' You help arrange golden scarabs, ancient scrolls, and beautiful jewelry. The Pharaoh is so grateful for your respectful help!",
+      "music": "helpful-organizing-theme.mp3",
+      "choices": [
+        {
+          "text": "Ask about the beautiful artifacts",
+          "next": "egypt_treasures"
+        },
+        {
+          "text": "Request the yellow diamond as thanks",
+          "next": "egypt_bow"
+        },
+        {
+          "text": "Ask the Pharaoh about ancient wisdom",
+          "next": "praise_pharaoh_wisdom"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt with wild crazy hair in museum scene, golden-bandaged mummy pharaoh in museum main hall, colorful cartoon style suitable for children"
+    },
+    "egypt_riddle_contest": {
+      "text": "You challenge the Mummy Pharaoh to a riddle contest! 'EXCELLENT!' he booms! 'I LOVE RIDDLES! HERE IS MINE: WHAT HAS FOUR LEGS IN THE MORNING, TWO LEGS AT NOON, AND THREE LEGS IN THE EVENING?' Now it's your turn to solve this ancient puzzle!",
+      "music": "riddle-challenge-theme.mp3",
+      "choices": [
+        {
+          "text": "A person! (baby crawls, adult walks, elderly use cane)",
+          "next": "egypt_riddle_correct"
+        },
+        {
+          "text": "A chair that gets broken during the day?",
+          "next": "egypt_riddle_wrong"
+        },
+        {
+          "text": "Can I have a hint, great Pharaoh?",
+          "next": "egypt_riddle_hint"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt with wild crazy hair in museum scene, golden-bandaged mummy pharaoh in museum main hall, colorful cartoon style suitable for children"
+    },
+    "egypt_riddle_hint": {
+      "text": "The kind Pharaoh's eyes twinkle! 'VERY WELL, YOUNG SEEKER! THINK ABOUT THE JOURNEY OF LIFE... FROM BIRTH TO OLD AGE... HOW DOES A PERSON MOVE DIFFERENTLY AT DIFFERENT TIMES?' His hint makes you think about how people change as they grow up!",
+      "music": "helpful-hint-theme.mp3",
+      "choices": [
+        {
+          "text": "A person! They crawl, walk, then use a cane!",
+          "next": "egypt_riddle_correct"
+        },
+        {
+          "text": "Let me think more and try again",
+          "next": "egypt_riddle_contest"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt with wild crazy hair in museum scene, golden-bandaged mummy pharaoh in museum main hall, colorful cartoon style suitable for children"
+    },
+    "space_planets": {
+      "text": "You recite the planets in order: 'Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune!' The Robot Astronaut's lights flash excitedly! 'BEEP BEEP! CORRECT PLANETARY SEQUENCE! IMPRESSIVE ASTRONOMICAL KNOWLEDGE! YOU ARE READY FOR SPACE EXPLORATION!'",
+      "music": "space-education-theme.mp3",
+      "choices": [
+        {
+          "text": "Ask about each planet's special features",
+          "next": "space_alien_chat"
+        },
+        {
+          "text": "Claim your purple diamond reward!",
+          "next": "space_walk_moves"
+        },
+        {
+          "text": "Do a space dance to celebrate!",
+          "next": "space_walk_moves"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt with wild crazy hair in museum scene, silver robot astronaut in space exhibit with planets and rockets, colorful cartoon style suitable for children"
+    },
+    "space_alien_chat": {
+      "text": "You ask the Robot Astronaut about life on other planets! 'BEEP BEEP! FASCINATING QUESTION! WHILE WE HAVEN'T FOUND LITTLE GREEN ALIENS YET, THE UNIVERSE IS SO BIG THAT THERE MIGHT BE FRIENDLY CREATURES OUT THERE WHO LOVE SPARKLY THINGS JUST LIKE YOU!' Its antenna wiggles excitedly!",
+      "music": "alien-wonder-theme.mp3",
+      "choices": [
+        {
+          "text": "That's so exciting! Give me the purple diamond!",
+          "next": "space_walk_moves"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt with wild crazy hair in museum scene, silver robot astronaut in space exhibit with planets and rockets, colorful cartoon style suitable for children"
+    },
+    "lecture_stealing": {
+      "text": "You put on your most serious face (though your crazy hair still bounces). 'Mr. Bad Guy, stealing is wrong! It makes people sad and breaks trust! The diamonds belong to everyone at the museum!' Mr. Bad Guy looks ashamed. 'You're right, Wiggly... I just wanted them so badly, but I made a big mistake.'",
+      "music": "moral-lesson-theme.mp3",
+      "choices": [
+        {
+          "text": "It's okay, we all make mistakes. Let's fix this together!",
+          "next": "offer_museum_visits"
+        },
+        {
+          "text": "Ask why he wanted them so much",
+          "next": "ask_why_diamonds"
+        },
+        {
+          "text": "Suggest he could help at the museum instead",
+          "next": "suggest_museum_job"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt with wild crazy hair in museum scene, villain with black cape and twirly mustache in museum main hall, emotional scene, colorful cartoon style suitable for children"
+    },
+    "final_showdown": {
+      "text": "You strike a superhero pose, your crazy hair flowing dramatically! 'Mr. Bad Guy! I challenge you to the ultimate showdown... a DIAMOND APPRECIATION CONTEST! We'll see who really loves diamonds more!' Mr. Bad Guy is surprised but intrigued. 'A contest of diamond love? I accept!' But then you realize - competing isn't the answer. 'Actually, let's work together instead!'",
+      "music": "epic-showdown-theme.mp3",
+      "choices": [
+        {
+          "text": "Let's return the diamonds together as friends!",
+          "next": "happy_ending"
+        },
+        {
+          "text": "We both love diamonds - that makes us perfect partners!",
+          "next": "offer_museum_visits"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt with wild crazy hair in museum scene, villain with black cape and twirly mustache in museum main hall, colorful cartoon style suitable for children"
+    },
+    "run_away_attempt": {
+      "text": "You try to run away with the diamonds, but Mr. Bad Guy calls out sadly, 'Wait, Wiggly! I don't want to fight you! I just... I just love diamonds so much, and I thought having them all would make me happy!' He sits down and looks very lonely. Your kind heart makes you stop running.",
+      "music": "sad-realization-theme.mp3",
+      "choices": [
+        {
+          "text": "Turn back and ask why he's so sad",
+          "next": "ask_why_diamonds"
+        },
+        {
+          "text": "Suggest he can visit the diamonds anytime",
+          "next": "offer_museum_visits"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt with wild crazy hair in museum scene, villain with black cape and twirly mustache in museum main hall, emotional scene, colorful cartoon style suitable for children"
+    },
+    "suggest_museum_job": {
+      "text": "Your eyes light up with a brilliant idea! 'Mr. Bad Guy! What if you worked at the museum? You could be around the diamonds every day AND help other people learn to love them too!' His mustache stops twirling in surprise. 'Really? I could work here? With the diamonds?' He looks hopeful!",
+      "music": "brilliant-idea-theme.mp3",
+      "choices": [
+        {
+          "text": "Yes! Let's return the diamonds and talk to the curator!",
+          "next": "happy_ending"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt with wild crazy hair in museum scene, villain with black cape and twirly mustache in museum main hall, colorful cartoon style suitable for children"
+    },
+    "share_diamond_love": {
+      "text": "You bounce excitedly, your crazy hair sparkling! 'Mr. Bad Guy, I love diamonds too! They're the most amazing things ever! But you know what's even better than having diamonds? SHARING the love of diamonds with friends!' Your enthusiasm is contagious, and Mr. Bad Guy starts smiling!",
+      "music": "shared-joy-theme.mp3",
+      "choices": [
+        {
+          "text": "Let's be diamond-loving friends!",
+          "next": "offer_museum_visits"
+        },
+        {
+          "text": "I'll teach you everything I know about gems!",
+          "next": "diamond_facts_promise"
+        },
+        {
+          "text": "We could start a diamond club!",
+          "next": "diamond_club_idea"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt with wild crazy hair in museum scene, villain with black cape and twirly mustache in museum main hall, colorful cartoon style suitable for children"
+    },
+    "ask_help_return": {
+      "text": "You extend your hand to Mr. Bad Guy with a big smile! 'Will you help me return the diamonds to where they belong? We could do it together!' Mr. Bad Guy looks at your outstretched hand, then at the sparkling diamonds, then back at your kind face. 'Together? You'd... you'd want my help?'",
+      "music": "friendship-offer-theme.mp3",
+      "choices": [
+        {
+          "text": "Yes! Let's return them and be friends!",
+          "next": "happy_ending"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt with wild crazy hair in museum scene, villain with black cape and twirly mustache in museum main hall, colorful cartoon style suitable for children"
+    },
+    "diamond_snacks_idea": {
+      "text": "Mr. Good Guy's eyes absolutely sparkle! 'Diamond-themed snacks! We could have crystal-shaped cookies, sparkly punch, and maybe even rock candy that looks like gems!' You both start planning the most amazing diamond-themed party ever!",
+      "music": "party-planning-theme.mp3",
+      "choices": [
+        {
+          "text": "Let's make it the best club ever!",
+          "next": "happy_ending"
+        },
+        {
+          "text": "First, let's return the diamonds and start planning!",
+          "next": "happy_ending"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt with wild crazy hair in museum scene in sparkling crystal cave-like minerals section, colorful cartoon style suitable for children"
+    },
+    "daily_facts_promise": {
+      "text": "Mr. Good Guy jumps up and down with excitement! 'Every day? Really? Oh, that would be the most wonderful thing ever! I could learn something new about diamonds every single day!' His happiness is so genuine that your crazy hair seems to sparkle with joy too!",
+      "music": "daily-joy-theme.mp3",
+      "choices": [
+        {
+          "text": "Let's start right now with the rainbow diamonds!",
+          "next": "happy_ending"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt with wild crazy hair in museum scene in museum main hall, doing acrobatic moves, colorful cartoon style suitable for children"
+    },
+    "investigate_closet": {
+      "text": "You carefully open the janitor's closet. Inside, you find cleaning supplies, a mop, and... wait! A black cape hanging on a hook! And there's a note that fell out of the pocket: 'Phase 1: Take diamonds. Phase 2: ??? Phase 3: Be happy!' This is definitely suspicious!",
+      "music": "discovery-theme.mp3",
+      "choices": [
+        {
+          "text": "Go tell the curator immediately",
+          "next": "tell_curator_footprints"
+        },
+        {
+          "text": "Start your diamond rescue mission",
+          "next": "accept_mission"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt with wild crazy hair in museum scene in museum main hall, mysterious atmosphere, colorful cartoon style suitable for children"
+    },
+    "tell_curator_footprints": {
+      "text": "You rush back to the curator with your discoveries! 'Curator! I found muddy footprints leading to the janitor's closet, and there's a suspicious black cape in there!' The curator gasps! 'Oh my! This is quite the mystery! But first, we must get those diamonds back safely!'",
+      "music": "urgent-report-theme.mp3",
+      "choices": [
+        {
+          "text": "Yes! Let's start the rescue mission!",
+          "next": "accept_mission"
+        },
+        {
+          "text": "Let me investigate more first",
+          "next": "search_main_hall"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt with wild crazy hair in museum scene, museum curator in museum main hall, mysterious atmosphere, colorful cartoon style suitable for children"
+    },
+    "check_visitors_book": {
+      "text": "The curator brings out a big book filled with visitor signatures. You flip through the pages and see lots of names... and there! A signature that matches the handwriting on the note: 'Mr. Bad Guy - Diamond Enthusiast Extraordinaire!' The curator nods knowingly.",
+      "music": "evidence-found-theme.mp3",
+      "choices": [
+        {
+          "text": "Let's focus on getting the diamonds back first",
+          "next": "accept_mission"
+        },
+        {
+          "text": "Ask more about this Mr. Bad Guy",
+          "next": "ask_mr_bad_guy"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt with wild crazy hair in museum scene, villain with black cape and twirly mustache, museum curator in museum main hall, colorful cartoon style suitable for children"
+    },
+    "mr_bad_guy_description": {
+      "text": "The curator describes Mr. Bad Guy: 'He's about average height, always wears a dramatic black cape, and has the most perfectly twirled mustache I've ever seen! His eyes absolutely sparkle when he looks at gems - like he's seeing magic! He seems lonely though, always visits by himself.'",
+      "music": "character-description-theme.mp3",
+      "choices": [
+        {
+          "text": "Let's start the rescue mission",
+          "next": "accept_mission"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt with wild crazy hair in museum scene, villain with black cape and twirly mustache, museum curator in museum main hall, colorful cartoon style suitable for children"
+    },
+    "note_mustache_clue": {
+      "text": "You make a mental note: 'Twirly mustache - that's an important clue!' Your detective skills are getting better! You remember the curator mentioning someone with a twirly mustache who visits every day. The pieces of the puzzle are coming together!",
+      "music": "detective-work-theme.mp3",
+      "choices": [
+        {
+          "text": "Continue collecting diamonds and clues",
+          "next": "rocks_entrance"
+        },
+        {
+          "text": "Ask the T-Rex for more details",
+          "next": "dino_more_clues"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt with wild crazy hair in museum scene, museum curator in museum main hall, colorful cartoon style suitable for children"
+    },
+    "dino_more_clues": {
+      "text": "The Robot T-Rex thinks harder, more steam puffing out! 'ROAAAAR! THE MUSTACHE HUMAN ALSO HAD SPARKLY EYES! AND HE KEPT SAYING \"MY PRECIOUS DIAMONDS!\" OVER AND OVER! HE SEEMED VERY LONELY, LIKE HE NEEDED A FRIEND TO SHARE HIS LOVE OF SHINY THINGS!'",
+      "music": "more-clues-theme.mp3",
+      "choices": [
+        {
+          "text": "Poor guy, he does sound lonely",
+          "next": "sympathize_thief"
+        },
+        {
+          "text": "Continue to Rocks & Minerals",
+          "next": "rocks_entrance"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt with wild crazy hair in museum scene, giant robot T-Rex with glowing eyes in museum main hall, colorful cartoon style suitable for children"
+    },
+    "teach_trex_backflip": {
+      "text": "You try to teach the massive Robot T-Rex how to backflip! 'Okay, first you jump up... then you tuck your knees... then flip!' The T-Rex tries but just spins in a circle! 'ROAAAAR! THIS IS HARDER THAN FIGHTING TRICERATOPS!' You both laugh at the silly attempt!",
+      "music": "silly-teaching-theme.mp3",
+      "choices": [
+        {
+          "text": "You're doing great! Keep trying!",
+          "next": "rocks_entrance"
+        },
+        {
+          "text": "Let's head to Rocks & Minerals now",
+          "next": "rocks_entrance"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt with wild crazy hair in museum scene, giant robot T-Rex with glowing eyes in museum main hall, doing acrobatic moves, colorful cartoon style suitable for children"
+    },
+    "sympathize_thief": {
+      "text": "Your kind heart feels sorry for the lonely thief. 'Maybe he just wanted to be surrounded by beautiful things because he was sad,' you think. Your crazy hair seems to droop a little with sympathy. Sometimes people do wrong things when they're hurting inside.",
+      "music": "sympathetic-theme.mp3",
+      "choices": [
+        {
+          "text": "Continue collecting diamonds to solve this",
+          "next": "rocks_entrance"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt with wild crazy hair in museum scene in museum main hall, emotional scene, colorful cartoon style suitable for children"
+    },
+    "rocks_more_details": {
+      "text": "The Crystal Golem shares more details: 'CLANK! THE CAPE-WEARING HUMAN HAD TEARS IN HIS EYES WHEN HE LOOKED AT THE DIAMONDS! HE WHISPERED \"IF ONLY I COULD KEEP THEM SAFE FOREVER!\" I THINK HE BELIEVES LOVE MEANS KEEPING THINGS ALL TO YOURSELF!'",
+      "music": "deeper-understanding-theme.mp3",
+      "choices": [
+        {
+          "text": "That's sad, but I understand his feelings",
+          "next": "roman_entrance"
+        },
+        {
+          "text": "Continue to the Roman section",
+          "next": "roman_entrance"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt with wild crazy hair in museum scene, purple crystal golem in museum main hall, colorful cartoon style suitable for children"
+    },
+    "crystal_lesson": {
+      "text": "The Crystal Golem's eyes light up like stars! 'CLANK! OH WONDERFUL! LET ME TEACH YOU ABOUT CRYSTALS!' It shows you how crystals form deep in the Earth, how they grow in beautiful patterns, and how each one is unique! 'CRYSTALS TEACH US THAT BEAUTY TAKES TIME AND PATIENCE!'",
+      "music": "educational-crystal-theme.mp3",
+      "choices": [
+        {
+          "text": "That's amazing! Thank you for teaching me!",
+          "next": "roman_entrance"
+        },
+        {
+          "text": "Thank the Golem and continue your quest",
+          "next": "roman_entrance"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt with wild crazy hair in museum scene, purple crystal golem in sparkling crystal cave-like minerals section, colorful cartoon style suitable for children"
+    },
+    "roman_wisdom_advice": {
+      "text": "The Roman Ghost shares ancient wisdom: 'IN ROME, WE LEARNED THAT TRUE WEALTH COMES NOT FROM HOARDING TREASURES, BUT FROM SHARING THEM WITH OTHERS! A DIAMOND SHARED BRINGS JOY TO MANY - A DIAMOND HIDDEN BRINGS JOY TO NONE!' His ghostly wisdom echoes through the ages!",
+      "music": "ancient-wisdom-theme.mp3",
+      "choices": [
+        {
+          "text": "That's beautiful wisdom! Thank you!",
+          "next": "egypt_entrance"
+        },
+        {
+          "text": "Continue to Ancient Egypt",
+          "next": "egypt_entrance"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt with wild crazy hair in museum scene, translucent Roman centurion ghost in Roman exhibit with ancient armor, colorful cartoon style suitable for children"
+    },
+    "thank_centurion": {
+      "text": "You give the Roman Ghost your most respectful bow! 'Thank you, noble Centurion, for your wisdom and courage!' The ghost beams with pride! 'YOU HONOR THE TRADITIONS OF ROME, YOUNG WARRIOR! MAY YOUR QUEST BE SUCCESSFUL!' He salutes you with his ghostly sword!",
+      "music": "honorable-thanks-theme.mp3",
+      "choices": [
+        {
+          "text": "Salute back and claim the green diamond",
+          "next": "roman_salute"
+        },
+        {
+          "text": "Ask for more Roman wisdom",
+          "next": "roman_wisdom_advice"
+        },
+        {
+          "text": "Head to Ancient Egypt",
+          "next": "egypt_entrance"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt with wild crazy hair in museum scene, translucent Roman centurion ghost in Roman exhibit with ancient armor, colorful cartoon style suitable for children"
+    },
+    "practice_battle_cry": {
+      "text": "You practice the Roman battle cry with gusto! 'FOR HONOR AND DIAMONDS!' Your voice echoes through the Roman section, and your crazy hair bounces with each shout! The Roman Ghost applauds! 'MAGNIFICENT! YOU HAVE THE HEART OF A TRUE ROMAN LEGIONNAIRE!'",
+      "music": "battle-cry-practice-theme.mp3",
+      "choices": [
+        {
+          "text": "Use the battle cry to claim the green diamond!",
+          "next": "roman_salute"
+        },
+        {
+          "text": "Head to Ancient Egypt with confidence!",
+          "next": "egypt_entrance"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt with wild crazy hair in museum scene, translucent Roman centurion ghost in Roman exhibit with ancient armor, colorful cartoon style suitable for children"
+    },
+    "praise_pharaoh_wisdom": {
+      "text": "You bow deeply to the wise Pharaoh! 'Your wisdom spans the ages, great Pharaoh Bandage-Hotep! You understand both treasures and hearts!' The Mummy Pharaoh's golden eyes glow with pleasure! 'YOU SHOW GREAT RESPECT FOR THE ANCIENT WAYS, YOUNG SEEKER!'",
+      "music": "pharaoh-praise-theme.mp3",
+      "choices": [
+        {
+          "text": "Request the yellow diamond humbly",
+          "next": "egypt_bow"
+        },
+        {
+          "text": "Ask to learn more about Egyptian treasures",
+          "next": "egypt_treasures"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt with wild crazy hair in museum scene, golden-bandaged mummy pharaoh in museum main hall, colorful cartoon style suitable for children"
+    },
+    "treasure_lesson_learned": {
+      "text": "You nod enthusiastically, your crazy hair bouncing with understanding! 'You're so right, great Pharaoh! The best treasures are the ones we share with friends! That's what makes them truly magical!' The Pharaoh smiles warmly at your wisdom!",
+      "music": "lesson-learned-theme.mp3",
+      "choices": [
+        {
+          "text": "Thank the Pharaoh and claim the yellow diamond",
+          "next": "egypt_riddle_correct"
+        },
+        {
+          "text": "Head to the Space section",
+          "next": "space_entrance"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt with wild crazy hair in museum scene, golden-bandaged mummy pharaoh in museum main hall, colorful cartoon style suitable for children"
+    },
+    "friendship_protocol": {
+      "text": "The Robot Astronaut's lights flash in a happy pattern! 'BEEP BEEP! FRIENDSHIP PROTOCOL ACTIVATED! ANALYSIS SHOWS: LONELY HUMANS NEED COMPANIONSHIP AND SHARED INTERESTS! RECOMMENDATION: INVITE SUBJECT TO JOIN DIAMOND APPRECIATION ACTIVITIES!'",
+      "music": "friendship-protocol-theme.mp3",
+      "choices": [
+        {
+          "text": "That's perfect! Let's be his friend!",
+          "next": "return_to_curator"
+        },
+        {
+          "text": "Head back to find the thief",
+          "next": "return_to_curator"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt with wild crazy hair in museum scene, silver robot astronaut in museum main hall, colorful cartoon style suitable for children"
+    },
+    "quick_handover": {
+      "text": "You quickly hand all 5 diamonds to the curator! 'Here! Keep them safe!' But the slow clapping continues... The curator gasps as Mr. Bad Guy steps out of the shadows! 'Too late, Wiggly! I've already seen that you got them all back!' But he doesn't look angry... he looks impressed!",
+      "music": "dramatic-handover-theme.mp3",
+      "choices": [
+        {
+          "text": "Ask why he stole them",
+          "next": "ask_why_diamonds"
+        },
+        {
+          "text": "Demand to know why he stole them",
+          "next": "demand_explanation"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt with wild crazy hair in museum scene, villain with black cape and twirly mustache, museum curator in museum main hall, colorful cartoon style suitable for children"
+    },
+    "demand_explanation": {
+      "text": "You put your hands on your hips and give Mr. Bad Guy your most serious look (though your crazy hair still bounces adorably)! 'Mr. Bad Guy! You need to explain yourself right now! Why did you steal the museum's precious diamonds?' He looks surprised by your boldness!",
+      "music": "serious-confrontation-theme.mp3",
+      "choices": [
+        {
+          "text": "Wait for his explanation",
+          "next": "ask_why_diamonds"
+        },
+        {
+          "text": "Tell him stealing is wrong",
+          "next": "lecture_stealing"
+        }
+      ],
+      "image-text": "boy with crazy hair and rainbow t-shirt with wild crazy hair in museum scene, villain with black cape and twirly mustache in museum main hall, colorful cartoon style suitable for children"
+    },
+    "happy_ending": {
+      "text": "🎉 You and Mr. Bad Guy (who decides to change his name to Mr. Good Guy) return all 5 diamonds to the museum together! The curator is so happy he does a little dance! The Robot T-Rex, Crystal Golem, Roman Ghost, Mummy Pharaoh, and Robot Astronaut all cheer for you! You become the museum's official Diamond Detective, and Mr. Good Guy becomes the Diamond Tour Guide! Every day, you both get to see the beautiful Rainbow Diamonds sparkle, and you're the best of friends! Your crazy hair has never been happier! THE END! 💎✨",
+      "music": "victory-celebration-theme.mp3",
+      "choices": [],
+      "isEnd": true,
+      "image-text": "Celebration scene with boy with crazy hair and rainbow t-shirt, good mustache man, curator dancing, all monsters cheering, rainbow diamonds sparkling"
+    }
+  }
+}
