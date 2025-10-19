@@ -10,7 +10,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Get story ID from command line argument
-const storyId = process.argv[2] || 'wigglys-diamond-quest';
+const storyId = process.argv[2];
 
 // Configuration
 const STORY_DIR = path.join(__dirname, 'public', storyId);

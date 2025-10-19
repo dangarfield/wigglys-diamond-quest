@@ -1,0 +1,150 @@
+{
+  "startNode": "start",
+  "capabilities": {
+    "diamondCollection": false
+  },
+  "nodes": {
+    "start": {
+      "text": "You wake up in a mysterious forest. The trees tower above you, their leaves rustling in the gentle breeze. A path splits in two directions ahead of you.",
+      "image-text": "A person standing at a fork in a mystical forest path, tall ancient trees, dappled sunlight",
+      "choices": [
+        {
+          "text": "Take the left path toward the sound of water",
+          "next": "river_path"
+        },
+        {
+          "text": "Take the right path toward the distant mountains",
+          "next": "mountain_path"
+        }
+      ]
+    },
+    "river_path": {
+      "text": "You follow the sound of rushing water and discover a beautiful crystal-clear river. A small wooden boat is tied to a dock nearby. The current looks unpredictable - you'll need to test your luck to see what happens next!",
+      "image-text": "A crystal clear river with a small wooden boat at a rustic dock, surrounded by lush forest",
+      "roll": {
+        "text": "🎲 Roll the dice to see what the river brings!",
+        "outcomes": [
+          {
+            "range": "1-3",
+            "text": "The current is too strong! You're swept downstream rapidly.",
+            "next": "rapid_current"
+          },
+          {
+            "range": "4",
+            "text": "Perfect conditions! You have a peaceful boat ride.",
+            "next": "boat_journey"
+          },
+          {
+            "range": "5-6",
+            "text": "You notice something glittering in the shallow water.",
+            "next": "magic_flowers"
+          }
+        ]
+      }
+    },
+    "mountain_path": {
+      "text": "The mountain path is steep but rewarding. As you climb higher, you spot a cave entrance carved with ancient symbols.",
+      "image-text": "A mountain path leading to a cave entrance with mysterious ancient symbols carved into the rock",
+      "choices": [
+        {
+          "text": "Enter the mysterious cave",
+          "next": "ancient_cave"
+        },
+        {
+          "text": "Continue climbing to the summit",
+          "next": "mountain_summit"
+        }
+      ]
+    },
+    "boat_journey": {
+      "text": "The boat carries you gently downstream. You pass under a natural stone bridge and see a village in the distance with smoke rising from chimneys.",
+      "image-text": "View from a boat on a river approaching a quaint village with stone bridge and chimney smoke",
+      "choices": [
+        {
+          "text": "Dock at the village",
+          "next": "friendly_village"
+        },
+        {
+          "text": "Continue past the village",
+          "next": "river_end"
+        }
+      ]
+    },
+    "riverbank_walk": {
+      "text": "Walking along the riverbank, you discover colorful flowers that seem to glow with their own inner light. A friendly fox approaches you curiously.",
+      "image-text": "A riverbank with glowing magical flowers and a curious red fox approaching peacefully",
+      "choices": [
+        {
+          "text": "Follow the fox deeper into the forest",
+          "next": "fox_guide"
+        },
+        {
+          "text": "Pick some of the glowing flowers",
+          "next": "magic_flowers"
+        }
+      ]
+    },
+    "ancient_cave": {
+      "text": "Inside the cave, you find walls covered in glowing crystals that illuminate ancient paintings telling stories of long-lost civilizations.",
+      "image-text": "Inside a cave with glowing crystals on walls and ancient cave paintings depicting civilizations",
+      "choices": [
+        {
+          "text": "Study the ancient paintings",
+          "next": "ancient_wisdom"
+        },
+        {
+          "text": "Collect some glowing crystals",
+          "next": "crystal_power"
+        }
+      ]
+    },
+    "mountain_summit": {
+      "text": "At the summit, you're rewarded with a breathtaking view of the entire realm. You can see the forest, river, village, and distant lands beyond.",
+      "image-text": "Panoramic view from mountain summit showing forest, river, village and distant magical lands",
+      "choices": [
+        {
+          "text": "Enjoy the peaceful moment",
+          "next": "peaceful_ending"
+        },
+        {
+          "text": "Look for a way down the other side",
+          "next": "new_adventure"
+        }
+      ]
+    },
+    "friendly_village": {
+      "text": "The villagers welcome you warmly and share stories of their peaceful life by the river. They offer you a place to stay and rest.",
+      "image-text": "Friendly villagers welcoming a traveler in a cozy riverside village with warm lighting",
+      "choices": [
+        {
+          "text": "Accept their hospitality",
+          "next": "peaceful_ending"
+        }
+      ]
+    },
+    "peaceful_ending": {
+      "text": "You've found a place of peace and contentment. Whether by the river village or atop the mountain, you've discovered that sometimes the journey itself is the greatest treasure.",
+      "image-text": "A serene scene showing contentment and peace, either village life or mountain tranquility",
+      "isEnd": true
+    },
+    "rapid_current": {
+      "text": "The strong current carries you swiftly downstream! You hold on tight as the boat bounces through small rapids. Eventually, you wash up on a sandy shore near a hidden grove.",
+      "image-text": "A person in a boat being carried by strong river currents through rapids toward a hidden grove",
+      "choices": [
+        {
+          "text": "Explore the hidden grove",
+          "next": "fox_guide"
+        },
+        {
+          "text": "Rest on the sandy shore",
+          "next": "peaceful_ending"
+        }
+      ]
+    },
+    "new_adventure": {
+      "text": "As you descend the other side of the mountain, you realize this is just the beginning of a much larger adventure. The path ahead leads to unknown wonders.",
+      "image-text": "A path leading down from mountains toward new unexplored lands full of mystery and wonder",
+      "isEnd": true
+    }
+  }
+}

@@ -1,6 +1,9 @@
 {
   "title": "Wiggly's Diamond Quest",
   "startNode": "start",
+  "capabilities": {
+    "diamondCollection": true
+  },
   "nodes": {
     "start": {
       "text": "🚨 ALARM! ALARM! 🚨 You are Wiggly McJiggly Head, a 7-year-old boy with the craziest hair in the world! You're visiting the Natural History Museum when suddenly alarms start blaring. The Museum Curator runs up to you, looking very worried. 'Wiggly! Someone has stolen our 5 precious diamonds from different sections of the museum! We need your help - you're the only one brave enough and bouncy enough to get them back!' What do you do?",

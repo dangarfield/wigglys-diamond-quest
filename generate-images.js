@@ -12,7 +12,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // Get story ID from command line argument
-const storyId = process.argv[2] || 'wigglys-diamond-quest';
+const storyId = process.argv[2]
 
 // Configuration
 const AWS_PROFILE = 'dan-sso';
@@ -98,7 +98,7 @@ async function generateImage(nodeId, prompt) {
 // Main function to process all story nodes
 async function generateAllImages() {
     try {
-        console.log('🚀 Starting image generation for Wiggly\'s Diamond Quest...\n');
+        console.log(`🚀 Starting image generation for story: ${storyId}...\n`);
 
         // Read story data
         const storyPath = path.join(STORY_DIR, 'story.json');
@@ -160,24 +160,9 @@ async function generateAllImages() {
             }
         }
 
-        // Generate summary report
-        const reportPath = path.join(OUTPUT_DIR, 'generation-report.json');
-        const report = {
-            timestamp: new Date().toISOString(),
-            totalNodes: allNodes.length,
-            processedNodes: nodes.length,
-            skippedNodes: allNodes.length - nodes.length,
-            successCount,
-            failCount,
-            results: results
-        };
-
-        fs.writeFileSync(reportPath, JSON.stringify(report, null, 2));
-
         console.log('\n🎉 Image generation complete!');
         console.log(`📊 Results: ${successCount} successful, ${failCount} failed, ${allNodes.length - nodes.length} skipped`);
         console.log(`📁 Images saved to: ${OUTPUT_DIR}`);
-        console.log(`📋 Report saved to: ${reportPath}`);
 
         if (failCount > 0) {
             console.log('\n❌ Failed nodes:');

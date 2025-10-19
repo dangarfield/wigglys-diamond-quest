@@ -5,6 +5,13 @@
       "title": "Wiggly's Diamond Quest",
       "description": "Help Wiggly recover stolen diamonds from the museum by exploring themed rooms and making clever choices.",
       "author": "Caleb & Dad"
+    },
+    {
+      "id": "test-story-2",
+      "title": "Forest Adventure",
+      "description": "A peaceful journey through a mystical forest where every path leads to wonder and discovery.",
+      "author": "Test Author",
+      "work-in-progress": true
     }
   ]
 }

@@ -315,6 +315,7 @@ class StoryGame {
       return
     }
     await this.loadStory()
+    this.injectCapabilityUI()
     this.setupEventListeners()
     this.loadGameState()
   }
@@ -340,6 +341,28 @@ class StoryGame {
     }
   }
 
+  injectCapabilityUI() {
+    // Inject progress bar HTML if story supports diamond collection
+    if (this.story?.capabilities?.diamondCollection) {
+      const storyText = document.getElementById('storyText')
+
+      const progressBarHTML = `
+        <div id="progressBar" class="progress-bar" style="display: none;">
+          <div class="progress-label">💎 Diamonds Collected:</div>
+          <div id="diamondProgress" class="diamond-progress">
+            <span class="diamond-slot" data-diamond="red">🔴</span>
+            <span class="diamond-slot" data-diamond="blue">🔵</span>
+            <span class="diamond-slot" data-diamond="green">🟢</span>
+            <span class="diamond-slot" data-diamond="yellow">🟡</span>
+            <span class="diamond-slot" data-diamond="purple">🟣</span>
+          </div>
+        </div>
+      `
+
+      storyText.insertAdjacentHTML('beforebegin', progressBarHTML)
+    }
+  }
+
   async showStoryIndex() {
     try {
       const response = await fetch('/stories.json')
@@ -351,6 +374,9 @@ class StoryGame {
   }
 
   renderStoryIndex(stories) {
+    // Filter out work-in-progress stories
+    const publishedStories = stories.filter(story => !story['work-in-progress'])
+    
     document.body.innerHTML = `
             <div class="story-index">
                 <header class="index-header">
@@ -358,7 +384,7 @@ class StoryGame {
                     <p>Choose your adventure!</p>
                 </header>
                 <div class="stories-grid">
-                    ${stories.map(story => `
+                    ${publishedStories.map(story => `
                         <div class="story-card" onclick="window.location.href='/story/${story.id}'">
                             <img src="/${story.id}/cover.png" alt="${story.title}" class="story-preview">
                             <div class="story-info">
@@ -446,9 +472,14 @@ class StoryGame {
     const gameState = {
       currentNode: this.currentNode,
       nodeHistory: this.nodeHistory,
-      diamondsCollected: this.getDiamondsCollected(),
       timestamp: Date.now()
     }
+
+    // Only include diamondsCollected if story supports it
+    if (this.story?.capabilities?.diamondCollection) {
+      gameState.diamondsCollected = this.getDiamondsCollected()
+    }
+
     localStorage.setItem(this.saveKey, JSON.stringify(gameState))
     console.log('Game state saved:', gameState)
   }
@@ -465,9 +496,11 @@ class StoryGame {
     return diamonds
   }
 
-  updateProgressBar() {
-    const diamonds = this.getDiamondsCollected()
+  updateDiamondProgressBar() {
     const progressBar = document.getElementById('progressBar')
+
+
+    const diamonds = this.getDiamondsCollected()
 
     // Show progress bar after accepting the mission
     if (this.nodeHistory.includes('accept_mission') || this.currentNode === 'accept_mission') {
@@ -594,7 +627,11 @@ class StoryGame {
     const choicesContainer = document.getElementById('choices')
     choicesContainer.innerHTML = ''
 
-    if (node.choices && node.choices.length > 0) {
+    if (node.roll) {
+      // Handle dice roll mechanic
+      this.renderDiceRoll(node.roll, choicesContainer)
+    } else if (node.choices && node.choices.length > 0) {
+      // Handle regular choices
       node.choices.forEach((choice) => {
         const button = document.createElement('button')
         button.className = 'choice-btn'
@@ -617,8 +654,114 @@ class StoryGame {
       backBtn.style.display = 'none'
     }
 
-    // Update progress bar
-    this.updateProgressBar()
+    if (this.story?.capabilities?.diamondCollection) {
+      this.updateDiamondProgressBar()
+    }
+  }
+
+  parseRange(rangeStr) {
+    // Parse range strings like "1-3", "4", "5-12"
+    if (rangeStr.includes('-')) {
+      const [min, max] = rangeStr.split('-').map(n => parseInt(n.trim()))
+      return { min, max }
+    } else {
+      const num = parseInt(rangeStr.trim())
+      return { min: num, max: num }
+    }
+  }
+
+  renderDiceRoll(roll, container) {
+    const diceContainer = document.createElement('div')
+    diceContainer.className = 'dice-container'
+
+    const diceButton = document.createElement('button')
+    diceButton.className = 'dice-btn'
+    diceButton.textContent = roll.text
+    diceButton.addEventListener('click', () => {
+      this.rollDice(roll.outcomes, diceButton, outcomesContainer)
+    })
+
+    // Show potential outcomes
+    const outcomesContainer = document.createElement('div')
+    outcomesContainer.className = 'dice-outcomes'
+
+    const outcomesTitle = document.createElement('div')
+    outcomesTitle.className = 'outcomes-title'
+    outcomesTitle.textContent = 'Possible outcomes:'
+    outcomesContainer.appendChild(outcomesTitle)
+
+    roll.outcomes.forEach(outcome => {
+      const outcomeDiv = document.createElement('div')
+      outcomeDiv.className = 'dice-outcome'
+
+      outcomeDiv.innerHTML = `
+        <span class="outcome-range">🎲 ${outcome.range}:</span>
+        <span class="outcome-text">${outcome.text}</span>
+      `
+
+      outcomesContainer.appendChild(outcomeDiv)
+    })
+
+    diceContainer.appendChild(diceButton)
+    diceContainer.appendChild(outcomesContainer)
+    container.appendChild(diceContainer)
+  }
+
+  rollDice(outcomes, button, outcomesContainer) {
+    // Stop current speech
+    this.stopSpeech()
+
+    // Calculate the dice range from outcomes
+    const parsedRanges = outcomes.map(o => this.parseRange(o.range))
+    const minRoll = Math.min(...parsedRanges.map(r => r.min))
+    const maxRoll = Math.max(...parsedRanges.map(r => r.max))
+    const diceRange = maxRoll - minRoll + 1
+
+    // Disable button and show rolling animation
+    button.disabled = true
+    button.textContent = '🎲 Rolling...'
+
+    // Animate the dice roll
+    let rollCount = 0
+    const rollAnimation = setInterval(() => {
+      const animRoll = Math.floor(Math.random() * diceRange) + minRoll
+      button.textContent = `🎲 ${animRoll}`
+      rollCount++
+
+      if (rollCount >= 10) {
+        clearInterval(rollAnimation)
+
+        // Final roll
+        const finalRoll = Math.floor(Math.random() * diceRange) + minRoll
+        button.textContent = `🎲 ${finalRoll}`
+
+        // Find matching outcome
+        const outcome = outcomes.find(o => {
+          const range = this.parseRange(o.range)
+          return finalRoll >= range.min && finalRoll <= range.max
+        })
+
+        if (outcome) {
+          // Highlight the winning outcome
+          const outcomeElements = outcomesContainer.querySelectorAll('.dice-outcome')
+          const winningIndex = outcomes.findIndex(o => o === outcome)
+          if (outcomeElements[winningIndex]) {
+            outcomeElements[winningIndex].classList.add('winning-outcome')
+          }
+
+          // Show result text
+          setTimeout(() => {
+            button.textContent = `🎲 ${finalRoll} - ${outcome.text}`
+            this.speakText(outcome.text)
+
+            // Continue to next node after delay
+            setTimeout(() => {
+              this.makeChoice(outcome.next)
+            }, 2000)
+          }, 500)
+        }
+      }
+    }, 100)
   }
 
   makeChoice(nextNodeId) {

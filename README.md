@@ -30,18 +30,36 @@ Each story is defined with this structure:
 ```json
 {
   "startNode": "start",
+  "capabilities": {
+    "diamondCollection": true  // Optional: story specific capabilities
+  },
   "nodes": {
     "node_id": {
       "text": "Story text for this scene",
       "image-text": "Description for AI image generation",
-      "choices": [
+      "choices": [  // Either "choices" OR "roll" is required (not both)
         { "text": "Choice description", "next": "next_node_id" }
       ],
+      "roll": {  // Either "choices" OR "roll" is required (not both)
+        "text": "🎲 Roll the dice!",
+        "outcomes": [
+          { "range": "1-3", "text": "Bad luck!", "next": "bad_outcome" },
+          { "range": "4", "text": "Good result!", "next": "good_outcome" },
+          { "range": "5-12", "text": "Great luck!", "next": "great_outcome" } // No limit on range values
+        ]
+      },
       "isEnd": true  // Optional, marks ending nodes
     }
   }
 }
 ```
+
+### Story Mechanics
+
+- **Choices**: Standard branching narrative with player decisions
+- **Dice Rolling**: Chance-based outcomes using customizable ranges (e.g., "1-3", "4", "5-12")
+- **Capabilities**: Optional features like diamond collection progress tracking
+- **Endings**: Multiple story conclusions with `isEnd: true`
 
 ## AWS Integration
 
@@ -49,10 +67,10 @@ Images are generated using AWS Bedrock's Nova Canvas model with prompts optimize
 
 ```bash
 # Generate images for specific story
-node generate-images.js [story-id]
+AWS_PROFILE=your-profile node generate-images.js [story-id]
 
 # Generate images for Wiggly's Diamond Quest
-node generate-images.js wigglys-diamond-quest
+AWS_PROFILE=your-profile node generate-images.js wigglys-diamond-quest
 ```
 
 ## PDF Generation

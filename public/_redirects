@@ -1,0 +1,5 @@
+# SPA routing - redirect all /story/* routes to index.html
+/story/*  /index.html  200
+
+# Fallback for any other routes that don't match static files
+/*  /index.html  200
