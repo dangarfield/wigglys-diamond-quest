@@ -67,7 +67,6 @@ class StoryBookGenerator {
             this.savePDF('booklet');
 
             console.log('\n🎉 PDF book generation complete!');
-            console.log(`📖 Book saved as: ${OUTPUT_FILE}`);
 
         } catch (error) {
             console.error('❌ Error generating PDF book:', error.message);
@@ -339,8 +338,64 @@ class StoryBookGenerator {
 
         yPos += 10;
 
+        // Add item collection notice
+        if (node.collectItem) {
+            this.pdf.setTextColor(0, 100, 0); // Dark green color
+            this.pdf.setFontSize(11);
+            const itemFont = this.getChelseaMarketFont('bold');
+            this.pdf.setFont(itemFont.font, itemFont.style);
+
+            if (yPos > this.pageHeight - this.margin - 10) {
+                this.pdf.addPage();
+                yPos = this.margin;
+            }
+
+            const itemText = `You gained: ${this.getItemDisplayName(node.collectItem)}`;
+            this.pdf.text(itemText, this.margin, yPos);
+            yPos += 8;
+
+            // Reset color back to black
+            this.pdf.setTextColor(0, 0, 0);
+        }
+
         // Add choices/actions
-        if (node.choices && node.choices.length > 0) {
+        if (node.roll) {
+            // Handle dice roll mechanic
+            this.pdf.setTextColor(0, 0, 0);
+            this.pdf.setFontSize(12);
+            const rollFont = this.getChelseaMarketFont('bold');
+            this.pdf.setFont(rollFont.font, rollFont.style);
+
+            if (yPos > this.pageHeight - this.margin - 15) {
+                this.pdf.addPage();
+                yPos = this.margin;
+            }
+
+            // Clean roll text
+            const cleanRollText = node.roll.text.replace(/🎲/g, 'Roll dice:');
+            this.pdf.text(cleanRollText, this.margin, yPos);
+            yPos += 8;
+
+            // Add outcomes
+            this.pdf.setFontSize(10);
+            const outcomeFont = this.getChelseaMarketFont('normal');
+            this.pdf.setFont(outcomeFont.font, outcomeFont.style);
+
+            node.roll.outcomes.forEach((outcome) => {
+                const targetPage = this.nodeToPageMap[outcome.next] || '?';
+                const outcomeText = `${outcome.range}: ${outcome.text}`;
+                const pageText = `Page ${targetPage}`;
+
+                if (yPos > this.pageHeight - this.margin - 10) {
+                    this.pdf.addPage();
+                    yPos = this.margin;
+                }
+
+                this.pdf.text(outcomeText, this.margin, yPos);
+                this.pdf.text(pageText, this.pageWidth - this.margin, yPos, { align: 'right' });
+                yPos += 5;
+            });
+        } else if (node.choices && node.choices.length > 0) {
             this.pdf.setTextColor(0, 0, 0); // Black color
             this.pdf.setFontSize(12);
             const choiceFont = this.getChelseaMarketFont('normal');
@@ -348,7 +403,14 @@ class StoryBookGenerator {
 
             node.choices.forEach((choice, index) => {
                 const targetPage = this.nodeToPageMap[choice.next] || '?';
-                const choiceText = `> ${choice.text}`;
+                let choiceText = `> ${choice.text}`;
+
+                // Add item requirement/usage indicator
+                if (choice.item) {
+                    const itemName = this.getItemDisplayName(choice.item);
+                    choiceText += ` (${itemName} is needed)`;
+                }
+
                 const pageText = `Page ${targetPage}`;
 
                 if (yPos > this.pageHeight - this.margin - 10) {
@@ -463,6 +525,16 @@ class StoryBookGenerator {
         }
 
         console.log(`✅ Booklet version created with ${this.pdf.getNumberOfPages()} pages`);
+    }
+
+    getItemDisplayName(itemId) {
+        const displayNames = {
+            'magic_flowers': 'Magic Flowers',
+            'glowing_crystals': 'Glowing Crystals',
+            'ancient_knowledge': 'Ancient Knowledge',
+            'Map of the land': 'Map of the Land'
+        };
+        return displayNames[itemId] || itemId.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
     }
 
     savePDF(version = 'readable') {
