@@ -33,12 +33,13 @@ const D3StoryGraph = ({ story }) => {
     // Prepare data
     const { nodes, links, missingNodes } = prepareGraphData(story)
 
-    // Create force simulation
+    // Create force simulation with initial positioning
     const simulation = d3.forceSimulation(nodes)
-      .force("link", d3.forceLink(links).id(d => d.id).distance(100))
-      .force("charge", d3.forceManyBody().strength(-300))
-      .force("center", d3.forceCenter(width / 2, height / 2))
-      .force("collision", d3.forceCollide().radius(40))
+      .force("link", d3.forceLink(links).id(d => d.id).distance(120))
+      .force("charge", d3.forceManyBody().strength(-200))
+      .force("collision", d3.forceCollide().radius(45))
+      .force("x", d3.forceX(d => 100 + (d.distance * 150)).strength(0.3))
+      .force("y", d3.forceY(height / 2).strength(0.1))
 
     // Create arrow markers
     svg.append("defs").selectAll("marker")
@@ -164,30 +165,67 @@ const prepareGraphData = (story) => {
     }
   })
 
+  // Calculate distances from start node using BFS
+  const calculateDistances = () => {
+    const distances = {}
+    const queue = [{ nodeId: story.startNode, distance: 0 }]
+    const visited = new Set()
+
+    while (queue.length > 0) {
+      const { nodeId, distance } = queue.shift()
+
+      if (visited.has(nodeId)) continue
+      visited.add(nodeId)
+      distances[nodeId] = distance
+
+      const node = story.nodes[nodeId]
+      if (node && node.choices) {
+        node.choices.forEach(choice => {
+          if (!visited.has(choice.next)) {
+            queue.push({ nodeId: choice.next, distance: distance + 1 })
+          }
+        })
+      }
+    }
+
+    return distances
+  }
+
+  const distances = calculateDistances()
+
   // Create nodes array
   const nodes = []
-  
+
   // Add existing nodes
   Object.entries(story.nodes).forEach(([nodeId, nodeData]) => {
+    const distance = distances[nodeId] || 0
     nodes.push({
       id: nodeId,
       text: nodeData.text,
       isStart: nodeId === story.startNode,
       isEnd: nodeData.isEnd || false,
       choiceCount: nodeData.choices ? nodeData.choices.length : 0,
-      missing: false
+      missing: false,
+      distance: distance,
+      // Set initial position based on distance from start
+      x: 100 + (distance * 150), // Start at x=100, then 150px per level
+      y: 400 + (Math.random() - 0.5) * 200 // Random y with some spread
     })
   })
 
   // Add missing nodes
   missingNodeIds.forEach(nodeId => {
+    const distance = distances[nodeId] || 999
     nodes.push({
       id: nodeId,
       text: "Missing node",
       isStart: false,
       isEnd: false,
       choiceCount: 0,
-      missing: true
+      missing: true,
+      distance: distance,
+      x: 100 + (distance * 150),
+      y: 400 + (Math.random() - 0.5) * 200
     })
   })
 
@@ -222,7 +260,7 @@ const StoryEditor = ({ story, onClose }) => {
         <h2>Story Decision Graph</h2>
         <button className="close-btn" onClick={onClose}>✕</button>
       </div>
-      
+
       {missingNodes.length > 0 && (
         <div className="missing-nodes-warning" style={{ margin: '10px 20px' }}>
           <h4>⚠️ Missing Nodes ({missingNodes.length}):</h4>
@@ -233,16 +271,16 @@ const StoryEditor = ({ story, onClose }) => {
           </div>
         </div>
       )}
-      
+
       <div className="graph-legend" style={{ margin: '10px 20px', fontSize: '12px' }}>
-        <span style={{ color: '#48bb78' }}>🟢 Start Node</span> | 
-        <span style={{ color: '#f56565' }}> 🔴 End Node</span> | 
-        <span style={{ color: '#667eea' }}> 🔵 Regular Node</span> | 
+        <span style={{ color: '#48bb78' }}>🟢 Start Node</span> |
+        <span style={{ color: '#f56565' }}> 🔴 End Node</span> |
+        <span style={{ color: '#667eea' }}> 🔵 Regular Node</span> |
         <span style={{ color: '#ff6b6b' }}> ❌ Missing Node</span>
         <br />
         <em>Drag nodes to rearrange • Zoom with mouse wheel • Hover for details</em>
       </div>
-      
+
       <div style={{ height: 'calc(100% - 120px)' }}>
         <D3StoryGraph story={story} />
       </div>
@@ -251,200 +289,255 @@ const StoryEditor = ({ story, onClose }) => {
 }
 
 class StoryGame {
-    constructor() {
-        this.story = null
-        this.currentNode = null
-        this.flumeRoot = null
-        this.nodeHistory = [] // Track visited nodes for back button
-        this.saveKey = 'wiggly-diamond-quest-save'
-        this.speechKey = 'wiggly-speech-enabled'
-        this.currentSpeech = null // Track current speech synthesis
-        this.speechEnabled = this.loadSpeechSetting() // Load speech setting from localStorage
-        this.speechActivated = false // Track if user has activated speech
-        this.init()
-    }
+  constructor() {
+    this.story = null
+    this.currentNode = null
+    this.flumeRoot = null
+    this.nodeHistory = [] // Track visited nodes for back button
+    this.storyId = this.getStoryIdFromUrl()
+    this.saveKey = `${this.storyId}-save`
+    this.speechKey = 'speech-enabled' // Generic speech setting
+    this.currentSpeech = null // Track current speech synthesis
+    this.speechEnabled = this.loadSpeechSetting() // Load speech setting from localStorage
+    this.speechActivated = false // Track if user has activated speech
+    this.init()
+  }
 
-    async init() {
-        await this.loadStory()
-        this.setupEventListeners()
-        this.loadGameState()
-    }
+  getStoryIdFromUrl() {
+    const path = window.location.pathname
+    const match = path.match(/\/story\/([^\/]+)/)
+    return match ? match[1] : null
+  }
 
-    async loadStory() {
-        try {
-            const response = await fetch('/story.json')
-            this.story = await response.json()
-            console.log('Story loaded successfully:', this.story)
-        } catch (error) {
-            console.error('Failed to load story:', error)
+  async init() {
+    if (!this.storyId) {
+      this.showStoryIndex()
+      return
+    }
+    await this.loadStory()
+    this.setupEventListeners()
+    this.loadGameState()
+  }
+
+  async loadStory() {
+    try {
+      const response = await fetch(`/${this.storyId}/story.json`)
+      this.story = await response.json()
+
+      // Update page title and header
+      const storiesResponse = await fetch('/stories.json')
+      const storiesData = await storiesResponse.json()
+      const storyInfo = storiesData.stories.find(s => s.id === this.storyId)
+
+      if (storyInfo) {
+        document.title = storyInfo.title
+        document.getElementById('gameTitle').textContent = storyInfo.title
+      }
+
+      console.log('Story loaded successfully:', this.story)
+    } catch (error) {
+      console.error('Failed to load story:', error)
+    }
+  }
+
+  async showStoryIndex() {
+    try {
+      const response = await fetch('/stories.json')
+      const storiesData = await response.json()
+      this.renderStoryIndex(storiesData.stories)
+    } catch (error) {
+      console.error('Failed to load stories:', error)
+    }
+  }
+
+  renderStoryIndex(stories) {
+    document.body.innerHTML = `
+            <div class="story-index">
+                <header class="index-header">
+                    <h1>📚 Story Collection</h1>
+                    <p>Choose your adventure!</p>
+                </header>
+                <div class="stories-grid">
+                    ${stories.map(story => `
+                        <div class="story-card" onclick="window.location.href='/story/${story.id}'">
+                            <img src="/${story.id}/cover.png" alt="${story.title}" class="story-preview">
+                            <div class="story-info">
+                                <h3>${story.title}</h3>
+                                <p class="story-description">${story.description}</p>
+                                <p class="story-author">by ${story.author}</p>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `
+  }
+
+  setupEventListeners() {
+    // Tab switching
+    document.getElementById('gameTab').addEventListener('click', () => {
+      this.showView('gameView')
+      this.setActiveTab('gameTab')
+    })
+
+    document.getElementById('visualizeTab').addEventListener('click', () => {
+      this.showView('visualizeView')
+      this.setActiveTab('visualizeTab')
+      this.renderStoryMap()
+    })
+
+    // Restart button
+    document.getElementById('restartBtn').addEventListener('click', () => {
+      this.startGame()
+    })
+
+    // Back button (we'll add this to the HTML)
+    document.getElementById('backBtn').addEventListener('click', () => {
+      this.goBack()
+    })
+
+    // Top restart button
+    document.getElementById('topRestartBtn').addEventListener('click', () => {
+      this.confirmRestart()
+    })
+
+    // Speech toggle button
+    document.getElementById('speechToggle').addEventListener('click', () => {
+      this.toggleSpeech()
+    })
+
+    // Initialize speech button state
+    this.updateSpeechButton()
+  }
+
+  showView(viewId) {
+    document.querySelectorAll('.view').forEach(view => {
+      view.classList.remove('active')
+    })
+    document.getElementById(viewId).classList.add('active')
+  }
+
+  setActiveTab(tabId) {
+    document.querySelectorAll('.tab-btn').forEach(btn => {
+      btn.classList.remove('active')
+    })
+    document.getElementById(tabId).classList.add('active')
+  }
+
+  startGame() {
+    if (!this.story) return
+
+    this.currentNode = this.story.startNode
+    this.nodeHistory = [] // Reset history when starting new game
+    this.saveGameState()
+    this.renderCurrentNode()
+    document.getElementById('restartBtn').style.display = 'none'
+  }
+
+  confirmRestart() {
+    const confirmed = confirm('🎮 Start a new game? This will erase your current progress!')
+    if (confirmed) {
+      this.clearSaveData()
+      this.startGame()
+    }
+  }
+
+  saveGameState() {
+    const gameState = {
+      currentNode: this.currentNode,
+      nodeHistory: this.nodeHistory,
+      diamondsCollected: this.getDiamondsCollected(),
+      timestamp: Date.now()
+    }
+    localStorage.setItem(this.saveKey, JSON.stringify(gameState))
+    console.log('Game state saved:', gameState)
+  }
+
+  getDiamondsCollected() {
+    // Check which diamonds have been collected based on visited nodes
+    const diamonds = {
+      red: this.nodeHistory.includes('dino_jumping_contest') || this.currentNode === 'dino_jumping_contest',
+      blue: this.nodeHistory.includes('rocks_love_speech') || this.currentNode === 'rocks_love_speech',
+      green: this.nodeHistory.includes('roman_salute') || this.currentNode === 'roman_salute',
+      yellow: this.nodeHistory.includes('egypt_riddle_correct') || this.currentNode === 'egypt_riddle_correct',
+      purple: this.nodeHistory.includes('space_walk_moves') || this.currentNode === 'space_walk_moves'
+    }
+    return diamonds
+  }
+
+  updateProgressBar() {
+    const diamonds = this.getDiamondsCollected()
+    const progressBar = document.getElementById('progressBar')
+
+    // Show progress bar after accepting the mission
+    if (this.nodeHistory.includes('accept_mission') || this.currentNode === 'accept_mission') {
+      progressBar.style.display = 'block'
+
+      // Update diamond indicators
+      Object.entries(diamonds).forEach(([color, collected]) => {
+        const slot = document.querySelector(`[data-diamond="${color}"]`)
+        if (slot) {
+          slot.style.opacity = collected ? '1' : '0.3'
+          slot.style.transform = collected ? 'scale(1.2)' : 'scale(1)'
         }
+      })
+    } else {
+      progressBar.style.display = 'none'
     }
+  }
 
-    setupEventListeners() {
-        // Tab switching
-        document.getElementById('gameTab').addEventListener('click', () => {
-            this.showView('gameView')
-            this.setActiveTab('gameTab')
-        })
-
-        document.getElementById('visualizeTab').addEventListener('click', () => {
-            this.showView('visualizeView')
-            this.setActiveTab('visualizeTab')
-            this.renderStoryMap()
-        })
-
-        // Restart button
-        document.getElementById('restartBtn').addEventListener('click', () => {
-            this.startGame()
-        })
-
-        // Back button (we'll add this to the HTML)
-        document.getElementById('backBtn').addEventListener('click', () => {
-            this.goBack()
-        })
-
-        // Top restart button
-        document.getElementById('topRestartBtn').addEventListener('click', () => {
-            this.confirmRestart()
-        })
-
-        // Speech toggle button
-        document.getElementById('speechToggle').addEventListener('click', () => {
-            this.toggleSpeech()
-        })
-
-        // Initialize speech button state
-        this.updateSpeechButton()
-    }
-
-    showView(viewId) {
-        document.querySelectorAll('.view').forEach(view => {
-            view.classList.remove('active')
-        })
-        document.getElementById(viewId).classList.add('active')
-    }
-
-    setActiveTab(tabId) {
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.classList.remove('active')
-        })
-        document.getElementById(tabId).classList.add('active')
-    }
-
-    startGame() {
-        if (!this.story) return
-
-        this.currentNode = this.story.startNode
-        this.nodeHistory = [] // Reset history when starting new game
-        this.saveGameState()
+  loadGameState() {
+    try {
+      const savedState = localStorage.getItem(this.saveKey)
+      if (savedState) {
+        const gameState = JSON.parse(savedState)
+        this.currentNode = gameState.currentNode
+        this.nodeHistory = gameState.nodeHistory || []
+        console.log('Game state loaded:', gameState)
         this.renderCurrentNode()
-        document.getElementById('restartBtn').style.display = 'none'
-    }
 
-    confirmRestart() {
-        const confirmed = confirm('🎮 Start a new game? This will erase your current progress!')
-        if (confirmed) {
-            this.clearSaveData()
-            this.startGame()
-        }
+        // Show a welcome back message
+        this.showWelcomeBackMessage()
+      } else {
+        // No saved game, start fresh
+        this.startGame()
+      }
+    } catch (error) {
+      console.error('Error loading game state:', error)
+      this.startGame()
     }
+  }
 
-    saveGameState() {
-        const gameState = {
-            currentNode: this.currentNode,
-            nodeHistory: this.nodeHistory,
-            diamondsCollected: this.getDiamondsCollected(),
-            timestamp: Date.now()
-        }
-        localStorage.setItem(this.saveKey, JSON.stringify(gameState))
-        console.log('Game state saved:', gameState)
+  clearSaveData() {
+    localStorage.removeItem(this.saveKey)
+    console.log('Save data cleared')
+  }
+
+  loadSpeechSetting() {
+    try {
+      const saved = localStorage.getItem(this.speechKey)
+      return saved !== null ? JSON.parse(saved) : true // Default to enabled
+    } catch (error) {
+      return true // Default to enabled if error
     }
+  }
 
-    getDiamondsCollected() {
-        // Check which diamonds have been collected based on visited nodes
-        const diamonds = {
-            red: this.nodeHistory.includes('dino_jumping_contest') || this.currentNode === 'dino_jumping_contest',
-            blue: this.nodeHistory.includes('rocks_love_speech') || this.currentNode === 'rocks_love_speech',
-            green: this.nodeHistory.includes('roman_salute') || this.currentNode === 'roman_salute',
-            yellow: this.nodeHistory.includes('egypt_riddle_correct') || this.currentNode === 'egypt_riddle_correct',
-            purple: this.nodeHistory.includes('space_walk_moves') || this.currentNode === 'space_walk_moves'
-        }
-        return diamonds
-    }
+  saveSpeechSetting() {
+    localStorage.setItem(this.speechKey, JSON.stringify(this.speechEnabled))
+  }
 
-    updateProgressBar() {
-        const diamonds = this.getDiamondsCollected()
-        const progressBar = document.getElementById('progressBar')
-        
-        // Show progress bar after accepting the mission
-        if (this.nodeHistory.includes('accept_mission') || this.currentNode === 'accept_mission') {
-            progressBar.style.display = 'block'
-            
-            // Update diamond indicators
-            Object.entries(diamonds).forEach(([color, collected]) => {
-                const slot = document.querySelector(`[data-diamond="${color}"]`)
-                if (slot) {
-                    slot.style.opacity = collected ? '1' : '0.3'
-                    slot.style.transform = collected ? 'scale(1.2)' : 'scale(1)'
-                }
-            })
-        } else {
-            progressBar.style.display = 'none'
-        }
-    }
+  showWelcomeBackMessage() {
+    this.showToast('💾 Welcome back! Your adventure continues...', 4000)
+  }
 
-    loadGameState() {
-        try {
-            const savedState = localStorage.getItem(this.saveKey)
-            if (savedState) {
-                const gameState = JSON.parse(savedState)
-                this.currentNode = gameState.currentNode
-                this.nodeHistory = gameState.nodeHistory || []
-                console.log('Game state loaded:', gameState)
-                this.renderCurrentNode()
-                
-                // Show a welcome back message
-                this.showWelcomeBackMessage()
-            } else {
-                // No saved game, start fresh
-                this.startGame()
-            }
-        } catch (error) {
-            console.error('Error loading game state:', error)
-            this.startGame()
-        }
-    }
+  showToast(message, duration = 3000) {
+    // Create toast element
+    const toast = document.createElement('div')
+    toast.className = 'toast-notification'
+    toast.textContent = message
 
-    clearSaveData() {
-        localStorage.removeItem(this.saveKey)
-        console.log('Save data cleared')
-    }
-
-    loadSpeechSetting() {
-        try {
-            const saved = localStorage.getItem(this.speechKey)
-            return saved !== null ? JSON.parse(saved) : true // Default to enabled
-        } catch (error) {
-            return true // Default to enabled if error
-        }
-    }
-
-    saveSpeechSetting() {
-        localStorage.setItem(this.speechKey, JSON.stringify(this.speechEnabled))
-    }
-
-    showWelcomeBackMessage() {
-        this.showToast('💾 Welcome back! Your adventure continues...', 4000)
-    }
-
-    showToast(message, duration = 3000) {
-        // Create toast element
-        const toast = document.createElement('div')
-        toast.className = 'toast-notification'
-        toast.textContent = message
-        
-        // Add toast styles
-        toast.style.cssText = `
+    // Add toast styles
+    toast.style.cssText = `
             position: fixed;
             top: 20px;
             right: 20px;
@@ -462,276 +555,276 @@ class StoryGame {
             transition: transform 0.3s ease;
             max-width: 300px;
         `
-        
-        // Add to page
-        document.body.appendChild(toast)
-        
-        // Animate in
-        setTimeout(() => {
-            toast.style.transform = 'translateX(0)'
-        }, 100)
-        
-        // Remove after duration
-        setTimeout(() => {
-            toast.style.transform = 'translateX(100%)'
-            setTimeout(() => {
-                if (toast.parentNode) {
-                    toast.parentNode.removeChild(toast)
-                }
-            }, 300)
-        }, duration)
+
+    // Add to page
+    document.body.appendChild(toast)
+
+    // Animate in
+    setTimeout(() => {
+      toast.style.transform = 'translateX(0)'
+    }, 100)
+
+    // Remove after duration
+    setTimeout(() => {
+      toast.style.transform = 'translateX(100%)'
+      setTimeout(() => {
+        if (toast.parentNode) {
+          toast.parentNode.removeChild(toast)
+        }
+      }, 300)
+    }, duration)
+  }
+
+  renderCurrentNode() {
+    const node = this.story.nodes[this.currentNode]
+    if (!node) return
+
+    // Update story text
+    document.getElementById('storyText').textContent = node.text
+
+    // Update or add image if available
+    this.updateNodeImage(this.currentNode)
+
+    // Read the text aloud with a small delay to ensure DOM is updated
+    setTimeout(() => {
+      this.speakText(node.text)
+    }, 100)
+
+    // Clear and update choices
+    const choicesContainer = document.getElementById('choices')
+    choicesContainer.innerHTML = ''
+
+    if (node.choices && node.choices.length > 0) {
+      node.choices.forEach((choice) => {
+        const button = document.createElement('button')
+        button.className = 'choice-btn'
+        button.textContent = choice.text
+        button.addEventListener('click', () => {
+          this.makeChoice(choice.next)
+        })
+        choicesContainer.appendChild(button)
+      })
+    } else if (node.isEnd) {
+      // Show restart button for end nodes
+      document.getElementById('restartBtn').style.display = 'block'
     }
 
-    renderCurrentNode() {
-        const node = this.story.nodes[this.currentNode]
-        if (!node) return
-
-        // Update story text
-        document.getElementById('storyText').textContent = node.text
-
-        // Update or add image if available
-        this.updateNodeImage(this.currentNode)
-
-        // Read the text aloud with a small delay to ensure DOM is updated
-        setTimeout(() => {
-            this.speakText(node.text)
-        }, 100)
-
-        // Clear and update choices
-        const choicesContainer = document.getElementById('choices')
-        choicesContainer.innerHTML = ''
-
-        if (node.choices && node.choices.length > 0) {
-            node.choices.forEach((choice) => {
-                const button = document.createElement('button')
-                button.className = 'choice-btn'
-                button.textContent = choice.text
-                button.addEventListener('click', () => {
-                    this.makeChoice(choice.next)
-                })
-                choicesContainer.appendChild(button)
-            })
-        } else if (node.isEnd) {
-            // Show restart button for end nodes
-            document.getElementById('restartBtn').style.display = 'block'
-        }
-
-        // Show/hide back button
-        const backBtn = document.getElementById('backBtn')
-        if (this.nodeHistory.length > 0) {
-            backBtn.style.display = 'block'
-        } else {
-            backBtn.style.display = 'none'
-        }
-
-        // Update progress bar
-        this.updateProgressBar()
+    // Show/hide back button
+    const backBtn = document.getElementById('backBtn')
+    if (this.nodeHistory.length > 0) {
+      backBtn.style.display = 'block'
+    } else {
+      backBtn.style.display = 'none'
     }
 
-    makeChoice(nextNodeId) {
-        // Stop current speech before moving to next node
-        this.stopSpeech()
-        
-        // Add current node to history before moving
-        if (this.currentNode && !this.nodeHistory.includes(this.currentNode)) {
-            this.nodeHistory.push(this.currentNode)
-        }
-        
-        this.currentNode = nextNodeId
-        this.saveGameState() // Auto-save after each choice
-        this.renderCurrentNode()
+    // Update progress bar
+    this.updateProgressBar()
+  }
+
+  makeChoice(nextNodeId) {
+    // Stop current speech before moving to next node
+    this.stopSpeech()
+
+    // Add current node to history before moving
+    if (this.currentNode && !this.nodeHistory.includes(this.currentNode)) {
+      this.nodeHistory.push(this.currentNode)
     }
 
-    goBack() {
-        if (this.nodeHistory.length > 0) {
-            // Stop current speech before going back
-            this.stopSpeech()
-            
-            this.currentNode = this.nodeHistory.pop()
-            this.saveGameState() // Auto-save when going back
-            this.renderCurrentNode()
-        }
+    this.currentNode = nextNodeId
+    this.saveGameState() // Auto-save after each choice
+    this.renderCurrentNode()
+  }
+
+  goBack() {
+    if (this.nodeHistory.length > 0) {
+      // Stop current speech before going back
+      this.stopSpeech()
+
+      this.currentNode = this.nodeHistory.pop()
+      this.saveGameState() // Auto-save when going back
+      this.renderCurrentNode()
+    }
+  }
+
+  renderStoryMap() {
+    console.log('Rendering story map with story:', this.story)
+    const container = document.getElementById('flume-editor')
+
+    if (this.flumeRoot) {
+      this.flumeRoot.unmount()
     }
 
-    renderStoryMap() {
-        console.log('Rendering story map with story:', this.story)
-        const container = document.getElementById('flume-editor')
-        
-        if (this.flumeRoot) {
-            this.flumeRoot.unmount()
-        }
-
-        if (!this.story) {
-            console.error('No story data available for visualization')
-            return
-        }
-
-        this.flumeRoot = ReactDOM.createRoot(container)
-        this.flumeRoot.render(
-            React.createElement(StoryEditor, {
-                story: this.story,
-                onClose: () => {
-                    this.showView('gameView')
-                    this.setActiveTab('gameTab')
-                }
-            })
-        )
+    if (!this.story) {
+      console.error('No story data available for visualization')
+      return
     }
 
-    updateNodeImage(nodeId) {
-        // Check if image exists for this node
-        const imagePath = `/generated-images/${nodeId}.png`
-        
-        // Get the existing image container
-        const imageContainer = document.getElementById('nodeImage')
-        if (!imageContainer) return
-        
-        // Try to load the image
-        const img = new Image()
-        img.onload = () => {
-            // Image exists, display it
-            imageContainer.innerHTML = `
+    this.flumeRoot = ReactDOM.createRoot(container)
+    this.flumeRoot.render(
+      React.createElement(StoryEditor, {
+        story: this.story,
+        onClose: () => {
+          this.showView('gameView')
+          this.setActiveTab('gameTab')
+        }
+      })
+    )
+  }
+
+  updateNodeImage(nodeId) {
+    // Check if image exists for this node
+    const imagePath = `/${this.storyId}/generated-images/${nodeId}.png`
+
+    // Get the existing image container
+    const imageContainer = document.getElementById('nodeImage')
+    if (!imageContainer) return
+
+    // Try to load the image
+    const img = new Image()
+    img.onload = () => {
+      // Image exists, display it
+      imageContainer.innerHTML = `
                 <img src="${imagePath}" alt="Scene illustration for ${nodeId}" class="node-image" />
             `
-            imageContainer.style.display = 'flex'
-        }
-        img.onerror = () => {
-            // Image doesn't exist, show placeholder
-            imageContainer.innerHTML = `
+      imageContainer.style.display = 'flex'
+    }
+    img.onerror = () => {
+      // Image doesn't exist, show placeholder
+      imageContainer.innerHTML = `
                 <div style="color: rgba(255,255,255,0.6); text-align: center; font-style: italic;">
                     🎨<br>No illustration<br>available
                 </div>
             `
-            imageContainer.style.display = 'flex'
-        }
-        img.src = imagePath
+      imageContainer.style.display = 'flex'
+    }
+    img.src = imagePath
+  }
+
+  speakText(text) {
+    // Don't speak if speech is disabled
+    if (!this.speechEnabled) {
+      return
     }
 
-    speakText(text) {
-        // Don't speak if speech is disabled
-        if (!this.speechEnabled) {
-            return
-        }
-
-        // Stop any currently playing speech
-        if (this.currentSpeech) {
-            speechSynthesis.cancel()
-        }
-
-        // Check if speech synthesis is supported
-        if (!('speechSynthesis' in window)) {
-            console.log('Speech synthesis not supported')
-            return
-        }
-
-        // Clean up the text for better speech
-        let cleanText = text
-            .replace(/🚨/g, 'Alarm!')
-            .replace(/🦕/g, 'dinosaur')
-            .replace(/💎/g, 'diamond')
-            .replace(/⚔️/g, 'sword')
-            .replace(/🏺/g, 'ancient')
-            .replace(/🚀/g, 'rocket')
-            .replace(/🎉/g, 'celebration')
-            .replace(/'/g, "'") // Fix smart quotes
-            .replace(/'/g, "'")
-            .replace(/"/g, '"')
-            .replace(/"/g, '"')
-
-
-
-        // Create speech synthesis utterance
-        this.currentSpeech = new SpeechSynthesisUtterance(cleanText)
-        
-        // Configure speech settings
-        this.currentSpeech.rate = 0.9
-        this.currentSpeech.pitch = 1.1
-        this.currentSpeech.volume = 0.8
-
-        // Wait for voices to load, then set voice and speak
-        const speakWithVoice = () => {
-            const voices = speechSynthesis.getVoices()
-            
-            if (voices.length > 0) {
-                // Try to find a good English voice
-                const preferredVoice = voices.find(voice => 
-                    voice.lang.startsWith('en') && 
-                    (voice.name.includes('Google') || voice.name.includes('Microsoft') || voice.name.includes('Samantha') || voice.name.includes('Alex'))
-                ) || voices.find(voice => voice.lang.startsWith('en')) || voices[0]
-                
-                if (preferredVoice) {
-                    this.currentSpeech.voice = preferredVoice
-                }
-            }
-
-            // Add event listeners
-            this.currentSpeech.onend = () => {
-                this.currentSpeech = null
-            }
-
-            this.currentSpeech.onerror = (event) => {
-                this.currentSpeech = null
-            }
-
-            // Speak the text
-            speechSynthesis.speak(this.currentSpeech)
-        }
-
-        // Check if voices are already loaded
-        if (speechSynthesis.getVoices().length > 0) {
-            speakWithVoice()
-        } else {
-            // Wait for voices to load
-            speechSynthesis.addEventListener('voiceschanged', speakWithVoice, { once: true })
-            
-            // Fallback timeout in case voiceschanged doesn't fire
-            setTimeout(() => {
-                if (this.currentSpeech && speechSynthesis.getVoices().length === 0) {
-                    speechSynthesis.speak(this.currentSpeech)
-                }
-            }, 1000)
-        }
+    // Stop any currently playing speech
+    if (this.currentSpeech) {
+      speechSynthesis.cancel()
     }
 
-    stopSpeech() {
-        if (speechSynthesis.speaking) {
-            speechSynthesis.cancel()
+    // Check if speech synthesis is supported
+    if (!('speechSynthesis' in window)) {
+      console.log('Speech synthesis not supported')
+      return
+    }
+
+    // Clean up the text for better speech
+    let cleanText = text
+      .replace(/🚨/g, 'Alarm!')
+      .replace(/🦕/g, 'dinosaur')
+      .replace(/💎/g, 'diamond')
+      .replace(/⚔️/g, 'sword')
+      .replace(/🏺/g, 'ancient')
+      .replace(/🚀/g, 'rocket')
+      .replace(/🎉/g, 'celebration')
+      .replace(/'/g, "'") // Fix smart quotes
+      .replace(/'/g, "'")
+      .replace(/"/g, '"')
+      .replace(/"/g, '"')
+
+
+
+    // Create speech synthesis utterance
+    this.currentSpeech = new SpeechSynthesisUtterance(cleanText)
+
+    // Configure speech settings
+    this.currentSpeech.rate = 0.9
+    this.currentSpeech.pitch = 1.1
+    this.currentSpeech.volume = 0.8
+
+    // Wait for voices to load, then set voice and speak
+    const speakWithVoice = () => {
+      const voices = speechSynthesis.getVoices()
+
+      if (voices.length > 0) {
+        // Try to find a good English voice
+        const preferredVoice = voices.find(voice =>
+          voice.lang.startsWith('en') &&
+          (voice.name.includes('Google') || voice.name.includes('Microsoft') || voice.name.includes('Samantha') || voice.name.includes('Alex'))
+        ) || voices.find(voice => voice.lang.startsWith('en')) || voices[0]
+
+        if (preferredVoice) {
+          this.currentSpeech.voice = preferredVoice
         }
+      }
+
+      // Add event listeners
+      this.currentSpeech.onend = () => {
         this.currentSpeech = null
+      }
+
+      this.currentSpeech.onerror = (event) => {
+        this.currentSpeech = null
+      }
+
+      // Speak the text
+      speechSynthesis.speak(this.currentSpeech)
     }
 
-    toggleSpeech() {
-        this.speechEnabled = !this.speechEnabled
-        this.saveSpeechSetting() // Save the setting
-        this.updateSpeechButton()
-        
-        if (!this.speechEnabled) {
-            this.stopSpeech() // Stop any current speech when disabling
+    // Check if voices are already loaded
+    if (speechSynthesis.getVoices().length > 0) {
+      speakWithVoice()
+    } else {
+      // Wait for voices to load
+      speechSynthesis.addEventListener('voiceschanged', speakWithVoice, { once: true })
+
+      // Fallback timeout in case voiceschanged doesn't fire
+      setTimeout(() => {
+        if (this.currentSpeech && speechSynthesis.getVoices().length === 0) {
+          speechSynthesis.speak(this.currentSpeech)
         }
+      }, 1000)
     }
+  }
 
-    updateSpeechButton() {
-        const speechButton = document.getElementById('speechToggle')
-        if (!speechButton) return
-        
-        if (this.speechEnabled) {
-            speechButton.textContent = '🔊 Speech'
-            speechButton.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
-        } else {
-            speechButton.textContent = '🔇 Muted'
-            speechButton.style.background = 'linear-gradient(135deg, #6b7280 0%, #4b5563 100%)'
-        }
+  stopSpeech() {
+    if (speechSynthesis.speaking) {
+      speechSynthesis.cancel()
     }
+    this.currentSpeech = null
+  }
 
+  toggleSpeech() {
+    this.speechEnabled = !this.speechEnabled
+    this.saveSpeechSetting() // Save the setting
+    this.updateSpeechButton()
 
-
-    truncateText(text, maxLength) {
-        if (text.length <= maxLength) return text
-        return text.substring(0, maxLength) + '...'
+    if (!this.speechEnabled) {
+      this.stopSpeech() // Stop any current speech when disabling
     }
+  }
+
+  updateSpeechButton() {
+    const speechButton = document.getElementById('speechToggle')
+    if (!speechButton) return
+
+    if (this.speechEnabled) {
+      speechButton.textContent = '🔊 Speech'
+      speechButton.style.background = 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)'
+    } else {
+      speechButton.textContent = '🔇 Muted'
+      speechButton.style.background = 'linear-gradient(135deg, #6b7280 0%, #4b5563 100%)'
+    }
+  }
+
+
+
+  truncateText(text, maxLength) {
+    if (text.length <= maxLength) return text
+    return text.substring(0, maxLength) + '...'
+  }
 }
 
 // Initialize the game when the page loads
 document.addEventListener('DOMContentLoaded', () => {
-    new StoryGame()
+  new StoryGame()
 })

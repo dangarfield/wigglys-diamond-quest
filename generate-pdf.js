@@ -9,9 +9,13 @@ import './ChelseaMarket-Regular-normal.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Get story ID from command line argument
+const storyId = process.argv[2] || 'wigglys-diamond-quest';
+
 // Configuration
-const OUTPUT_FILE = 'Wigglys-Diamond-Quest-Book.pdf';
-const IMAGES_DIR = path.join(__dirname, 'public', 'generated-images');
+const STORY_DIR = path.join(__dirname, 'public', storyId);
+const OUTPUT_FILE_BASE = storyId.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join('-');
+const IMAGES_DIR = path.join(STORY_DIR, 'generated-images');
 
 class StoryBookGenerator {
     constructor() {
@@ -105,7 +109,7 @@ class StoryBookGenerator {
 
 
     async loadStory() {
-        const storyPath = path.join(__dirname, 'public', 'story.json');
+        const storyPath = path.join(STORY_DIR, 'story.json');
         const storyContent = fs.readFileSync(storyPath, 'utf8');
         this.story = JSON.parse(storyContent);
         console.log(`📖 Loaded story with ${Object.keys(this.story.nodes).length} nodes`);
@@ -148,8 +152,8 @@ class StoryBookGenerator {
         this.pageNumber++;
 
         try {
-            // Use the cover image from public/cover.png
-            const coverImagePath = path.join(__dirname, 'public', 'cover.png');
+            // Use the cover image from story directory
+            const coverImagePath = path.join(STORY_DIR, 'cover.png');
 
             if (fs.existsSync(coverImagePath)) {
                 // Read cover image as base64
@@ -463,8 +467,8 @@ class StoryBookGenerator {
 
     savePDF(version = 'readable') {
         const filename = version === 'booklet'
-            ? 'Wigglys-Diamond-Quest-Book-BOOKLET.pdf'
-            : 'Wigglys-Diamond-Quest-Book-READABLE.pdf';
+            ? `${OUTPUT_FILE_BASE}-Book-BOOKLET.pdf`
+            : `${OUTPUT_FILE_BASE}-Book-READABLE.pdf`;
 
         this.pdf.save(filename);
         console.log(`💾 ${version} PDF saved: ${filename} (${this.pdf.getNumberOfPages()} pages)`);

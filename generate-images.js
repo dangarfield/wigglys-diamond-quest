@@ -11,11 +11,15 @@ import {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Get story ID from command line argument
+const storyId = process.argv[2] || 'wigglys-diamond-quest';
+
 // Configuration
 const AWS_PROFILE = 'dan-sso';
+const STORY_DIR = path.join(__dirname, 'public', storyId);
+const OUTPUT_DIR = path.join(STORY_DIR, 'generated-images');
 const AWS_REGION = 'us-east-1'; // Nova Canvas is available in us-east-1
 const MODEL_ID = 'amazon.nova-canvas-v1:0';
-const OUTPUT_DIR = path.join(__dirname, 'public', 'generated-images');
 
 // Initialize AWS Bedrock client
 const bedrockClient = new BedrockRuntimeClient({
@@ -97,7 +101,7 @@ async function generateAllImages() {
         console.log('🚀 Starting image generation for Wiggly\'s Diamond Quest...\n');
 
         // Read story data
-        const storyPath = path.join(__dirname, 'public', 'story.json');
+        const storyPath = path.join(STORY_DIR, 'story.json');
         const storyContent = fs.readFileSync(storyPath, 'utf8');
         const story = JSON.parse(storyContent);
 
