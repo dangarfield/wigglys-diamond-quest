@@ -840,8 +840,8 @@ ume editor styling */
 
 .close-btn:active {
     transform: scale(0.95);
-}/
-* Story Index Styles */
+}
+/* Story Index Styles */
 .story-index {
     min-height: 100vh;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -956,8 +956,8 @@ Roll Styles */
 .dice-btn:disabled:hover {
     transform: none;
     box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
-}/
-* Dice Outcomes Display */
+}
+/* Dice Outcomes Display */
 .dice-outcomes {
     margin-top: 15px;
     padding: 15px;
@@ -1015,4 +1015,101 @@ Roll Styles */
 .winning-outcome .outcome-range,
 .winning-outcome .outcome-text {
     color: white;
+}/* Invento
+ry Styles */
+.inventory-bar {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: linear-gradient(135deg, rgba(45, 55, 72, 0.8) 0%, rgba(26, 32, 44, 0.9) 100%);
+    border: 2px solid rgba(102, 126, 234, 0.6);
+    border-radius: 15px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+}
+
+.inventory-label {
+    font-size: 1.1rem;
+    margin-right: 10px;
+    opacity: 0.8;
+}
+
+.inventory-items {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.inventory-item {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3);
+    transition: all 0.2s ease;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    white-space: nowrap;
+}
+
+.inventory-item:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.empty-inventory {
+    color: rgba(255, 255, 255, 0.6);
+    font-style: italic;
+    font-size: 0.9rem;
+}
+
+.choice-btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.choice-btn:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.choice-btn-disabled {
+    border: 2px solid #ef4444;
+    cursor: not-allowed;
+    opacity: 0.8;
+}
+
+.choice-btn-disabled:hover {
+    transform: none;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+/* Choice Button Content and Badge Styles */
+.choice-content {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+}
+
+.item-badge {
+    padding: 3px 8px;
+    border-radius: 8px;
+    font-size: 0.7rem;
+    font-weight: 600;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    flex-shrink: 0;
+}
+
+.requires-badge {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+    box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
+}
+
+.uses-badge {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3);
 }

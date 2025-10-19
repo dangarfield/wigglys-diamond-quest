@@ -147,6 +147,18 @@ const D3StoryGraph = ({ story }) => {
   return <svg ref={svgRef} style={{ width: '100%', height: '100%', border: '1px solid #ddd' }}></svg>
 }
 
+// Helper function to get total choice count (regular choices + dice outcomes)
+const getNodeChoiceCount = (nodeData) => {
+  let count = 0
+  if (nodeData.choices) {
+    count += nodeData.choices.length
+  }
+  if (nodeData.roll && nodeData.roll.outcomes) {
+    count += nodeData.roll.outcomes.length
+  }
+  return count
+}
+
 // Prepare data for D3 graph
 const prepareGraphData = (story) => {
   const existingNodes = new Set(Object.keys(story.nodes))
@@ -160,6 +172,14 @@ const prepareGraphData = (story) => {
         referencedNodes.add(choice.next)
         if (!existingNodes.has(choice.next)) {
           missingNodeIds.add(choice.next)
+        }
+      })
+    }
+    if (node.roll && node.roll.outcomes) {
+      node.roll.outcomes.forEach(outcome => {
+        referencedNodes.add(outcome.next)
+        if (!existingNodes.has(outcome.next)) {
+          missingNodeIds.add(outcome.next)
         }
       })
     }
@@ -179,12 +199,23 @@ const prepareGraphData = (story) => {
       distances[nodeId] = distance
 
       const node = story.nodes[nodeId]
-      if (node && node.choices) {
-        node.choices.forEach(choice => {
-          if (!visited.has(choice.next)) {
-            queue.push({ nodeId: choice.next, distance: distance + 1 })
-          }
-        })
+      if (node) {
+        // Handle regular choices
+        if (node.choices) {
+          node.choices.forEach(choice => {
+            if (!visited.has(choice.next)) {
+              queue.push({ nodeId: choice.next, distance: distance + 1 })
+            }
+          })
+        }
+        // Handle dice roll outcomes
+        if (node.roll && node.roll.outcomes) {
+          node.roll.outcomes.forEach(outcome => {
+            if (!visited.has(outcome.next)) {
+              queue.push({ nodeId: outcome.next, distance: distance + 1 })
+            }
+          })
+        }
       }
     }
 
@@ -204,7 +235,7 @@ const prepareGraphData = (story) => {
       text: nodeData.text,
       isStart: nodeId === story.startNode,
       isEnd: nodeData.isEnd || false,
-      choiceCount: nodeData.choices ? nodeData.choices.length : 0,
+      choiceCount: getNodeChoiceCount(nodeData),
       missing: false,
       distance: distance,
       // Set initial position based on distance from start
@@ -232,12 +263,23 @@ const prepareGraphData = (story) => {
   // Create links array
   const links = []
   Object.entries(story.nodes).forEach(([nodeId, nodeData]) => {
+    // Add links for regular choices
     if (nodeData.choices) {
       nodeData.choices.forEach(choice => {
         links.push({
           source: nodeId,
           target: choice.next,
           choiceText: choice.text
+        })
+      })
+    }
+    // Add links for dice roll outcomes
+    if (nodeData.roll && nodeData.roll.outcomes) {
+      nodeData.roll.outcomes.forEach(outcome => {
+        links.push({
+          source: nodeId,
+          target: outcome.next,
+          choiceText: `${outcome.range}: ${outcome.text}`
         })
       })
     }
@@ -294,6 +336,7 @@ class StoryGame {
     this.currentNode = null
     this.flumeRoot = null
     this.nodeHistory = [] // Track visited nodes for back button
+    this.inventory = [] // Track collected items
     this.storyId = this.getStoryIdFromUrl()
     this.saveKey = `${this.storyId}-save`
     this.speechKey = 'speech-enabled' // Generic speech setting
@@ -342,10 +385,19 @@ class StoryGame {
   }
 
   injectCapabilityUI() {
+    const storyText = document.getElementById('storyText')
+    
+    // Inject inventory UI (always present but subtle)
+    const inventoryHTML = `
+      <div id="inventoryBar" class="inventory-bar">
+        <span class="inventory-label">🎒</span>
+        <div id="inventoryItems" class="inventory-items"></div>
+      </div>
+    `
+    storyText.insertAdjacentHTML('beforebegin', inventoryHTML)
+    
     // Inject progress bar HTML if story supports diamond collection
     if (this.story?.capabilities?.diamondCollection) {
-      const storyText = document.getElementById('storyText')
-
       const progressBarHTML = `
         <div id="progressBar" class="progress-bar" style="display: none;">
           <div class="progress-label">💎 Diamonds Collected:</div>
@@ -358,7 +410,7 @@ class StoryGame {
           </div>
         </div>
       `
-
+      
       storyText.insertAdjacentHTML('beforebegin', progressBarHTML)
     }
   }
@@ -455,6 +507,7 @@ class StoryGame {
 
     this.currentNode = this.story.startNode
     this.nodeHistory = [] // Reset history when starting new game
+    this.inventory = [] // Reset inventory when starting new game
     this.saveGameState()
     this.renderCurrentNode()
     document.getElementById('restartBtn').style.display = 'none'
@@ -472,6 +525,7 @@ class StoryGame {
     const gameState = {
       currentNode: this.currentNode,
       nodeHistory: this.nodeHistory,
+      inventory: this.inventory,
       timestamp: Date.now()
     }
 
@@ -484,14 +538,67 @@ class StoryGame {
     console.log('Game state saved:', gameState)
   }
 
+  collectItem(itemId) {
+    if (!this.inventory.includes(itemId)) {
+      this.inventory.push(itemId)
+      this.updateInventoryUI()
+      this.saveGameState()
+      console.log(`Collected item: ${itemId}`)
+    }
+  }
+
+  hasItem(itemId) {
+    return this.inventory.includes(itemId)
+  }
+
+  removeItem(itemId) {
+    const index = this.inventory.indexOf(itemId)
+    if (index > -1) {
+      this.inventory.splice(index, 1)
+      this.updateInventoryUI()
+      this.saveGameState()
+      console.log(`Removed item: ${itemId}`)
+    }
+  }
+
+  updateInventoryUI() {
+    const inventoryBar = document.getElementById('inventoryBar')
+    const inventoryItems = document.getElementById('inventoryItems')
+    if (!inventoryBar || !inventoryItems) return
+
+    if (this.inventory.length === 0) {
+      inventoryBar.style.display = 'none'
+    } else {
+      inventoryBar.style.display = 'flex'
+      inventoryItems.innerHTML = this.inventory.map(item => 
+        `<span class="inventory-item">${this.getItemDisplayName(item)}</span>`
+      ).join('')
+    }
+  }
+
+  getItemDisplayName(itemId) {
+    return (itemId)
+    // const displayNames = {
+    //   'magic_flowers': 'Magic Flowers',
+    //   'glowing_crystals': 'Glowing Crystals',
+    //   'ancient_knowledge': 'Ancient Knowledge'
+    // }
+    // return displayNames[itemId] || itemId.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+  }
+
   getDiamondsCollected() {
+    // Get visited node IDs from history (handle both old and new formats)
+    const visitedNodes = this.nodeHistory.map(entry => 
+      typeof entry === 'string' ? entry : entry.node
+    )
+
     // Check which diamonds have been collected based on visited nodes
     const diamonds = {
-      red: this.nodeHistory.includes('dino_jumping_contest') || this.currentNode === 'dino_jumping_contest',
-      blue: this.nodeHistory.includes('rocks_love_speech') || this.currentNode === 'rocks_love_speech',
-      green: this.nodeHistory.includes('roman_salute') || this.currentNode === 'roman_salute',
-      yellow: this.nodeHistory.includes('egypt_riddle_correct') || this.currentNode === 'egypt_riddle_correct',
-      purple: this.nodeHistory.includes('space_walk_moves') || this.currentNode === 'space_walk_moves'
+      red: visitedNodes.includes('dino_jumping_contest') || this.currentNode === 'dino_jumping_contest',
+      blue: visitedNodes.includes('rocks_love_speech') || this.currentNode === 'rocks_love_speech',
+      green: visitedNodes.includes('roman_salute') || this.currentNode === 'roman_salute',
+      yellow: visitedNodes.includes('egypt_riddle_correct') || this.currentNode === 'egypt_riddle_correct',
+      purple: visitedNodes.includes('space_walk_moves') || this.currentNode === 'space_walk_moves'
     }
     return diamonds
   }
@@ -525,7 +632,20 @@ class StoryGame {
       if (savedState) {
         const gameState = JSON.parse(savedState)
         this.currentNode = gameState.currentNode
-        this.nodeHistory = gameState.nodeHistory || []
+        this.inventory = gameState.inventory || []
+        
+        // Handle backward compatibility for nodeHistory format
+        const rawHistory = gameState.nodeHistory || []
+        if (rawHistory.length > 0 && typeof rawHistory[0] === 'string') {
+          // Old format: array of node IDs, convert to new format
+          this.nodeHistory = rawHistory.map(nodeId => ({
+            node: nodeId,
+            inventory: [] // Can't recover old inventory states
+          }))
+        } else {
+          // New format: array of {node, inventory} objects
+          this.nodeHistory = rawHistory
+        }
         console.log('Game state loaded:', gameState)
         this.renderCurrentNode()
 
@@ -634,11 +754,35 @@ class StoryGame {
       // Handle regular choices
       node.choices.forEach((choice) => {
         const button = document.createElement('button')
-        button.className = 'choice-btn'
-        button.textContent = choice.text
-        button.addEventListener('click', () => {
-          this.makeChoice(choice.next)
-        })
+        const hasRequiredItem = !choice.item || this.hasItem(choice.item)
+        
+        // Create the main button content
+        const buttonContent = document.createElement('div')
+        buttonContent.className = 'choice-content'
+        
+        const choiceText = document.createElement('span')
+        choiceText.textContent = choice.text
+        buttonContent.appendChild(choiceText)
+        
+        // Add item badges if needed
+        if (choice.item) {
+          const badge = document.createElement('span')
+          badge.className = hasRequiredItem ? 'item-badge uses-badge' : 'item-badge requires-badge'
+          badge.textContent = hasRequiredItem ? `${this.getItemDisplayName(choice.item)} is used` : `${this.getItemDisplayName(choice.item)} is needed`
+          buttonContent.appendChild(badge)
+        }
+        
+        if (hasRequiredItem) {
+          button.className = 'choice-btn'
+          button.addEventListener('click', () => {
+            this.makeChoice(choice.next, choice)
+          })
+        } else {
+          button.className = 'choice-btn choice-btn-disabled'
+          button.disabled = true
+        }
+        
+        button.appendChild(buttonContent)
         choicesContainer.appendChild(button)
       })
     } else if (node.isEnd) {
@@ -653,6 +797,14 @@ class StoryGame {
     } else {
       backBtn.style.display = 'none'
     }
+
+    // Handle item collection
+    if (node.collectItem) {
+      this.collectItem(node.collectItem)
+    }
+
+    // Update inventory UI
+    this.updateInventoryUI()
 
     if (this.story?.capabilities?.diamondCollection) {
       this.updateDiamondProgressBar()
@@ -764,13 +916,27 @@ class StoryGame {
     }, 100)
   }
 
-  makeChoice(nextNodeId) {
+  makeChoice(nextNodeId, choiceData = null) {
     // Stop current speech before moving to next node
     this.stopSpeech()
 
-    // Add current node to history before moving
-    if (this.currentNode && !this.nodeHistory.includes(this.currentNode)) {
-      this.nodeHistory.push(this.currentNode)
+    // Remove item from inventory if choice required one
+    if (choiceData && choiceData.item && this.hasItem(choiceData.item)) {
+      this.removeItem(choiceData.item)
+    }
+
+    // Save current state to history before moving
+    if (this.currentNode) {
+      const currentState = {
+        node: this.currentNode,
+        inventory: [...this.inventory] // Create a copy of current inventory
+      }
+      
+      // Only add if it's not already the last entry (avoid duplicates)
+      const lastEntry = this.nodeHistory[this.nodeHistory.length - 1]
+      if (!lastEntry || lastEntry.node !== this.currentNode) {
+        this.nodeHistory.push(currentState)
+      }
     }
 
     this.currentNode = nextNodeId
@@ -783,7 +949,11 @@ class StoryGame {
       // Stop current speech before going back
       this.stopSpeech()
 
-      this.currentNode = this.nodeHistory.pop()
+      // Restore previous state (node + inventory)
+      const previousState = this.nodeHistory.pop()
+      this.currentNode = previousState.node
+      this.inventory = [...previousState.inventory] // Restore inventory state
+      
       this.saveGameState() // Auto-save when going back
       this.renderCurrentNode()
     }

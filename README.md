@@ -37,8 +37,10 @@ Each story is defined with this structure:
     "node_id": {
       "text": "Story text for this scene",
       "image-text": "Description for AI image generation",
+      "collectItem": "Rusty Key",  // Optional: adds item to inventory
       "choices": [  // Either "choices" OR "roll" is required (not both)
-        { "text": "Choice description", "next": "next_node_id" }
+        { "text": "Choice description", "next": "next_node_id" },
+        { "text": "Unlock rusty lock", "next": "open_door", "item": "Rusty Key" } // item: required item
       ],
       "roll": {  // Either "choices" OR "roll" is required (not both)
         "text": "🎲 Roll the dice!",
@@ -57,6 +59,8 @@ Each story is defined with this structure:
 ### Story Mechanics
 
 - **Choices**: Standard branching narrative with player decisions
+- **Item Collection**: `"collectItem": "item_id"` adds items to player inventory
+- **Conditional Choices**: `"item": "required_item"` on choices requires specific items
 - **Dice Rolling**: Chance-based outcomes using customizable ranges (e.g., "1-3", "4", "5-12")
 - **Capabilities**: Optional features like diamond collection progress tracking
 - **Endings**: Multiple story conclusions with `isEnd: true`

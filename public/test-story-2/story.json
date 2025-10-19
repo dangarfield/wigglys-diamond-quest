@@ -141,6 +141,124 @@
         }
       ]
     },
+    "magic_flowers": {
+      "text": "You carefully pick the glowing flowers. They pulse with a warm, magical light in your hands. These could be useful later!",
+      "image-text": "Hands holding glowing magical flowers that pulse with warm light",
+      "collectItem": "magic_flowers",
+      "choices": [
+        {
+          "text": "Continue exploring",
+          "next": "fox_guide"
+        }
+      ]
+    },
+    "crystal_power": {
+      "text": "You collect several glowing crystals. They feel warm and seem to hum with ancient energy.",
+      "image-text": "Hands holding glowing crystals that emit ancient magical energy",
+      "collectItem": "glowing_crystals",
+      "choices": [
+        {
+          "text": "Leave the cave",
+          "next": "mountain_summit"
+        }
+      ]
+    },
+    "ancient_wisdom": {
+      "text": "The paintings tell of an ancient ritual. You memorize the symbols - this knowledge might prove valuable.",
+      "image-text": "Ancient cave paintings showing mystical symbols and ritual scenes",
+      "collectItem": "Map of the land",
+      "choices": [
+        {
+          "text": "Leave the cave",
+          "next": "mountain_summit"
+        },
+        {
+          "text": "Use the map",
+          "next": "fox_guide",
+          "item": "Map of the land"
+        },
+        {
+          "text": "Blow up the cave",
+          "next": "fox_guide",
+          "item": "Dynamite"
+        }
+      ]
+    },
+    "fox_guide": {
+      "text": "The fox leads you to a hidden clearing where an old hermit sits by a fire. He looks at your items with interest.",
+      "image-text": "A fox leading to a clearing with an old hermit by a campfire",
+      "choices": [
+        {
+          "text": "Greet the hermit",
+          "next": "hermit_meeting"
+        }
+      ]
+    },
+    "hermit_meeting": {
+      "text": "The hermit smiles. 'I see you've gathered some interesting items on your journey. I can help you, but only if you have something magical.'",
+      "image-text": "An old wise hermit examining magical items by firelight",
+      "choices": [
+        {
+          "text": "Show the magic flowers",
+          "next": "hermit_flowers",
+          "item": "magic_flowers"
+        },
+        {
+          "text": "Show the glowing crystals",
+          "next": "hermit_crystals",
+          "item": "glowing_crystals"
+        },
+        {
+          "text": "Share your ancient knowledge",
+          "next": "hermit_wisdom",
+          "item": "Map of the land"
+        },
+        {
+          "text": "You have nothing to offer",
+          "next": "hermit_disappointed"
+        }
+      ]
+    },
+    "hermit_flowers": {
+      "text": "The hermit's eyes light up. 'Ah, the flowers of eternal spring! With these, I can brew a potion of courage for you.'",
+      "image-text": "Hermit brewing a magical potion with glowing flowers",
+      "choices": [
+        {
+          "text": "Accept the potion",
+          "next": "peaceful_ending"
+        }
+      ]
+    },
+    "hermit_crystals": {
+      "text": "The hermit nods approvingly. 'These crystals hold the power of the earth itself. I can forge them into a protective amulet.'",
+      "image-text": "Hermit crafting a magical amulet from glowing crystals",
+      "choices": [
+        {
+          "text": "Accept the amulet",
+          "next": "peaceful_ending"
+        }
+      ]
+    },
+    "hermit_wisdom": {
+      "text": "The hermit listens intently. 'The ancient knowledge you've gained is more valuable than any treasure. You are truly wise.'",
+      "image-text": "Hermit and traveler sharing wisdom by firelight",
+      "choices": [
+        {
+          "text": "Thank the hermit",
+          "next": "peaceful_ending"
+        }
+      ]
+    },
+    "hermit_disappointed": {
+      "text": "The hermit shakes his head sadly. 'Without something magical to offer, I cannot help you. Perhaps explore more before returning.'",
+      "image-text": "Disappointed hermit by a dying campfire",
+      "choices": [
+        {
+          "text": "Leave disappointed",
+          "next": "new_adventure"
+        }
+      ]
+    },
     "new_adventure": {
       "text": "As you descend the other side of the mountain, you realize this is just the beginning of a much larger adventure. The path ahead leads to unknown wonders.",
       "image-text": "A path leading down from mountains toward new unexplored lands full of mystery and wonder",
