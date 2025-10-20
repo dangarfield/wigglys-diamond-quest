@@ -387,7 +387,7 @@ class StoryGame {
 
   injectCapabilityUI() {
     const storyText = document.getElementById('storyText')
-    
+
     // Inject inventory UI (always present but subtle)
     const inventoryHTML = `
       <div id="inventoryBar" class="inventory-bar">
@@ -396,11 +396,11 @@ class StoryGame {
       </div>
     `
     storyText.insertAdjacentHTML('beforebegin', inventoryHTML)
-    
+
     // Inject progress bar HTML if story supports diamond collection
     if (this.story?.capabilities?.diamondCollection) {
       const progressBarHTML = `
-        <div id="progressBar" class="progress-bar" style="display: none;">
+        <div id="progressBar" class="progress-bar" style="display: block;">
           <div class="progress-label">💎 Diamonds Collected:</div>
           <div id="diamondProgress" class="diamond-progress">
             <span class="diamond-slot" data-diamond="red">🔴</span>
@@ -411,7 +411,7 @@ class StoryGame {
           </div>
         </div>
       `
-      
+
       storyText.insertAdjacentHTML('beforebegin', progressBarHTML)
     }
   }
@@ -429,7 +429,7 @@ class StoryGame {
   renderStoryIndex(stories) {
     // Filter out work-in-progress stories
     const publishedStories = stories.filter(story => !story['work-in-progress'])
-    
+
     document.body.innerHTML = `
             <div class="story-index">
                 <header class="index-header">
@@ -571,7 +571,7 @@ class StoryGame {
       inventoryBar.style.display = 'none'
     } else {
       inventoryBar.style.display = 'flex'
-      inventoryItems.innerHTML = this.inventory.map(item => 
+      inventoryItems.innerHTML = this.inventory.map(item =>
         `<span class="inventory-item">${this.getItemDisplayName(item)}</span>`
       ).join('')
     }
@@ -589,7 +589,7 @@ class StoryGame {
 
   getDiamondsCollected() {
     // Get visited node IDs from history (handle both old and new formats)
-    const visitedNodes = this.nodeHistory.map(entry => 
+    const visitedNodes = this.nodeHistory.map(entry =>
       typeof entry === 'string' ? entry : entry.node
     )
 
@@ -607,11 +607,11 @@ class StoryGame {
   updateDiamondProgressBar() {
     const progressBar = document.getElementById('progressBar')
 
-
     const diamonds = this.getDiamondsCollected()
 
     // Show progress bar after accepting the mission
-    if (this.nodeHistory.includes('accept_mission') || this.currentNode === 'accept_mission') {
+    const visitedNodes = this.nodeHistory.map(entry => entry.node)
+    if (visitedNodes.includes('accept_mission') || this.currentNode === 'accept_mission') {
       progressBar.style.display = 'block'
 
       // Update diamond indicators
@@ -634,7 +634,7 @@ class StoryGame {
         const gameState = JSON.parse(savedState)
         this.currentNode = gameState.currentNode
         this.inventory = gameState.inventory || []
-        
+
         // Handle backward compatibility for nodeHistory format
         const rawHistory = gameState.nodeHistory || []
         if (rawHistory.length > 0 && typeof rawHistory[0] === 'string') {
@@ -756,15 +756,15 @@ class StoryGame {
       node.choices.forEach((choice) => {
         const button = document.createElement('button')
         const hasRequiredItem = !choice.item || this.hasItem(choice.item)
-        
+
         // Create the main button content
         const buttonContent = document.createElement('div')
         buttonContent.className = 'choice-content'
-        
+
         const choiceText = document.createElement('span')
         choiceText.textContent = choice.text
         buttonContent.appendChild(choiceText)
-        
+
         // Add item badges if needed
         if (choice.item) {
           const badge = document.createElement('span')
@@ -772,7 +772,7 @@ class StoryGame {
           badge.textContent = hasRequiredItem ? `${this.getItemDisplayName(choice.item)} is used` : `${this.getItemDisplayName(choice.item)} is needed`
           buttonContent.appendChild(badge)
         }
-        
+
         if (hasRequiredItem) {
           button.className = 'choice-btn'
           button.addEventListener('click', () => {
@@ -782,7 +782,7 @@ class StoryGame {
           button.className = 'choice-btn choice-btn-disabled'
           button.disabled = true
         }
-        
+
         button.appendChild(buttonContent)
         choicesContainer.appendChild(button)
       })
@@ -932,7 +932,7 @@ class StoryGame {
         node: this.currentNode,
         inventory: [...this.inventory] // Create a copy of current inventory
       }
-      
+
       // Only add if it's not already the last entry (avoid duplicates)
       const lastEntry = this.nodeHistory[this.nodeHistory.length - 1]
       if (!lastEntry || lastEntry.node !== this.currentNode) {
@@ -954,7 +954,7 @@ class StoryGame {
       const previousState = this.nodeHistory.pop()
       this.currentNode = previousState.node
       this.inventory = [...previousState.inventory] // Restore inventory state
-      
+
       this.saveGameState() // Auto-save when going back
       this.renderCurrentNode()
     }
@@ -1025,11 +1025,11 @@ class StoryGame {
 
     // Try to load and play generated voiceover first
     const voiceoverPath = `/${this.storyId}/generated-voiceovers/${this.currentNode}.mp3`
-    
+
     try {
       // Check if voiceover file exists by attempting to load it
       const audio = new Audio(voiceoverPath)
-      
+
       // Set up audio event handlers
       audio.onloadeddata = () => {
         console.log(`🎙️ Playing generated voiceover for ${this.currentNode}`)
@@ -1039,20 +1039,20 @@ class StoryGame {
           this.fallbackToTTS(text)
         })
       }
-      
+
       audio.onerror = () => {
         console.log(`No voiceover found for ${this.currentNode}, using browser TTS`)
         this.fallbackToTTS(text)
       }
-      
+
       audio.onended = () => {
         this.currentAudio = null
       }
-      
+
       // Set volume and attempt to load
       audio.volume = 0.8
       audio.load()
-      
+
     } catch (error) {
       console.log('Error loading voiceover, falling back to TTS:', error.message)
       this.fallbackToTTS(text)
@@ -1139,7 +1139,7 @@ class StoryGame {
       speechSynthesis.cancel()
     }
     this.currentSpeech = null
-    
+
     // Stop audio playback
     if (this.currentAudio) {
       this.currentAudio.pause()
