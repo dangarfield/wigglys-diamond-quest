@@ -1,6 +1,6 @@
 # Interactive Story Collection
 
-## 🎮 [**PLAY LIVE →**](https://wigglys-diamond-quest.netlify.app/)
+## 🎮 [**PLAY LIVE →**](https://story-time-with-diamond.netlify.app/)
 
 ![Cover](public/preview.png)
 
@@ -13,6 +13,7 @@ The platform supports multiple stories with a story selection interface and indi
 - **Multi-Story Platform**: Story selection interface with individual story experiences
 - **Interactive Web Games**: Play through stories with choices that affect the outcome
 - **AI-Generated Images**: Uses AWS Bedrock Nova Canvas to generate Arcane League of Legends style illustrations for each scene
+- **AI-Generated Voiceovers**: Voiceovers are generated using Amazon Polly with Danielle's generative voice for natural speech.
 - **PDF Book Generation**: Creates printable books in two formats per story:
   - Readable version (normal page order)
   - Booklet version (reordered for 4-up printing and folding)
@@ -67,7 +68,7 @@ Each story is defined with this structure:
 
 ## AWS Integration
 
-Images are generated using AWS Bedrock's Nova Canvas model with prompts optimized for the Arcane art style. 
+Images are generated using AWS Bedrock's Nova Canvas model with prompts optimized for the Arcane art style. Voiceovers are generated using Amazon Polly with Danielle's generative voice for natural speech.
 
 ```bash
 # Generate images for specific story
@@ -75,7 +76,15 @@ AWS_PROFILE=your-profile node generate-images.js [story-id]
 
 # Generate images for Wiggly's Diamond Quest
 AWS_PROFILE=your-profile node generate-images.js wigglys-diamond-quest
+
+# Generate voiceovers for specific story
+AWS_PROFILE=your-profile node generate-voiceovers.js [story-id]
+
+# Generate voiceovers for test story
+AWS_PROFILE=your-profile node generate-voiceovers.js test-story-2
 ```
+
+The web interface automatically uses generated voiceovers when available, falling back to browser text-to-speech when voiceover files don't exist.
 
 ## PDF Generation
 

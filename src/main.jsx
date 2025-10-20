@@ -341,6 +341,7 @@ class StoryGame {
     this.saveKey = `${this.storyId}-save`
     this.speechKey = 'speech-enabled' // Generic speech setting
     this.currentSpeech = null // Track current speech synthesis
+    this.currentAudio = null // Track current audio playback
     this.speechEnabled = this.loadSpeechSetting() // Load speech setting from localStorage
     this.speechActivated = false // Track if user has activated speech
     this.init()
@@ -1013,17 +1014,52 @@ class StoryGame {
     img.src = imagePath
   }
 
-  speakText(text) {
+  async speakText(text) {
     // Don't speak if speech is disabled
     if (!this.speechEnabled) {
       return
     }
 
-    // Stop any currently playing speech
-    if (this.currentSpeech) {
-      speechSynthesis.cancel()
-    }
+    // Stop any currently playing speech/audio
+    this.stopSpeech()
 
+    // Try to load and play generated voiceover first
+    const voiceoverPath = `/${this.storyId}/generated-voiceovers/${this.currentNode}.mp3`
+    
+    try {
+      // Check if voiceover file exists by attempting to load it
+      const audio = new Audio(voiceoverPath)
+      
+      // Set up audio event handlers
+      audio.onloadeddata = () => {
+        console.log(`🎙️ Playing generated voiceover for ${this.currentNode}`)
+        this.currentAudio = audio
+        audio.play().catch(error => {
+          console.log('Failed to play voiceover, falling back to TTS:', error.message)
+          this.fallbackToTTS(text)
+        })
+      }
+      
+      audio.onerror = () => {
+        console.log(`No voiceover found for ${this.currentNode}, using browser TTS`)
+        this.fallbackToTTS(text)
+      }
+      
+      audio.onended = () => {
+        this.currentAudio = null
+      }
+      
+      // Set volume and attempt to load
+      audio.volume = 0.8
+      audio.load()
+      
+    } catch (error) {
+      console.log('Error loading voiceover, falling back to TTS:', error.message)
+      this.fallbackToTTS(text)
+    }
+  }
+
+  fallbackToTTS(text) {
     // Check if speech synthesis is supported
     if (!('speechSynthesis' in window)) {
       console.log('Speech synthesis not supported')
@@ -1043,8 +1079,6 @@ class StoryGame {
       .replace(/'/g, "'")
       .replace(/"/g, '"')
       .replace(/"/g, '"')
-
-
 
     // Create speech synthesis utterance
     this.currentSpeech = new SpeechSynthesisUtterance(cleanText)
@@ -1100,10 +1134,18 @@ class StoryGame {
   }
 
   stopSpeech() {
+    // Stop browser TTS
     if (speechSynthesis.speaking) {
       speechSynthesis.cancel()
     }
     this.currentSpeech = null
+    
+    // Stop audio playback
+    if (this.currentAudio) {
+      this.currentAudio.pause()
+      this.currentAudio.currentTime = 0
+      this.currentAudio = null
+    }
   }
 
   toggleSpeech() {
