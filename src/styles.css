@@ -588,19 +588,21 @@ body {
     .container {
         padding: 10px;
     }
-    
+
     h1 {
         font-size: 2em;
     }
-    
-    .game-container, .visualization-container {
+
+    .game-container,
+    .visualization-container {
         padding: 20px;
     }
-    
+
     .story-text {
         font-size: 16px;
     }
 }
+
 /* Fl
 ume editor styling */
 .flume-editor {
@@ -645,6 +647,7 @@ ume editor styling */
     stroke: #4c51bf !important;
     stroke-width: 3px !important;
 }
+
 /*
  D3 Graph Styles */
 .graph-node {
@@ -684,7 +687,7 @@ ume editor styling */
     .graph-legend {
         font-size: 10px;
     }
-    
+
     .graph-legend span {
         margin-right: 8px;
         display: block;
@@ -753,32 +756,34 @@ ume editor styling */
     .game-layout {
         flex-direction: column;
     }
-    
+
     .image-panel {
         flex: 0 0 40vh;
     }
-    
+
     .content-panel {
         flex: 1;
         padding: 20px;
     }
-    
+
     header {
         bottom: 10px;
         right: 10px;
         padding: 10px 15px;
     }
-    
+
     h1 {
         font-size: 1em;
         margin-bottom: 8px;
     }
-    
+
     nav {
         gap: 6px;
     }
-    
-    .tab-btn, .undo-btn, .restart-top-btn {
+
+    .tab-btn,
+    .undo-btn,
+    .restart-top-btn {
         padding: 4px 8px;
         font-size: 9px;
     }
@@ -797,7 +802,9 @@ ume editor styling */
     content: "🎨 Loading illustration...";
     color: rgba(255, 255, 255, 0.8);
     font-style: italic;
-}/*
+}
+
+/*
  Visualization Header Styles */
 .visualization-header {
     display: flex;
@@ -841,6 +848,7 @@ ume editor styling */
 .close-btn:active {
     transform: scale(0.95);
 }
+
 /* Story Index Styles */
 .story-index {
     min-height: 100vh;
@@ -867,12 +875,32 @@ ume editor styling */
 }
 
 .stories-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    display: flex;
     gap: 30px;
-    max-width: 1200px;
-    margin: 0 auto;
     padding: 30px;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+}
+
+.stories-grid::-webkit-scrollbar {
+    height: 8px;
+}
+
+.stories-grid::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 4px;
+}
+
+.stories-grid::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+}
+
+.stories-grid::-webkit-scrollbar-thumb:hover {
+    background: rgba(255, 255, 255, 0.5);
 }
 
 .story-card {
@@ -883,6 +911,9 @@ ume editor styling */
     transition: all 0.3s ease;
     cursor: pointer;
     backdrop-filter: blur(10px);
+    flex: 0 0 280px;
+    display: flex;
+    flex-direction: column;
 }
 
 .story-card:hover {
@@ -892,12 +923,16 @@ ume editor styling */
 
 .story-preview {
     width: 100%;
-    height: 200px;
     object-fit: cover;
+    flex-shrink: 0;
 }
 
 .story-info {
     padding: 20px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .story-info h3 {
@@ -917,7 +952,9 @@ ume editor styling */
     font-style: italic;
     margin: 0;
     font-size: 0.9rem;
-}/* Dice 
+}
+
+/* Dice 
 Roll Styles */
 .dice-container {
     margin: 20px 0;
@@ -957,6 +994,7 @@ Roll Styles */
     transform: none;
     box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
 }
+
 /* Dice Outcomes Display */
 .dice-outcomes {
     margin-top: 15px;
@@ -1015,7 +1053,9 @@ Roll Styles */
 .winning-outcome .outcome-range,
 .winning-outcome .outcome-text {
     color: white;
-}/* Invento
+}
+
+/* Invento
 ry Styles */
 .inventory-bar {
     display: flex;
@@ -1112,4 +1152,80 @@ ry Styles */
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     color: white;
     box-shadow: 0 2px 6px rgba(102, 126, 234, 0.3);
+}
+
+/* View 
+Toggle Controls */
+.view-controls {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.view-toggle-btn {
+    padding: 8px 16px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+}
+
+.view-toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.view-toggle-btn.active {
+    background: rgba(255, 255, 255, 0.9);
+    color: #667eea;
+    border-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.view-toggle-btn.active:hover {
+    background: white;
+    transform: translateY(-1px);
+}
+
+/* Git Branch View Specific Styles */
+.git-node {
+    cursor: pointer;
+}
+
+.git-node:hover circle {
+    stroke-width: 3px;
+    filter: drop-shadow(0 0 6px rgba(74, 85, 104, 0.6));
+}
+
+.git-node text {
+    pointer-events: none;
+    user-select: none;
+}
+
+/* Responsive adjustments for view controls */
+@media (max-width: 768px) {
+    .view-controls {
+        gap: 4px;
+    }
+
+    .view-toggle-btn {
+        padding: 6px 12px;
+        font-size: 10px;
+    }
+
+    .visualization-header {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+
+    .visualization-header h2 {
+        font-size: 1.2rem;
+    }
 }

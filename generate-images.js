@@ -18,7 +18,7 @@ const storyId = process.argv[2]
 const AWS_PROFILE = 'dan-sso';
 const STORY_DIR = path.join(__dirname, 'public', storyId);
 const OUTPUT_DIR = path.join(STORY_DIR, 'generated-images');
-const AWS_REGION = 'us-east-1'; // Nova Canvas is available in us-east-1
+const AWS_REGION = 'eu-west-1'; // Nova Canvas is available in us-east-1
 const MODEL_ID = 'amazon.nova-canvas-v1:0';
 
 // Initialize AWS Bedrock client
@@ -33,14 +33,15 @@ if (!fs.existsSync(OUTPUT_DIR)) {
 }
 
 // Function to create image prompt from story node
-function createImagePrompt(nodeId, nodeData) {
+function createImagePrompt(nodeId, nodeData, story) {
     // Always use the image-text from the node
     if (!nodeData['image-text']) {
         throw new Error(`Node ${nodeId} is missing image-text attribute`);
     }
 
-    // Use the exact image-text and append Arcane League of Legends style
-    const prompt = nodeData['image-text'] + '. style of arcane league of legends';
+    // Get art style from story config, default to Arcane if not specified
+    const artStyle = story.artStyle || 'style of arcane league of legends';
+    const prompt = nodeData['image-text'] + '. ' + artStyle;
 
     return prompt;
 }
@@ -106,7 +107,7 @@ async function generateAllImages() {
         const story = JSON.parse(storyContent);
 
         const allNodes = Object.keys(story.nodes);
-        
+
         // Filter out nodes that already have images
         const nodes = allNodes.filter(nodeId => {
             const imagePath = path.join(OUTPUT_DIR, `${nodeId}.png`);
@@ -115,10 +116,10 @@ async function generateAllImages() {
                 console.log(`⏭️  Skipping ${nodeId} - image already exists`);
             }
             return !imageExists;
-        });
-        
+        })//.slice(0,6);
+
         console.log(`📖 Found ${allNodes.length} total nodes, ${nodes.length} need images\n`);
-        
+
         if (nodes.length === 0) {
             console.log('🎉 All images already generated!');
             return;
@@ -138,7 +139,7 @@ async function generateAllImages() {
 
             const batchPromises = batch.map(async (nodeId) => {
                 const nodeData = story.nodes[nodeId];
-                const prompt = createImagePrompt(nodeId, nodeData);
+                const prompt = createImagePrompt(nodeId, nodeData, story);
                 const imagePath = await generateImage(nodeId, prompt);
 
                 if (imagePath) {

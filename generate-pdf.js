@@ -117,12 +117,12 @@ class StoryBookGenerator {
     createPageMapping() {
         const nodeIds = Object.keys(this.story.nodes);
 
-        // Find end nodes
-        const endNodes = nodeIds.filter(id => this.story.nodes[id].isEnd);
+        // Find end nodes (exclude bad endings - they should be randomized)
+        const endNodes = nodeIds.filter(id => this.story.nodes[id].isEnd && !this.story.nodes[id].badEnding);
 
         // Start node gets page 1, others in seeded random order, end nodes last
         const middleNodes = nodeIds.filter(id =>
-            id !== this.story.startNode && !this.story.nodes[id].isEnd
+            id !== this.story.startNode && (!this.story.nodes[id].isEnd || this.story.nodes[id].badEnding)
         );
 
         // Seeded random shuffle using simple LCG
@@ -208,12 +208,12 @@ class StoryBookGenerator {
     async generateStoryPages() {
         const nodeIds = Object.keys(this.story.nodes);
 
-        // Find end nodes
-        const endNodes = nodeIds.filter(id => this.story.nodes[id].isEnd);
+        // Find end nodes (exclude bad endings - they should be randomized)
+        const endNodes = nodeIds.filter(id => this.story.nodes[id].isEnd && !this.story.nodes[id].badEnding);
 
         // Start node gets page 1, others in seeded random order, end nodes last
         const middleNodes = nodeIds.filter(id =>
-            id !== this.story.startNode && !this.story.nodes[id].isEnd
+            id !== this.story.startNode && (!this.story.nodes[id].isEnd || this.story.nodes[id].badEnding)
         );
 
         // Seeded random shuffle using simple LCG
@@ -391,9 +391,18 @@ class StoryBookGenerator {
                     yPos = this.margin;
                 }
 
-                this.pdf.text(outcomeText, this.margin, yPos);
+                // Calculate available width for outcome text (leave space for page number)
+                const pageTextWidth = this.pdf.getTextWidth(pageText);
+                const availableOutcomeWidth = this.contentWidth - pageTextWidth - 10; // 10mm gap
+
+                // Split outcome text if it's too long
+                const outcomeLines = this.pdf.splitTextToSize(outcomeText, availableOutcomeWidth);
+
+                this.pdf.text(outcomeLines, this.margin, yPos);
                 this.pdf.text(pageText, this.pageWidth - this.margin, yPos, { align: 'right' });
-                yPos += 5;
+
+                // Adjust yPos based on number of lines
+                yPos += Math.max(5, outcomeLines.length * 5);
             });
         } else if (node.choices && node.choices.length > 0) {
             this.pdf.setTextColor(0, 0, 0); // Black color
@@ -401,7 +410,20 @@ class StoryBookGenerator {
             const choiceFont = this.getChelseaMarketFont('normal');
             this.pdf.setFont(choiceFont.font, choiceFont.style);
 
-            node.choices.forEach((choice, index) => {
+            // Seeded random shuffle for choices
+            const shuffleWithSeed = (array, seed = 42) => {
+                const shuffled = [...array];
+                let rng = seed;
+                for (let i = shuffled.length - 1; i > 0; i--) {
+                    rng = (rng * 1664525 + 1013904223) % 4294967296;
+                    const j = Math.floor((rng / 4294967296) * (i + 1));
+                    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+                }
+                return shuffled;
+            };
+
+            const shuffledChoices = shuffleWithSeed(node.choices);
+            shuffledChoices.forEach((choice, index) => {
                 const targetPage = this.nodeToPageMap[choice.next] || '?';
                 let choiceText = `> ${choice.text}`;
 
@@ -418,17 +440,33 @@ class StoryBookGenerator {
                     yPos = this.margin;
                 }
 
+                // Calculate available width for choice text (leave space for page number)
+                const pageTextWidth = this.pdf.getTextWidth(pageText);
+                const availableChoiceWidth = this.contentWidth - pageTextWidth - 10; // 10mm gap
+
+                // Split choice text if it's too long
+                const choiceLines = this.pdf.splitTextToSize(choiceText, availableChoiceWidth);
+
                 // Choice text on the left
-                this.pdf.text(choiceText, this.margin, yPos);
+                this.pdf.text(choiceLines, this.margin, yPos);
 
                 // Page number on the right
                 this.pdf.text(pageText, this.pageWidth - this.margin, yPos, { align: 'right' });
 
-                yPos += 6; // Space between choices
+                // Adjust yPos based on number of lines
+                yPos += Math.max(6, choiceLines.length * 6); // Space between choices
             });
         } else if (node.isEnd) {
             // Add decorative border for ending
-            this.pdf.setDrawColor(255, 215, 0); // Gold color
+            let endingText = ''
+            if (node.badEnding) {
+                this.pdf.setDrawColor(215, 30, 0); // Red color
+                endingText = 'Better luck next time!'
+            } else {
+                this.pdf.setDrawColor(255, 215, 0); // Gold color
+                endingText = 'Thanks for playing!'
+            }
+
             this.pdf.setLineWidth(1);
             this.pdf.rect(this.margin, yPos - 5, this.contentWidth, 25);
 
@@ -461,9 +499,9 @@ class StoryBookGenerator {
 
         // Get all node IDs in the same order as readable version
         const nodeIds = Object.keys(this.story.nodes);
-        const endNodes = nodeIds.filter(id => this.story.nodes[id].isEnd);
+        const endNodes = nodeIds.filter(id => this.story.nodes[id].isEnd && !this.story.nodes[id].badEnding);
         const middleNodes = nodeIds.filter(id =>
-            id !== this.story.startNode && !this.story.nodes[id].isEnd
+            id !== this.story.startNode && (!this.story.nodes[id].isEnd || this.story.nodes[id].badEnding)
         );
 
         const shuffleWithSeed = (array, seed = 42) => {

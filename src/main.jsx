@@ -4,7 +4,7 @@ import * as d3 from 'd3'
 import './styles.css'
 
 // D3.js Graph Visualizer Component
-const D3StoryGraph = ({ story }) => {
+const D3StoryGraph = ({ story, viewMode = 'force' }) => {
   const svgRef = React.useRef()
 
   React.useEffect(() => {
@@ -33,13 +33,24 @@ const D3StoryGraph = ({ story }) => {
     // Prepare data
     const { nodes, links, missingNodes } = prepareGraphData(story)
 
-    // Create force simulation with initial positioning
+    if (viewMode === 'git') {
+      renderGitBranchingView(svg, container, nodes, links, width, height)
+    } else {
+      renderForceDirectedView(svg, container, nodes, links, width, height)
+    }
+
+  }, [story, viewMode])
+
+  const renderForceDirectedView = (svg, container, nodes, links, width, height) => {
+    // Create force simulation with more user control
     const simulation = d3.forceSimulation(nodes)
-      .force("link", d3.forceLink(links).id(d => d.id).distance(120))
-      .force("charge", d3.forceManyBody().strength(-200))
-      .force("collision", d3.forceCollide().radius(45))
-      .force("x", d3.forceX(d => 100 + (d.distance * 150)).strength(0.3))
-      .force("y", d3.forceY(height / 2).strength(0.1))
+      .force("link", d3.forceLink(links).id(d => d.id).distance(120).strength(0.5))
+      .force("charge", d3.forceManyBody().strength(-150))
+      .force("collision", d3.forceCollide().radius(45).strength(0.8))
+      .force("x", d3.forceX(d => 100 + (d.distance * 150)).strength(0.1))
+      .force("y", d3.forceY(height / 2).strength(0.05))
+      .alphaDecay(0.02) // Slower cooling for more stable positioning
+      .velocityDecay(0.4) // More friction for smoother movement
 
     // Create arrow markers
     svg.append("defs").selectAll("marker")
@@ -76,18 +87,46 @@ const D3StoryGraph = ({ story }) => {
         .on("start", dragstarted)
         .on("drag", dragged)
         .on("end", dragended))
+      .on("dblclick", (event, d) => {
+        // Double-click to unpin individual node
+        d.fx = null
+        d.fy = null
+        simulation.alpha(0.1).restart()
+
+        // Visual feedback
+        d3.select(event.currentTarget)
+          .select("circle")
+          .transition()
+          .duration(200)
+          .attr("stroke-width", 4)
+          .transition()
+          .duration(200)
+          .attr("stroke-width", 2)
+      })
 
     // Add circles for nodes
     node.append("circle")
       .attr("r", 20)
       .attr("fill", d => {
         if (d.missing) return "#ff6b6b"
+        if (d.unreachable) return "#a0aec0" // Gray for unreachable nodes
         if (d.isStart) return "#48bb78"
-        if (d.isEnd) return "#f56565"
+        if (d.isEnd && d.badEnding) return "#dc2626" // Red for bad endings
+        if (d.isEnd) return "#16a34a" // Green for good endings
+        if (d.hasRoll) return "#ff9500" // Orange for dice roll nodes
+        if (d.collectsItem) return "#9f7aea" // Purple for item collection
+        if (d.hasItemRequiredChoices) return "#ed8936" // Orange-red for item requirements
         return "#667eea"
       })
-      .attr("stroke", "#fff")
-      .attr("stroke-width", 2)
+      .attr("stroke", d => {
+        if (d.unreachable) return "#718096"
+        if (d.hasRoll) return "#ff6b00"
+        if (d.collectsItem) return "#805ad5"
+        if (d.hasItemRequiredChoices) return "#c05621"
+        return "#fff"
+      })
+      .attr("stroke-width", d => d.hasRoll || d.collectsItem || d.hasItemRequiredChoices || d.unreachable ? 3 : 2)
+      .attr("stroke-dasharray", d => d.unreachable ? "5,5" : null)
 
     // Add labels
     node.append("text")
@@ -99,9 +138,17 @@ const D3StoryGraph = ({ story }) => {
       .attr("font-weight", "bold")
       .attr("fill", "#333")
 
-    // Add choice count
+    // Add choice count and special indicators
     node.append("text")
-      .text(d => d.missing ? "❌" : `${d.choiceCount} choices`)
+      .text(d => {
+        if (d.missing) return "❌"
+        if (d.unreachable) return "🚫 unreachable"
+        let text = `${d.choiceCount} choices`
+        if (d.hasRoll) text = "🎲 " + text
+        if (d.collectsItem) text = "🎒 " + text
+        if (d.hasItemRequiredChoices) text = "🔑 " + text
+        return text
+      })
       .attr("x", 0)
       .attr("y", 35)
       .attr("text-anchor", "middle")
@@ -124,11 +171,48 @@ const D3StoryGraph = ({ story }) => {
         .attr("transform", d => `translate(${d.x},${d.y})`)
     })
 
-    // Drag functions
+    // Add event listeners for control buttons
+    const resetHandler = () => {
+      // Reset all fixed positions
+      nodes.forEach(d => {
+        d.fx = null
+        d.fy = null
+      })
+      // Restart simulation with more energy
+      simulation.alpha(0.5).restart()
+    }
+
+    const unpinHandler = () => {
+      // Unpin all nodes but keep current positions as starting points
+      nodes.forEach(d => {
+        d.fx = null
+        d.fy = null
+      })
+      // Gentle restart to allow natural movement
+      simulation.alpha(0.1).restart()
+    }
+
+    document.addEventListener('resetPositions', resetHandler)
+    document.addEventListener('unpinNodes', unpinHandler)
+
+    // Cleanup event listeners when component unmounts
+    return () => {
+      document.removeEventListener('resetPositions', resetHandler)
+      document.removeEventListener('unpinNodes', unpinHandler)
+    }
+
+    // Enhanced drag functions for better control
     function dragstarted(event, d) {
-      if (!event.active) simulation.alphaTarget(0.3).restart()
+      // Gentle restart of simulation
+      if (!event.active) simulation.alphaTarget(0.1).restart()
       d.fx = d.x
       d.fy = d.y
+
+      // Visual feedback
+      d3.select(event.sourceEvent.target.parentNode)
+        .select("circle")
+        .attr("stroke-width", 4)
+        .attr("filter", "drop-shadow(0 0 8px rgba(102, 126, 234, 0.8))")
     }
 
     function dragged(event, d) {
@@ -137,12 +221,182 @@ const D3StoryGraph = ({ story }) => {
     }
 
     function dragended(event, d) {
-      if (!event.active) simulation.alphaTarget(0)
-      d.fx = null
-      d.fy = null
-    }
+      // Keep position fixed after drag (pin the node)
+      if (!event.active) simulation.alphaTarget(0.02) // Very gentle cooling
 
-  }, [story])
+      // Keep the node pinned where you dropped it
+      // d.fx = null  // Commented out to keep nodes pinned
+      // d.fy = null  // Commented out to keep nodes pinned
+
+      // Remove visual feedback
+      d3.select(event.sourceEvent.target.parentNode)
+        .select("circle")
+        .attr("stroke-width", 2)
+        .attr("filter", null)
+    }
+  }
+
+  const renderGitBranchingView = (svg, container, nodes, links, width, height) => {
+    // Group nodes by distance (levels)
+    const nodesByLevel = {}
+    nodes.forEach(node => {
+      const level = node.distance || 0
+      if (!nodesByLevel[level]) nodesByLevel[level] = []
+      nodesByLevel[level].push(node)
+    })
+
+    // Calculate positions for git-style layout
+    const levelWidth = 180
+    const nodeHeight = 80
+    const startX = 100
+
+    // Position nodes in git-style branching layout
+    Object.entries(nodesByLevel).forEach(([level, levelNodes]) => {
+      const levelNum = parseInt(level)
+      const x = startX + (levelNum * levelWidth)
+
+      levelNodes.forEach((node, index) => {
+        // Create parabolic offset: low/high indexes near 0, middle indexes approach 40
+        const centerIndex = (levelNodes.length - 1) / 2
+        const distanceFromCenter = Math.abs(index - centerIndex)
+        const maxDistance = Math.max(centerIndex, levelNodes.length - 1 - centerIndex)
+
+        // Parabolic curve: maximum offset at center, minimum at edges
+        const normalizedDistance = maxDistance > 0 ? (maxDistance - distanceFromCenter) / maxDistance : 0
+        const horizontalOffset = normalizedDistance * 40
+
+        node.x = x + horizontalOffset
+        node.y = height / 2 + (index - (levelNodes.length - 1) / 2) * nodeHeight
+        node.fx = node.x // Fix position
+        node.fy = node.y
+      })
+    })
+
+    // Create git-style curved paths
+    const linkGenerator = d3.linkHorizontal()
+      .x(d => d.x)
+      .y(d => d.y)
+
+    // Create arrow markers for git style
+    svg.append("defs").selectAll("marker")
+      .data(["git-arrow"])
+      .enter().append("marker")
+      .attr("id", d => d)
+      .attr("viewBox", "0 -5 10 10")
+      .attr("refX", 15)
+      .attr("refY", 0)
+      .attr("markerWidth", 6)
+      .attr("markerHeight", 6)
+      .attr("orient", "auto")
+      .append("path")
+      .attr("d", "M0,-5L10,0L0,5")
+      .attr("fill", "#4a5568")
+
+    // Create curved links (git-style)
+    const link = container.append("g")
+      .selectAll("path")
+      .data(links)
+      .enter().append("path")
+      .attr("d", d => {
+        const source = nodes.find(n => n.id === d.source.id || n.id === d.source)
+        const target = nodes.find(n => n.id === d.target.id || n.id === d.target)
+
+        if (!source || !target) return ""
+
+        // Create curved path for branching effect
+        const midX = (source.x + target.x) / 2
+        return `M${source.x},${source.y} Q${midX},${source.y} ${target.x},${target.y}`
+      })
+      .attr("stroke", "#4a5568")
+      .attr("stroke-width", 2)
+      .attr("fill", "none")
+      .attr("marker-end", "url(#git-arrow)")
+
+    // Create git-style commit nodes
+    const node = container.append("g")
+      .selectAll("g")
+      .data(nodes)
+      .enter().append("g")
+      .attr("class", "git-node")
+      .attr("transform", d => `translate(${d.x},${d.y})`)
+
+    // Add git-style commit circles
+    node.append("circle")
+      .attr("r", 8)
+      .attr("fill", d => {
+        if (d.missing) return "#e53e3e"
+        if (d.unreachable) return "#a0aec0" // Gray for unreachable nodes
+        if (d.isStart) return "#38a169"
+        if (d.isEnd && d.badEnding) return "#dc2626" // Red for bad endings
+        if (d.isEnd) return "#16a34a" // Green for good endings
+        if (d.hasRoll) return "#ff9500" // Orange for dice roll nodes
+        if (d.collectsItem) return "#9f7aea" // Purple for item collection
+        if (d.hasItemRequiredChoices) return "#ed8936" // Orange-red for item requirements
+        return "#3182ce"
+      })
+      .attr("stroke", d => {
+        if (d.unreachable) return "#718096"
+        if (d.hasRoll) return "#ff6b00"
+        if (d.collectsItem) return "#805ad5"
+        if (d.hasItemRequiredChoices) return "#c05621"
+        return "#2d3748"
+      })
+      .attr("stroke-width", d => d.hasRoll || d.collectsItem || d.hasItemRequiredChoices || d.unreachable ? 3 : 2)
+      .attr("stroke-dasharray", d => d.unreachable ? "3,3" : null)
+
+    // Add node labels (full names)
+    node.append("text")
+      .text(d => d.id)
+      .attr("x", 15)
+      .attr("y", -5)
+      .attr("font-size", "11px")
+      .attr("font-family", "monospace")
+      .attr("font-weight", "bold")
+      .attr("fill", "#2d3748")
+
+    // Add branch info with special indicators
+    node.append("text")
+      .text(d => {
+        if (d.missing) return "❌ missing"
+        if (d.unreachable) return "🚫 unreachable"
+        if (d.isStart) return "�n start"
+        if (d.isEnd) return "🏁 end"
+
+        let text = `${d.choiceCount} paths`
+        if (d.hasRoll) text = "🎲 " + text
+        if (d.collectsItem) text = "🎒 " + text
+        if (d.hasItemRequiredChoices) text = "🔑 " + text
+        return text
+      })
+      .attr("x", 15)
+      .attr("y", 8)
+      .attr("font-size", "9px")
+      .attr("fill", "#718096")
+
+    // Add git-style branch lines (vertical connectors)
+    const branchLines = container.append("g")
+    Object.entries(nodesByLevel).forEach(([level, levelNodes]) => {
+      if (levelNodes.length > 1) {
+        const levelNum = parseInt(level)
+        const x = startX + (levelNum * levelWidth)
+        const minY = Math.min(...levelNodes.map(n => n.y))
+        const maxY = Math.max(...levelNodes.map(n => n.y))
+
+        branchLines.append("line")
+          .attr("x1", x - 20)
+          .attr("y1", minY)
+          .attr("x2", x - 20)
+          .attr("y2", maxY)
+          .attr("stroke", "#cbd5e0")
+          .attr("stroke-width", 1)
+          .attr("stroke-dasharray", "3,3")
+      }
+    })
+
+    // Add tooltips
+    node.append("title")
+      .text(d => d.missing ? `Missing node: ${d.id}` : `${d.id}\n${d.text.substring(0, 100)}...`)
+  }
 
   return <svg ref={svgRef} style={{ width: '100%', height: '100%', border: '1px solid #ddd' }}></svg>
 }
@@ -165,6 +419,9 @@ const prepareGraphData = (story) => {
   const referencedNodes = new Set()
   const missingNodeIds = new Set()
 
+  // Add start node to referenced nodes (it's reachable by definition)
+  referencedNodes.add(story.startNode)
+
   // Collect all referenced nodes
   Object.values(story.nodes).forEach(node => {
     if (node.choices) {
@@ -182,6 +439,14 @@ const prepareGraphData = (story) => {
           missingNodeIds.add(outcome.next)
         }
       })
+    }
+  })
+
+  // Find unreachable nodes (exist but not referenced and not start node)
+  const unreachableNodeIds = new Set()
+  existingNodes.forEach(nodeId => {
+    if (!referencedNodes.has(nodeId) && nodeId !== story.startNode) {
+      unreachableNodeIds.add(nodeId)
     }
   })
 
@@ -230,14 +495,33 @@ const prepareGraphData = (story) => {
   // Add existing nodes
   Object.entries(story.nodes).forEach(([nodeId, nodeData]) => {
     const distance = distances[nodeId] || 0
+
+    // Check if node has roll mechanic
+    const hasRoll = !!(nodeData.roll)
+
+    // Check if node collects an item
+    const collectsItem = !!(nodeData.collectItem)
+
+    // Check if any choices from this node require items
+    const hasItemRequiredChoices = nodeData.choices ?
+      nodeData.choices.some(choice => choice.item) : false
+
+    // Check if node is unreachable
+    const isUnreachable = unreachableNodeIds.has(nodeId)
+
     nodes.push({
       id: nodeId,
       text: nodeData.text,
       isStart: nodeId === story.startNode,
       isEnd: nodeData.isEnd || false,
+      badEnding: nodeData.badEnding || false,
       choiceCount: getNodeChoiceCount(nodeData),
       missing: false,
-      distance: distance,
+      unreachable: isUnreachable,
+      distance: isUnreachable ? 999 : distance, // Push unreachable nodes to the right
+      hasRoll: hasRoll,
+      collectsItem: collectsItem,
+      hasItemRequiredChoices: hasItemRequiredChoices,
       // Set initial position based on distance from start
       x: 100 + (distance * 150), // Start at x=100, then 150px per level
       y: 400 + (Math.random() - 0.5) * 200 // Random y with some spread
@@ -288,18 +572,58 @@ const prepareGraphData = (story) => {
   return {
     nodes,
     links,
-    missingNodes: Array.from(missingNodeIds)
+    missingNodes: Array.from(missingNodeIds),
+    unreachableNodes: Array.from(unreachableNodeIds)
   }
 }
 
 // React component for the Story Editor
 const StoryEditor = ({ story, onClose }) => {
-  const { missingNodes } = story ? prepareGraphData(story) : { missingNodes: [] }
+  const [viewMode, setViewMode] = React.useState('force')
+  const { missingNodes, unreachableNodes } = story ? prepareGraphData(story) : { missingNodes: [], unreachableNodes: [] }
 
   return (
     <div style={{ width: '100%', height: '100%' }}>
       <div className="visualization-header">
         <h2>Story Decision Graph</h2>
+        <div className="view-controls">
+          <button
+            className={`view-toggle-btn ${viewMode === 'git' ? 'active' : ''}`}
+            onClick={() => setViewMode('git')}
+          >
+            🌿 Branches
+          </button>
+          <button
+            className={`view-toggle-btn ${viewMode === 'force' ? 'active' : ''}`}
+            onClick={() => setViewMode('force')}
+          >
+            🌐 Force Layout
+          </button>
+          {viewMode === 'force' && (
+            <>
+              <button
+                className="view-toggle-btn"
+                onClick={() => {
+                  // Reset all node positions
+                  const event = new CustomEvent('resetPositions')
+                  document.dispatchEvent(event)
+                }}
+              >
+                🔄 Reset Layout
+              </button>
+              <button
+                className="view-toggle-btn"
+                onClick={() => {
+                  // Unpin all nodes
+                  const event = new CustomEvent('unpinNodes')
+                  document.dispatchEvent(event)
+                }}
+              >
+                📌 Unpin All
+              </button>
+            </>
+          )}
+        </div>
         <button className="close-btn" onClick={onClose}>✕</button>
       </div>
 
@@ -314,17 +638,57 @@ const StoryEditor = ({ story, onClose }) => {
         </div>
       )}
 
+      {unreachableNodes.length > 0 && (
+        <div className="missing-nodes-warning" style={{ margin: '10px 20px', borderColor: '#a0aec0', background: '#f7fafc' }}>
+          <h4 style={{ color: '#4a5568' }}>🚫 Unreachable Nodes ({unreachableNodes.length}):</h4>
+          <div className="missing-list">
+            {unreachableNodes.map(nodeId => (
+              <span key={nodeId} style={{ background: '#e2e8f0', color: '#4a5568' }} className="missing-node">{nodeId}</span>
+            ))}
+          </div>
+        </div>
+      )}
+
       <div className="graph-legend" style={{ margin: '10px 20px', fontSize: '12px' }}>
-        <span style={{ color: '#48bb78' }}>🟢 Start Node</span> |
-        <span style={{ color: '#f56565' }}> 🔴 End Node</span> |
-        <span style={{ color: '#667eea' }}> 🔵 Regular Node</span> |
-        <span style={{ color: '#ff6b6b' }}> ❌ Missing Node</span>
-        <br />
-        <em>Drag nodes to rearrange • Zoom with mouse wheel • Hover for details</em>
+        {viewMode === 'force' ? (
+          <>
+            <span style={{ color: '#48bb78' }}>🟢 Start</span> |
+            <span style={{ color: '#16a34a' }}> 🟢 Good End</span> |
+            <span style={{ color: '#dc2626' }}> 🔴 Bad End</span> |
+            <span style={{ color: '#ff9500' }}> 🎲 Roll</span> |
+            <span style={{ color: '#9f7aea' }}> 🎒 Item</span> |
+            <span style={{ color: '#ed8936' }}> 🔑 Requires</span> |
+            <span style={{ color: '#667eea' }}> 🔵 Regular</span> |
+            <span style={{ color: '#ff6b6b' }}> ❌ Missing</span> |
+            <span style={{ color: '#a0aec0' }}> 🚫 Unreachable</span>
+            <br />
+            <strong>📊 Total Nodes: {Object.keys(story?.nodes || {}).length + missingNodes.length}</strong>
+            {missingNodes.length > 0 && <span> | <strong style={{ color: '#ff6b6b' }}>Missing: {missingNodes.length}</strong></span>}
+            <br />
+            <em>Drag to move & pin nodes • Double-click to unpin • Zoom with mouse wheel • Hover for details</em>
+          </>
+        ) : (
+          <>
+            <span style={{ color: '#38a169' }}>🌱 Start</span> |
+            <span style={{ color: '#16a34a' }}> 🟢 Good End</span> |
+            <span style={{ color: '#dc2626' }}> 🔴 Bad End</span> |
+            <span style={{ color: '#ff9500' }}> 🎲 Roll</span> |
+            <span style={{ color: '#9f7aea' }}> 🎒 Item</span> |
+            <span style={{ color: '#ed8936' }}> 🔑 Requires</span> |
+            <span style={{ color: '#3182ce' }}> 🔵 Regular</span> |
+            <span style={{ color: '#e53e3e' }}> ❌ Missing</span> |
+            <span style={{ color: '#a0aec0' }}> 🚫 Unreachable</span>
+            <br />
+            <strong>📊 Total Nodes: {Object.keys(story?.nodes || {}).length + missingNodes.length}</strong>
+            {missingNodes.length > 0 && <span> | <strong style={{ color: '#e53e3e' }}>Missing: {missingNodes.length}</strong></span>}
+            <br />
+            <em>Git-style branching view • Zoom with mouse wheel • Hover for details</em>
+          </>
+        )}
       </div>
 
-      <div style={{ height: 'calc(100% - 120px)' }}>
-        <D3StoryGraph story={story} />
+      <div style={{ height: 'calc(100% - 140px)' }}>
+        <D3StoryGraph story={story} viewMode={viewMode} />
       </div>
     </div>
   )
@@ -752,8 +1116,9 @@ class StoryGame {
       // Handle dice roll mechanic
       this.renderDiceRoll(node.roll, choicesContainer)
     } else if (node.choices && node.choices.length > 0) {
-      // Handle regular choices
-      node.choices.forEach((choice) => {
+      // Handle regular choices - randomize the order for display
+      const shuffledChoices = [...node.choices].sort(() => Math.random() - 0.5)
+      shuffledChoices.forEach((choice) => {
         const button = document.createElement('button')
         const hasRequiredItem = !choice.item || this.hasItem(choice.item)
 
@@ -855,9 +1220,89 @@ class StoryGame {
       outcomesContainer.appendChild(outcomeDiv)
     })
 
+    // Secret button for direct outcome selection
+    const secretButton = document.createElement('button')
+    secretButton.className = 'secret-dice-btn'
+    secretButton.textContent = '🎯 Choose outcome'
+    secretButton.style.opacity = '0.1'
+    secretButton.style.marginTop = '10px'
+    secretButton.style.fontSize = '12px'
+    secretButton.style.padding = '5px 10px'
+    secretButton.style.background = 'rgba(102, 126, 234, 0.3)'
+    secretButton.style.border = '1px solid rgba(102, 126, 234, 0.5)'
+    secretButton.style.borderRadius = '5px'
+    secretButton.style.color = 'rgba(255, 255, 255, 0.7)'
+    secretButton.style.cursor = 'pointer'
+    secretButton.style.transition = 'opacity 0.3s ease'
+    
+    secretButton.addEventListener('mouseenter', () => {
+      secretButton.style.opacity = '0.8'
+    })
+    
+    secretButton.addEventListener('mouseleave', () => {
+      secretButton.style.opacity = '0.1'
+    })
+    
+    secretButton.addEventListener('click', () => {
+      this.showOutcomeSelector(roll.outcomes, diceButton, outcomesContainer)
+    })
+
     diceContainer.appendChild(diceButton)
     diceContainer.appendChild(outcomesContainer)
+    diceContainer.appendChild(secretButton)
     container.appendChild(diceContainer)
+  }
+
+  showOutcomeSelector(outcomes, button, outcomesContainer) {
+    // Stop current speech
+    this.stopSpeech()
+
+    // Make the secret button more visible and change its text
+    const secretButton = button.parentNode.querySelector('.secret-dice-btn')
+    if (secretButton) {
+      secretButton.style.opacity = '0.8'
+      secretButton.textContent = 'Choose your outcome'
+      secretButton.disabled = true
+    }
+
+    // Disable the main dice button
+    button.disabled = true
+    button.textContent = '🎯 Click on any outcome below to select it'
+
+    // Make existing outcome divs clickable without changing their appearance
+    const existingOutcomes = outcomesContainer.querySelectorAll('.dice-outcome')
+    existingOutcomes.forEach((outcomeDiv, index) => {
+      const outcome = outcomes[index]
+      
+      // Add hover effect to show they're clickable
+      outcomeDiv.style.cursor = 'pointer'
+      outcomeDiv.style.transition = 'all 0.3s ease'
+      
+      outcomeDiv.addEventListener('mouseenter', () => {
+        outcomeDiv.style.transform = 'translateX(5px)'
+        outcomeDiv.style.backgroundColor = 'rgba(102, 126, 234, 0.1)'
+      })
+      
+      outcomeDiv.addEventListener('mouseleave', () => {
+        outcomeDiv.style.transform = 'translateX(0)'
+        outcomeDiv.style.backgroundColor = 'transparent'
+      })
+      
+      outcomeDiv.addEventListener('click', () => {
+        // Simulate the selected outcome
+        button.textContent = `🎯 Selected: ${outcome.range} - ${outcome.text}`
+        this.speakText(outcome.text)
+        
+        // Highlight the selected outcome
+        outcomeDiv.style.backgroundColor = 'rgba(72, 187, 120, 0.3)'
+        outcomeDiv.style.transform = 'scale(1.05)'
+        
+        // Continue to next node after delay
+        setTimeout(() => {
+          this.makeChoice(outcome.next)
+        }, 2000)
+      })
+    })
   }
 
   rollDice(outcomes, button, outcomesContainer) {
@@ -1175,7 +1620,7 @@ class StoryGame {
 
   truncateText(text, maxLength) {
     if (text.length <= maxLength) return text
-    return text.substring(0, maxLength) + '...'
+    return text//.substring(0, maxLength) + '...'
   }
 }
 

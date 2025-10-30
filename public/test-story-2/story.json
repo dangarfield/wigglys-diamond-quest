@@ -3,6 +3,7 @@
   "capabilities": {
     "diamondCollection": false
   },
+  "artStyle": "simple cartoon style, childlike, doodle, bold black outlines, bright flat color",
   "nodes": {
     "start": {
       "text": "You wake up in a mysterious forest. The trees tower above you, their leaves rustling in the gentle breeze. A path splits in two directions ahead of you.",

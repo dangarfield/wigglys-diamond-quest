@@ -1,0 +1,1306 @@
+{
+  "startNode": "dragon_nursery_start",
+  "artStyle": "style of arcane league of legends",
+  "capabilities": {
+    "diamondCollection": false
+  },
+  "nodes": {
+    "dragon_nursery_start": {
+      "text": "You are Charlie, a tiny baby dragon just hatching in the peaceful Dragon Nursery of Mathematica. Elder Dragon Pythagoras looks worried - the sacred Dragon Eggs that power all mathematical magic have been stolen by Shadow Calculators! 'Only a brave young dragon can save our kingdom,' he says.",
+      "image-text": "blue baby marshmallow dragon hatching, elderly wise dragon, worried expression, mathematical symbols fading",
+      "choices": [
+        {
+          "text": "Volunteer to save the Dragon Eggs",
+          "next": "accept_quest"
+        },
+        {
+          "text": "Ask if you're strong enough for this quest",
+          "next": "encouragement"
+        }
+      ]
+    },
+    "encouragement": {
+      "text": "Elder Pythagoras smiles warmly. 'Charlie, you have a love for learning that will make you stronger than any Shadow Calculator. You'll discover what kind of dragon you're meant to be on this quest!'",
+      "image-text": "wise elder dragon, blue baby marshmallow dragon, warm magical light, encouraging gesture",
+      "choices": [
+        {
+          "text": "Feel inspired and accept the quest",
+          "next": "accept_quest"
+        }
+      ]
+    },
+    "accept_quest": {
+      "text": "Elder Pythagoras nods approvingly. 'Brave little Charlie! But first, you'll need the Mathematical Map to navigate to the Great Library. I left it somewhere safe in the Dragon Nursery. Explore and find it - this will be your first test of curiosity and determination!'",
+      "image-text": "elder dragon, blue baby marshmallow dragon, mystical nursery, encouraging conversation",
+      "choices": [
+        {
+          "text": "Explore the Crystal Garden",
+          "next": "crystal_garden"
+        },
+        {
+          "text": "Check the Ancient Study",
+          "next": "ancient_study"
+        },
+        {
+          "text": "Visit the Meditation Pool",
+          "next": "meditation_pool"
+        },
+        {
+          "text": "Use the Mathematical Map to fly to the Great Library",
+          "next": "library_entrance",
+          "item": "Mathematical Map"
+        }
+      ]
+    },
+    "crystal_garden": {
+      "text": "You flutter into a beautiful garden filled with glowing mathematical crystals. Each crystal hums with number patterns, but you don't see the map here. The crystals seem to point toward other areas of the nursery.",
+      "image-text": "blue baby marshmallow dragon, magical garden, glowing crystals, mathematical patterns, equations",
+      "choices": [
+        {
+          "text": "Follow the crystal patterns to the Ancient Study",
+          "next": "ancient_study"
+        },
+        {
+          "text": "Explore the Stargazing Tower",
+          "next": "stargazing_tower"
+        },
+        {
+          "text": "Return to ask Elder Pythagoras for another hint",
+          "next": "elder_hint"
+        }
+      ]
+    },
+    "ancient_study": {
+      "text": "The Ancient Study is filled with floating books and scrolls, all glowing with mathematical knowledge. You search through the shelves carefully, but the Mathematical Map isn't here. However, you notice a trail of glowing footprints leading elsewhere.",
+      "image-text": "blue baby marshmallow dragon, mystical study, floating books, scrolls, glowing footprints",
+      "choices": [
+        {
+          "text": "Follow the glowing footprints to the Meditation Pool",
+          "next": "meditation_pool"
+        },
+        {
+          "text": "Climb up to the Stargazing Tower",
+          "next": "stargazing_tower"
+        },
+        {
+          "text": "Return to the Crystal Garden",
+          "next": "crystal_garden"
+        }
+      ]
+    },
+    "meditation_pool": {
+      "text": "The Meditation Pool reflects mathematical equations in its still waters. As you peer into the reflective surface, you see images of different nursery locations, but the map isn't here. The water seems to whisper about looking to the stars for guidance.",
+      "image-text": "blue baby marshmallow dragon, mystical pool, reflective water, mathematical equations, star patterns",
+      "choices": [
+        {
+          "text": "Follow the water's guidance to the Stargazing Tower",
+          "next": "stargazing_tower"
+        },
+        {
+          "text": "Return to the Crystal Garden",
+          "next": "crystal_garden"
+        },
+        {
+          "text": "Go back to the Ancient Study",
+          "next": "ancient_study"
+        }
+      ]
+    },
+    "stargazing_tower": {
+      "text": "High in the Stargazing Tower, you can see the entire Dragon Nursery spread out below. The stars above form mathematical constellations that seem to be trying to tell you something important. You need to study them more carefully.",
+      "image-text": "blue baby marshmallow dragon, tower top, magical nursery view, mathematical star constellations, geometric patterns",
+      "choices": [
+        {
+          "text": "Study the star patterns more closely",
+          "next": "star_patterns"
+        },
+        {
+          "text": "Return to the Ancient Study",
+          "next": "ancient_study"
+        },
+        {
+          "text": "Descend to the Meditation Pool",
+          "next": "meditation_pool"
+        },
+        {
+          "text": "Try to fly directly to the Great Library without the map",
+          "next": "lost_in_sky_ending"
+        }
+      ]
+    },
+    "lost_in_sky_ending": {
+      "text": "Without the Mathematical Map to guide you, you become hopelessly lost in the vast magical sky! The swirling mathematical clouds confuse your sense of direction, and you can't find your way back to the Dragon Nursery or forward to the Great Library. You drift endlessly among the equation-filled clouds, a tiny dragon lost in the infinite mathematical cosmos.",
+      "image-text": "blue baby marshmallow dragon, lost, floating, swirling mathematical clouds, equations, endless sky",
+      "isEnd": true,
+      "badEnding": true
+    },
+    "star_patterns": {
+      "text": "The mathematical star constellations above spell out a riddle: 'Where knowledge sleeps in hidden deep, the map awaits for those who seek.' The stars seem to point toward the Secret Alcove with their geometric patterns.",
+      "image-text": "blue baby marshmallow dragon, studying stars, mathematical constellations, geometric patterns, hidden location",
+      "choices": [
+        {
+          "text": "Follow the star patterns to the Secret Alcove",
+          "next": "secret_alcove"
+        },
+        {
+          "text": "Descend to the Meditation Pool to think about the riddle",
+          "next": "meditation_pool"
+        },
+        {
+          "text": "Ask Elder Pythagoras for help with the riddle",
+          "next": "elder_hint"
+        }
+      ]
+    },
+    "elder_hint": {
+      "text": "Elder Pythagoras chuckles warmly. 'Ah, young Charlie, sometimes the greatest treasures are revealed only when we truly understand the patterns around us. Look to the stars - they hold ancient wisdom that can guide you to what you seek.'",
+      "image-text": "elder dragon, blue baby marshmallow dragon, gentle hint, star patterns, mystical symbols floating",
+      "choices": [
+        {
+          "text": "Go to the Stargazing Tower to study the stars",
+          "next": "stargazing_tower"
+        },
+        {
+          "text": "Look more carefully in the Ancient Study",
+          "next": "ancient_study"
+        },
+        {
+          "text": "Visit the Crystal Garden",
+          "next": "crystal_garden"
+        }
+      ]
+    },
+    "secret_alcove": {
+      "text": "Following the star patterns, you discover a hidden alcove behind a secret panel! There, glowing softly on a small pedestal, is the Mathematical Map! As you touch it, the map unfurls to show all the magical paths to different dragon realms. You should return to Elder Pythagoras with this treasure.",
+      "image-text": "blue baby marshmallow dragon, glowing Mathematical Map, pedestal, hidden alcove, star patterns, magical paths",
+      "collectItem": "Mathematical Map",
+      "choices": [
+        {
+          "text": "Return to Elder Pythagoras with the Mathematical Map",
+          "next": "accept_quest"
+        }
+      ]
+    },
+    "library_entrance": {
+      "text": "At the Great Mathematical Library, the Librarian Owl greets you warmly. 'Welcome, Charlie! Before your mathematical test, feel free to explore the library and prepare yourself. Each section holds different wisdom that might help you on your quest!'",
+      "image-text": "scholarly owl, tiny glasses, blue baby marshmallow dragon, vast magical library, glowing sections",
+      "choices": [
+        {
+          "text": "Explore the Arithmetic Archive",
+          "next": "arithmetic_archive"
+        },
+        {
+          "text": "Visit the Geometry Gallery",
+          "next": "geometry_gallery"
+        },
+        {
+          "text": "Check the Pattern Pavilion",
+          "next": "pattern_pavilion"
+        },
+        {
+          "text": "Enter the Wisdom Wing",
+          "next": "wisdom_wing"
+        }
+      ]
+    },
+    "arithmetic_archive": {
+      "text": "The Arithmetic Archive is filled with floating numbers that dance and combine in the air. You watch as 2+3 becomes 5, and 4×2 becomes 8. The numbers seem to be teaching you their basic relationships through their magical dance.",
+      "image-text": "blue baby marshmallow dragon, library section, floating numbers, dancing, arithmetic operations",
+      "choices": [
+        {
+          "text": "Study the dancing numbers more closely",
+          "next": "geometry_gallery"
+        },
+        {
+          "text": "Move to the Pattern Pavilion",
+          "next": "pattern_pavilion"
+        },
+        {
+          "text": "Visit the Wisdom Wing for guidance",
+          "next": "wisdom_wing"
+        }
+      ]
+    },
+    "geometry_gallery": {
+      "text": "The Geometry Gallery displays beautiful floating shapes - triangles, squares, circles, and more complex forms. Each shape glows with inner light and occasionally transforms into another shape, showing you the relationships between different geometric forms.",
+      "image-text": "blue baby marshmallow dragon, floating geometric shapes, glowing, transforming, mathematical relationships",
+      "choices": [
+        {
+          "text": "Watch the shapes transform in the Pattern Pavilion",
+          "next": "pattern_pavilion"
+        },
+        {
+          "text": "Seek wisdom in the Wisdom Wing",
+          "next": "wisdom_wing"
+        },
+        {
+          "text": "Return to study numbers in the Arithmetic Archive",
+          "next": "arithmetic_archive"
+        }
+      ]
+    },
+    "pattern_pavilion": {
+      "text": "The Pattern Pavilion shows you sequences and patterns everywhere - mathematical spirals, number sequences, and repeating designs. You begin to see how mathematics creates order and beauty in the world around you.",
+      "image-text": "blue baby marshmallow dragon, mathematical patterns, spirals, sequences, beautiful designs, floating",
+      "choices": [
+        {
+          "text": "Explore geometric patterns in the Geometry Gallery",
+          "next": "geometry_gallery"
+        },
+        {
+          "text": "Study number patterns in the Arithmetic Archive",
+          "next": "arithmetic_archive"
+        },
+        {
+          "text": "Seek final wisdom before your test",
+          "next": "wisdom_wing"
+        }
+      ]
+    },
+    "wisdom_wing": {
+      "text": "In the Wisdom Wing, ancient mathematical texts float open, showing the history of mathematical discovery. You feel more confident and prepared. The Librarian Owl appears and says, 'I see you've explored well, Charlie. Are you ready for your test, or would you like to explore more?'",
+      "image-text": "blue baby marshmallow dragon, wise library section, ancient floating texts, confident, prepared",
+      "roll": {
+        "text": "🎲 Roll to see if you feel ready for the test!",
+        "outcomes": [
+          {
+            "range": "1-2",
+            "text": "You feel you need more preparation - continue exploring!",
+            "next": "arithmetic_archive"
+          },
+          {
+            "range": "3-4",
+            "text": "You're getting there but want to see more patterns first.",
+            "next": "pattern_pavilion"
+          },
+          {
+            "range": "5-6",
+            "text": "You feel confident and ready for the Librarian's test!",
+            "next": "library_challenge"
+          }
+        ]
+      }
+    },
+    "library_challenge": {
+      "text": "Perfect! The Librarian Owl presents you with four magical books. 'The books will choose you as much as you choose them, Charlie. Let fate and your mathematical intuition guide you!'",
+      "image-text": "four glowing magical books, blue baby marshmallow dragon, different colored light, floating",
+      "roll": {
+        "text": "🎲 Roll to see which book calls to your dragon heart!",
+        "outcomes": [
+          {
+            "range": "1",
+            "text": "The red book about Fire and Numbers blazes brightly for you!",
+            "next": "fire_dragon_path_start"
+          },
+          {
+            "range": "2",
+            "text": "The blue book about Ice and Patterns sparkles with frost for you!",
+            "next": "ice_dragon_path_start"
+          },
+          {
+            "range": "3",
+            "text": "The green book about Earth and Geometry forms solid shapes for you!",
+            "next": "rock_dragon_path_start"
+          },
+          {
+            "range": "4",
+            "text": "The purple book about Magic and Equations swirls with mystical energy for you!",
+            "next": "magic_dragon_path_start"
+          }
+        ]
+      }
+    },
+    "fire_dragon_path_start": {
+      "text": "As you touch the red book, warm energy flows through you! You learn about multiplication and feel fire magic awakening. The Owl smiles: 'You must journey to the Volcano of Variables, where Fire Dragons learn their true power!'",
+      "image-text": "blue baby marshmallow dragon, red book, small flames, scales gaining red coloring, transformation",
+      "collectItem": "Fire Formula Scroll",
+      "choices": [
+        {
+          "text": "Journey to the Volcano of Variables",
+          "next": "volcano_approach"
+        }
+      ]
+    },
+    "volcano_approach": {
+      "text": "At the Volcano of Variables, a Fire Guardian blocks your path. 'To enter, solve this: 4 × 5 = ?' The guardian's flames dance with mathematical patterns.",
+      "image-text": "volcanic landscape, fiery guardian dragon, multiplication challenge, mathematical patterns",
+      "choices": [
+        {
+          "text": "Answer '20'",
+          "next": "fire_volcano_entrance"
+        },
+        {
+          "text": "Answer '25'",
+          "next": "fire_math_mistake"
+        },
+        {
+          "text": "Answer '9'",
+          "next": "fire_wrong_answer_ending"
+        }
+      ]
+    },
+    "fire_math_mistake": {
+      "text": "The Fire Guardian frowns. 'You added instead of multiplied! Fire Dragons must master multiplication. Try again: 4 × 5 means 4 groups of 5, or 5 + 5 + 5 + 5.'",
+      "image-text": "fire guardian, explaining multiplication, flame patterns, groups, mathematical demonstration",
+      "choices": [
+        {
+          "text": "Answer '20'",
+          "next": "fire_volcano_entrance"
+        },
+        {
+          "text": "Answer '15'",
+          "next": "fire_wrong_answer_ending"
+        }
+      ]
+    },
+    "fire_wrong_answer_ending": {
+      "text": "The Fire Guardian shakes his head sadly. 'A Fire Dragon must master multiplication and exponential powers to control their flames safely. Your mathematical understanding is not ready for this dangerous path.'",
+      "image-text": "disappointed fire guardian, sad young dragon, volcanic flames dimming, unstable, failure",
+      "isEnd": true,
+      "badEnding": true
+    },
+    "fire_volcano_entrance": {
+      "text": "Excellent! Inside the volcano, you meet the Ancient Fire Dragon. 'Now for a harder test: What is 3 × 8?' Your fire powers are growing stronger!",
+      "image-text": "ancient fire dragon, teaching, volcanic mathematical patterns, wisdom, flames",
+      "choices": [
+        {
+          "text": "Answer '24'",
+          "next": "fire_exponential_lesson"
+        },
+        {
+          "text": "Answer '11'",
+          "next": "fire_confusion_path"
+        },
+        {
+          "text": "Answer '32'",
+          "next": "fire_wrong_answer_ending"
+        }
+      ]
+    },
+    "fire_confusion_path": {
+      "text": "The Ancient Fire Dragon breathes gentle flames. 'You're still thinking addition, young one. Multiplication is repeated addition: 3 × 8 means 8 + 8 + 8. Count carefully!'",
+      "image-text": "ancient dragon, multiplication demonstration, repeated addition, flame groups, teaching",
+      "choices": [
+        {
+          "text": "Answer '24'",
+          "next": "fire_exponential_lesson"
+        },
+        {
+          "text": "Answer '12'",
+          "next": "fire_wrong_answer_ending"
+        }
+      ]
+    },
+    "fire_exponential_lesson": {
+      "text": "Perfect! The Ancient Fire Dragon teaches you about powers: '2³ means 2 × 2 × 2. What does 3² equal?' Your flames dance with exponential energy!",
+      "image-text": "young fire dragon, exponential powers, increasingly large flame bursts, learning, power",
+      "choices": [
+        {
+          "text": "Answer '9' (3 × 3)",
+          "next": "fire_mastery_test"
+        },
+        {
+          "text": "Answer '6' (3 + 3)",
+          "next": "fire_power_confusion"
+        },
+        {
+          "text": "Answer '12' (3 x 3 + 3))",
+          "next": "fire_copying_mistake"
+        }
+      ]
+    },
+    "fire_power_confusion": {
+      "text": "The Ancient Fire Dragon's flames dim with concern. 'Powers are not addition, young one. 3² means 3 × 3, not 3 + 3. This is crucial for controlling exponential fire!'",
+      "image-text": "ancient dragon, addition vs powers, flame demonstrations, mathematical teaching, concern",
+      "choices": [
+        {
+          "text": "Answer '9'",
+          "next": "fire_mastery_test"
+        },
+        {
+          "text": "Answer '12'",
+          "next": "fire_wrong_answer_ending"
+        }
+      ]
+    },
+    "fire_copying_mistake": {
+      "text": "The Ancient Fire Dragon notices your confusion. 'You copied my example instead of understanding. Each power is different: 2³ = 8, but 3² = 3 × 3. Think for yourself!'",
+      "image-text": "ancient dragon, emphasizing understanding, copying mistake, teaching moment, wisdom",
+      "choices": [
+        {
+          "text": "Think it through: 3 × 3 = 9",
+          "next": "fire_mastery_test"
+        },
+        {
+          "text": "Keep copying and guess '8' again",
+          "next": "fire_wrong_answer_ending"
+        }
+      ]
+    },
+    "fire_mastery_test": {
+      "text": "Excellent! Now for your final test before facing the Shadow Calculators: 'If you have 2⁴ flame bursts, how many is that?' Your fire powers are nearly mastered!",
+      "image-text": "confident young fire dragon, perfectly controlled flames, mathematical precision, mastery",
+      "choices": [
+        {
+          "text": "Answer '16' (2 × 2 × 2 × 2)",
+          "next": "fire_mastery_success"
+        },
+        {
+          "text": "Answer '8' (2 × 4)",
+          "next": "fire_final_mistake"
+        },
+        {
+          "text": "Answer '6' (2 + 4)",
+          "next": "fire_wrong_answer_ending"
+        }
+      ]
+    },
+    "fire_final_mistake": {
+      "text": "The Ancient Fire Dragon gives you one last chance: 'Remember, 2⁴ means 2 × 2 × 2 × 2, not 2 × 4. Count each multiplication carefully!'",
+      "image-text": "ancient dragon, patient teaching, step-by-step calculation, flames, mathematical guidance",
+      "choices": [
+        {
+          "text": "Answer '16' (2×2=4, 4×2=8, 8×2=16)",
+          "next": "fire_mastery_success"
+        },
+        {
+          "text": "Answer '10'",
+          "next": "fire_wrong_answer_ending"
+        }
+      ]
+    },
+    "fire_mastery_success": {
+      "text": "Perfect! You've mastered exponential fire powers! The Ancient Fire Dragon grants you the Fire Dragon Key. 'Now go face the Shadow Calculators - your mathematical fire will overcome their ice locks!'",
+      "image-text": "confident young fire dragon, glowing key, flames dancing, mathematical precision, achievement",
+      "collectItem": "Fire Dragon Key",
+      "choices": [
+        {
+          "text": "Head to the Shadow Calculator fortress",
+          "next": "fire_path_to_fortress"
+        }
+      ]
+    },
+    "fire_path_to_fortress": {
+      "text": "At the fortress, you face ice locks with the equation: '5² - 3² = ?' A Shadow Calculator whispers: 'Just melt them with brute force - math is too hard!'",
+      "image-text": "fire dragon, ice locks, equations, shadow figure, whispering temptations, fortress",
+      "choices": [
+        {
+          "text": "Answer '16' (25 - 9)",
+          "next": "fire_resist_temptation"
+        },
+        {
+          "text": "Answer '4' (10 - 6)",
+          "next": "fire_corruption_path"
+        },
+        {
+          "text": "Answer '8' (5 - 3 = 2, then 2²)",
+          "next": "fire_order_mistake"
+        }
+      ]
+    },
+    "fire_order_mistake": {
+      "text": "The ice locks resist your flames! You must solve each power first, then subtract. Remember: 5² = 25 and 3² = 9, so 25 - 9 = ?",
+      "image-text": "Ice locks glowing with resistance, showing the correct order of operations",
+      "choices": [
+        {
+          "text": "Solve correctly: 25 - 9 = 16",
+          "next": "fire_resist_temptation"
+        },
+        {
+          "text": "Answer '14'",
+          "next": "fire_corruption_path"
+        }
+      ]
+    },
+    "fire_resist_temptation": {
+      "text": "The Shadow Calculator's ice locks block your path to the fortress! You remember the multiplication formulas from your Fire Formula Scroll. Will you use your mathematical knowledge to melt these locks with precise fire calculations?",
+      "image-text": "A fire dragon facing ice locks blocking the fortress entrance, with a glowing scroll visible in their claws",
+      "choices": [
+        {
+          "text": "Use Fire Formula Scroll to melt the ice locks with mathematical fire",
+          "next": "convergence_point",
+          "item": "Fire Formula Scroll"
+        }
+      ]
+    },
+    "fire_corruption_path": {
+      "text": "Your flames turn chaotic and dark! The Shadow Calculator laughs as your mathematical precision is lost. But you can still remember your training!",
+      "image-text": "A fire dragon with darkening, chaotic flames, but still with a chance to resist corruption",
+      "choices": [
+        {
+          "text": "Remember your training: solve 5² - 3² properly",
+          "next": "fire_resist_temptation"
+        },
+        {
+          "text": "Give in to the chaotic flames",
+          "next": "shadow_dragon_ending"
+        }
+      ]
+    },
+    "ice_dragon_path_start": {
+      "text": "The blue book feels cool and calming. You learn about fractions and patterns. The Owl nods: 'Your path leads to the Frozen Fraction Falls, where Ice Dragons master precise calculation!'",
+      "image-text": "A baby dragon with a blue book, ice crystals forming around them, scales becoming blue and frosty",
+      "collectItem": "Ice Pattern Scroll",
+      "choices": [
+        {
+          "text": "Travel to the Frozen Fraction Falls",
+          "next": "frozen_falls_approach"
+        }
+      ]
+    },
+    "frozen_falls_approach": {
+      "text": "At the Frozen Fraction Falls, an Ice Guardian awaits. 'To enter, show precision: What is 1/2 as a decimal?' Ice crystals form mathematical patterns around you.",
+      "image-text": "Frozen waterfalls with an ice guardian presenting a fraction problem",
+      "choices": [
+        {
+          "text": "Answer '0.5'",
+          "next": "ice_falls_entrance"
+        },
+        {
+          "text": "Answer '0.2'",
+          "next": "ice_wrong_answer_ending"
+        }
+      ]
+    },
+    "ice_wrong_answer_ending": {
+      "text": "The Ice Guardian's crystals shatter sadly. 'An Ice Dragon must master fractions, decimals, percentages, and precise calculations. Your mathematical understanding is not ready for this precision-demanding path.'",
+      "image-text": "A disappointed ice guardian with broken crystals, a sad young dragon with chaotic ice patterns",
+      "isEnd": true,
+      "badEnding": true
+    },
+    "ice_falls_entrance": {
+      "text": "Perfect! Inside the falls, the Wise Ice Dragon teaches you: 'Now try this: What is 3/4 as a decimal?' Your ice powers grow more precise!",
+      "image-text": "A wise ice dragon teaching fractions with beautiful crystalline formations",
+      "choices": [
+        {
+          "text": "Answer '0.75' by dividing 3 by 4",
+          "next": "ice_mastery_success"
+        },
+        {
+          "text": "Answer '0.34' by putting digits together",
+          "next": "ice_decimal_mistake"
+        },
+        {
+          "text": "Answer '1.33' by dividing 4 by 3",
+          "next": "ice_wrong_answer_ending"
+        }
+      ]
+    },
+    "ice_decimal_mistake": {
+      "text": "The Wise Ice Dragon creates gentle frost patterns. 'You can't just put the digits together. 3/4 means 3 divided by 4. Think of it as sharing 3 things among 4 people.'",
+      "image-text": "An ice dragon demonstrating division with ice crystal sharing patterns",
+      "choices": [
+        {
+          "text": "Understand: 3 ÷ 4 = 0.75",
+          "next": "ice_mastery_success"
+        },
+        {
+          "text": "Answer '0.43'",
+          "next": "ice_wrong_answer_ending"
+        }
+      ]
+    },
+    "ice_mastery_success": {
+      "text": "Excellent! But the Wise Ice Dragon has more to teach: 'Now for percentages - the ultimate precision! What is 25% as a decimal?' Your ice crystals shimmer with anticipation.",
+      "image-text": "A wise ice dragon teaching percentages with crystalline formations showing parts of wholes",
+      "choices": [
+        {
+          "text": "Answer '0.25'",
+          "next": "ice_percentage_lesson"
+        },
+        {
+          "text": "Answer '2.5'",
+          "next": "ice_decimal_direction_mistake"
+        }
+      ]
+    },
+    "ice_decimal_direction_mistake": {
+      "text": "The Wise Ice Dragon creates gentle frost patterns. 'You moved the decimal the wrong way! 25% means 25 out of 100, which is 25/100 = 0.25, not 2.5!'",
+      "image-text": "An ice dragon showing 25 out of 100 ice crystals to demonstrate the concept",
+      "choices": [
+        {
+          "text": "Understand: 25% = 25/100 = 0.25",
+          "next": "ice_percentage_lesson"
+        },
+        {
+          "text": "Answer '0.025'",
+          "next": "ice_wrong_answer_ending"
+        }
+      ]
+    },
+    "ice_percentage_lesson": {
+      "text": "Perfect! The Wise Ice Dragon continues: 'Now try this: If you have 80% accuracy, what fraction is that in lowest terms?' Your precision powers are reaching mastery!",
+      "image-text": "A young ice dragon working with percentage and fraction conversions, ice crystals forming mathematical relationships",
+      "choices": [
+        {
+          "text": "Answer 4/5 (80% = 80/100 = 4/5)",
+          "next": "ice_fraction_mastery"
+        },
+        {
+          "text": "Answer '8/10' without simplifying",
+          "next": "ice_simplification_lesson"
+        },
+        {
+          "text": "Answer '80/1' by misunderstanding",
+          "next": "ice_wrong_answer_ending"
+        }
+      ]
+    },
+    "ice_simplification_lesson": {
+      "text": "The Wise Ice Dragon nods approvingly. 'Good start! But we can simplify further. 8/10 can be reduced by dividing both numbers by their greatest common factor. What divides both 8 and 10?'",
+      "image-text": "An ice dragon showing how to simplify fractions with crystalline division patterns",
+      "choices": [
+        {
+          "text": "Divide both by 2: 8/10 = 4/5",
+          "next": "ice_fraction_mastery"
+        }
+      ]
+    },
+    "ice_fraction_mastery": {
+      "text": "Excellent! Now for your final precision test: 'Convert 0.125 to a fraction in lowest terms.' Your ice powers are nearly perfect!",
+      "image-text": "A confident young ice dragon with increasingly precise ice formations",
+      "choices": [
+        {
+          "text": "Calculate: 0.125 = 125/1000 = 1/8",
+          "next": "ice_advanced_mastery"
+        },
+        {
+          "text": "Answer '125/1000'",
+          "next": "ice_wrong_answer_ending"
+        }
+      ]
+    },
+    "ice_advanced_mastery": {
+      "text": "Perfect! You've achieved true Ice Dragon mastery! The Wise Ice Dragon grants you the Ice Dragon Key. 'Your mathematical precision will solve the most complex combination locks that guard the Shadow Calculators!'",
+      "image-text": "A confident young ice dragon receiving a crystalline key, ice patterns achieving perfect mathematical precision",
+      "collectItem": "Ice Dragon Key",
+      "choices": [
+        {
+          "text": "Head to the Shadow Calculator fortress",
+          "next": "ice_fortress_approach"
+        }
+      ]
+    },
+    "ice_fortress_approach": {
+      "text": "At the fortress, you face intricate combination locks requiring decimal precision. The first lock shows: '0.6 + 0.25 = ?' A Shadow Calculator whispers: 'Just guess - close enough is good enough!'",
+      "image-text": "An ice dragon facing complex combination locks with decimal equations, a shadow figure suggesting imprecision",
+      "choices": [
+        {
+          "text": "Calculate precisely: 0.6 + 0.25 = 0.85",
+          "next": "ice_precision_test_2"
+        },
+        {
+          "text": "Listen to Shadow Calculator and guess 0.9",
+          "next": "ice_corruption_path"
+        }
+      ]
+    },
+    "ice_precision_test_2": {
+      "text": "Excellent! The second lock appears: '3/4 - 1/8 = ?' You must work with fractions that have different denominators. Your precision training is being tested!",
+      "image-text": "A more complex lock with fraction subtraction, ice crystals forming to help visualize the problem",
+      "choices": [
+        {
+          "text": "Find common denominator: 6/8 - 1/8 = 5/8",
+          "next": "ice_final_fortress_test"
+        },
+        {
+          "text": "Subtract directly: 3-1=2, 4-8=-4, so 2/-4",
+          "next": "ice_wrong_answer_ending"
+        },
+        {
+          "text": "Convert to decimals first: 0.75 - 0.125 = 0.625",
+          "next": "ice_final_fortress_test"
+        }
+      ]
+    },
+    "ice_final_fortress_test": {
+      "text": "The final lock appears with the ultimate precision test: 'What is 7/12 as a decimal rounded to 3 decimal places?' This combines fractions, decimals, and rounding!",
+      "image-text": "The most complex lock yet, with ice crystals forming intricate mathematical patterns",
+      "choices": [
+        {
+          "text": "Calculate: 7÷12 = 0.583 (rounded)",
+          "next": "ice_ultimate_success"
+        },
+        {
+          "text": "Answer '0.58'",
+          "next": "ice_wrong_answer_ending"
+        }
+      ]
+    },
+    "ice_ultimate_success": {
+      "text": "The final combination locks stand before the fortress entrance, more complex than any you've faced! You remember the precise fraction patterns from your Ice Pattern Scroll. Will you use your mathematical precision to solve these ultimate locks?",
+      "image-text": "An ice dragon facing complex combination locks at the fortress entrance, with a crystalline scroll visible in their claws",
+      "choices": [
+        {
+          "text": "Use Ice Pattern Scroll to solve the locks with perfect precision",
+          "next": "convergence_point",
+          "item": "Ice Pattern Scroll"
+        }
+      ]
+    },
+    "ice_corruption_path": {
+      "text": "Your ice becomes sloppy and imprecise as you listen to the Shadow Calculator! But you can still remember the beauty of perfect precision. Think of all your training!",
+      "image-text": "An ice dragon with imprecise, chaotic ice patterns, but still with hope for redemption",
+      "choices": [
+        {
+          "text": "Remember your precision training and solve correctly",
+          "next": "ice_precision_test_2"
+        },
+        {
+          "text": "Accept that 'close enough' is fine",
+          "next": "shadow_dragon_ending"
+        }
+      ]
+    },
+    "rock_dragon_path_start": {
+      "text": "The green book feels solid and strong. You learn about geometry and building foundations. The Owl points toward the mountains: 'Climb the Geometric Peaks, where Rock Dragons learn unshakeable solutions!'",
+      "image-text": "A baby dragon with a green book, geometric shapes forming around them, scales becoming rocky and green",
+      "collectItem": "Geometry Stone",
+      "choices": [
+        {
+          "text": "Climb toward the Geometric Peaks",
+          "next": "geometric_peaks_approach"
+        }
+      ]
+    },
+    "geometric_peaks_approach": {
+      "text": "At the Geometric Peaks, a Rock Guardian made of living stone challenges you: 'To enter, prove you understand shapes: How many sides does a triangle have?'",
+      "image-text": "Mountain peaks with a rock guardian made of geometric stone formations",
+      "choices": [
+        {
+          "text": "Answer '3'",
+          "next": "geometric_peaks_entrance"
+        },
+        {
+          "text": "Answer '4'",
+          "next": "rock_wrong_answer_ending"
+        }
+      ]
+    },
+    "rock_wrong_answer_ending": {
+      "text": "The Rock Guardian's stones crumble sadly. 'A Rock Dragon must master geometry, area, volume, and construction mathematics. Your mathematical understanding is not ready for this building-intensive path.'",
+      "image-text": "A disappointed rock guardian with crumbling stones, a sad young dragon with unstable geometric formations",
+      "isEnd": true,
+      "badEnding": true
+    },
+    "geometric_peaks_entrance": {
+      "text": "Correct! Inside the peaks, the Eternal Rock Dragon teaches you: 'Now for 3D shapes: How many faces does a cube have?' Your earth powers grow stronger!",
+      "image-text": "An ancient rock dragon teaching 3D geometry with floating stone formations",
+      "choices": [
+        {
+          "text": "Answer '6'",
+          "next": "rock_mastery_success"
+        },
+        {
+          "text": "Answer '8'",
+          "next": "rock_wrong_answer_ending"
+        }
+      ]
+    },
+    "rock_mastery_success": {
+      "text": "Excellent! But the Eternal Rock Dragon has more to teach: 'Now for area and volume - the foundation of all construction! What is the area of a rectangle that is 4 units by 6 units?' Your earth powers grow stronger!",
+      "image-text": "An ancient rock dragon teaching area with rectangular stone formations",
+      "choices": [
+        {
+          "text": "Calculate: 4 × 6 = 24 square units",
+          "next": "rock_area_lesson"
+        },
+        {
+          "text": "Answer '10'",
+          "next": "rock_wrong_answer_ending"
+        }
+      ]
+    },
+    "rock_area_lesson": {
+      "text": "Perfect! Now for 3D volume: 'What is the volume of a cube with sides of 3 units?' Your geometric understanding is deepening!",
+      "image-text": "A young rock dragon working with cubic stone formations, learning three-dimensional calculations",
+      "choices": [
+        {
+          "text": "Calculate: 3 × 3 × 3 = 27 cubic units",
+          "next": "rock_volume_mastery"
+        },
+        {
+          "text": "Answer '9' (3 × 3)",
+          "next": "rock_3d_thinking_lesson"
+        },
+        {
+          "text": "Answer '12' (3 × 4)",
+          "next": "rock_wrong_answer_ending"
+        }
+      ]
+    },
+    "rock_3d_thinking_lesson": {
+      "text": "The Eternal Rock Dragon creates a stone cube. 'You calculated area (3×3=9) but forgot the third dimension! Volume needs length × width × height. A cube has all sides equal, so 3 × 3 × 3!'",
+      "image-text": "A rock dragon demonstrating the three dimensions of a cube with glowing stone edges",
+      "choices": [
+        {
+          "text": "Think in 3D: 3 × 3 × 3 = 27 cubic units",
+          "next": "rock_volume_mastery"
+        }
+      ]
+    },
+    "rock_volume_mastery": {
+      "text": "Excellent! Now for surface area: 'A cube with 3-unit sides has 6 faces. What is the total surface area?' This combines area calculation with 3D understanding!",
+      "image-text": "A confident young rock dragon working with complex 3D surface calculations, stone faces glowing",
+      "choices": [
+        {
+          "text": "Answer '54' (6 faces × (3×3) = 6 × 9)",
+          "next": "rock_surface_mastery"
+        },
+        {
+          "text": "Answer '27' (3 x 9)",
+          "next": "rock_wrong_answer_ending"
+        }
+      ]
+    },
+    "rock_surface_mastery": {
+      "text": "Perfect! Now for your final geometric test: 'A rectangular prism is 2×3×4 units. What is its volume?' This tests your complete 3D mastery!",
+      "image-text": "A young rock dragon facing the ultimate geometric challenge with complex rectangular stone formations",
+      "choices": [
+        {
+          "text": "Answer '24' (2 × 3 × 4)",
+          "next": "rock_advanced_mastery"
+        },
+        {
+          "text": "Answer '18' (2×3+3×4+2×4)",
+          "next": "rock_wrong_answer_ending"
+        }
+      ]
+    },
+    "rock_advanced_mastery": {
+      "text": "Perfect! You've achieved true Rock Dragon mastery! The Eternal Rock Dragon grants you the Rock Dragon Key. 'Your geometric precision will build the strongest bridges to reach the Shadow Calculators!'",
+      "image-text": "A confident young rock dragon receiving a geometric crystal key, perfect 3D stone structures surrounding them",
+      "collectItem": "Rock Dragon Key",
+      "choices": [
+        {
+          "text": "Head to the Shadow Calculator fortress",
+          "next": "rock_fortress_approach"
+        }
+      ]
+    },
+    "rock_fortress_approach": {
+      "text": "At the fortress, you find deep geometric gaps that need precise bridge calculations. The first gap requires a bridge 5 units long and 3 units wide. 'What area of stone do you need?' A Shadow Calculator suggests: 'Just build roughly - close enough!'",
+      "image-text": "A rock dragon examining geometric gaps around a fortress, with precise measurements needed for bridge building",
+      "choices": [
+        {
+          "text": "Answer '15' (5 × 3)",
+          "next": "rock_bridge_test_2"
+        },
+        {
+          "text": "Answer '35' (3 and 5)",
+          "next": "rock_corruption_path"
+        }
+      ]
+    },
+    "rock_bridge_test_2": {
+      "text": "Excellent! The second gap needs a bridge with volume calculations: 'You need a stone beam 6 units long, 2 units wide, and 1 unit thick. What volume of stone?' Your construction skills are being tested!",
+      "image-text": "A more complex gap requiring 3D volume calculations for proper bridge construction",
+      "choices": [
+        {
+          "text": "Calculate volume: 6 × 2 × 1 = 12 cubic units",
+          "next": "rock_final_fortress_test"
+        },
+        {
+          "text": "Answer '9' (6+2+1)",
+          "next": "rock_wrong_answer_ending"
+        }
+      ]
+    },
+    "rock_final_fortress_test": {
+      "text": "The final gap appears with the ultimate construction challenge: 'Build a triangular support beam. The triangle has a base of 4 units and height of 3 units. What is its area?' This tests your complete geometric mastery!",
+      "image-text": "The most complex gap yet, requiring triangular area calculations for structural support",
+      "choices": [
+        {
+          "text": "Answer '6' ((4 × 3) ÷ 2)",
+          "next": "rock_ultimate_success"
+        },
+        {
+          "text": "Answer '12' (4×3)",
+          "next": "rock_wrong_answer_ending"
+        }
+      ]
+    },
+    "rock_ultimate_success": {
+      "text": "The final gaps before the fortress are the widest and most challenging yet! You remember the geometric formulas from your Geometry Stone. Will you use your mathematical knowledge to build the perfect bridges to reach the fortress?",
+      "image-text": "A rock dragon facing wide gaps before the fortress entrance, with a glowing geometric stone visible in their claws",
+      "choices": [
+        {
+          "text": "Use Geometry Stone to build perfect mathematical bridges",
+          "next": "convergence_point",
+          "item": "Geometry Stone"
+        }
+      ]
+    },
+    "rock_corruption_path": {
+      "text": "Your stone bridges become unstable and crooked as you listen to the Shadow Calculator! But you can still remember the strength of perfect geometry. Think of all your training!",
+      "image-text": "A rock dragon with unstable, crooked stone formations, but still with potential for redemption",
+      "choices": [
+        {
+          "text": "Remember your geometric training and build precisely",
+          "next": "rock_bridge_test_2"
+        },
+        {
+          "text": "Accept that 'roughly built' is fine",
+          "next": "shadow_dragon_ending"
+        }
+      ]
+    },
+    "magic_dragon_path_start": {
+      "text": "The purple book pulses with mystical energy. You learn about algebra and variables. The Owl's eyes twinkle: 'Your destiny awaits in the Mystic Equation Gardens, where Magic Dragons learn mathematical spells!'",
+      "image-text": "A baby dragon with a purple book, magical equations swirling around them, scales becoming iridescent purple",
+      "collectItem": "Magic Equation Scroll",
+      "choices": [
+        {
+          "text": "Fly to the Mystic Equation Gardens",
+          "next": "equation_gardens_approach"
+        }
+      ]
+    },
+    "equation_gardens_approach": {
+      "text": "At the Mystic Equation Gardens, a Magic Guardian surrounded by floating equations challenges you: 'To enter, solve this mystery: If x + 3 = 7, what is x?'",
+      "image-text": "Magical gardens with a mystical guardian presenting an algebraic equation",
+      "choices": [
+        {
+          "text": "Answer 'x = 4'",
+          "next": "equation_gardens_entrance"
+        },
+        {
+          "text": "Answer 'x = 10'",
+          "next": "magic_wrong_answer_ending"
+        }
+      ]
+    },
+    "magic_wrong_answer_ending": {
+      "text": "The Magic Guardian's equations fade sadly. 'A Magic Dragon must master algebra, equation solving, and systematic mathematical thinking. Your mathematical understanding is not ready for this spell-casting path.'",
+      "image-text": "A disappointed magic guardian with fading equations, a sad young dragon with chaotic magical effects",
+      "isEnd": true,
+      "badEnding": true
+    },
+    "equation_gardens_entrance": {
+      "text": "Perfect! Inside the gardens, the Arcane Magic Dragon teaches you: 'Now try this spell: If 2y - 5 = 9, what is y?' Your magical powers are awakening!",
+      "image-text": "An arcane magic dragon teaching algebra with equations floating like magical butterflies",
+      "choices": [
+        {
+          "text": "Answer 'y = 7' (2y = 14)",
+          "next": "magic_mastery_success"
+        },
+        {
+          "text": "Answer 'y = 4' (2×4-5=3)",
+          "next": "magic_wrong_answer_ending"
+        }
+      ]
+    },
+    "magic_mastery_success": {
+      "text": "Excellent! But the Arcane Magic Dragon has more advanced spells to teach: 'Now for equations with variables on both sides! Solve: 3x + 5 = 2x + 11.' Your magical powers are growing stronger!",
+      "image-text": "An arcane magic dragon teaching advanced algebra with complex equations floating like magical butterflies",
+      "choices": [
+        {
+          "text": "Answer 'x = 6' (3x - 2x = 11 - 5)",
+          "next": "magic_advanced_lesson"
+        },
+        {
+          "text": "Answer 'x = 16' (3×6+5=23)",
+          "next": "magic_wrong_answer_ending"
+        }
+      ]
+    },
+    "magic_advanced_lesson": {
+      "text": "Perfect! Now for distributive property magic: 'Solve: 2(x + 3) = 14.' You must expand the parentheses first! Your spell-casting is becoming more sophisticated!",
+      "image-text": "A young magic dragon learning to expand magical parentheses with distributive property spells",
+      "choices": [
+        {
+          "text": "Answer 'x = 4' (2x + 6 = 14, so 2x = 8)",
+          "next": "magic_distribution_mastery"
+        },
+        {
+          "text": "Answer 'x = 7' (2×7+3=17)",
+          "next": "magic_wrong_answer_ending"
+        }
+      ]
+    },
+    "magic_distribution_mastery": {
+      "text": "Excellent! Now for your most challenging spell: 'Solve: 3(2x - 1) + 4 = 2(x + 5) + 1.' This combines distribution with variables on both sides! Your magical mastery is being tested!",
+      "image-text": "A confident young magic dragon facing the most complex algebraic spell yet, with intricate magical equation patterns",
+      "choices": [
+        {
+          "text": "Answer 'x = 2.5'",
+          "next": "magic_complex_mastery"
+        },
+        {
+          "text": "Answer 'x = 5'",
+          "next": "magic_wrong_answer_ending"
+        }
+      ]
+    },
+    "magic_complex_mastery": {
+      "text": "Incredible! You solved the most complex algebraic spell! Now for your final test: 'A magic potion needs x bottles. If 4x - 7 = 2x + 9, how many bottles?' This tests real-world magical application!",
+      "image-text": "A young magic dragon applying algebra to practical magical problems, with potion bottles and spell ingredients",
+      "choices": [
+        {
+          "text": "Answer '8 bottles' (4x - 2x = 9 + 7, so 2x = 16)",
+          "next": "magic_application_mastery"
+        },
+        {
+          "text": "Answer '2 bottles' (4×2-7=1)",
+          "next": "magic_wrong_answer_ending"
+        }
+      ]
+    },
+    "magic_application_mastery": {
+      "text": "Perfect! You've mastered practical algebraic magic! The Arcane Magic Dragon grants you the Magic Dragon Key. 'Your advanced spells will decode the most complex variable ciphers that protect the Shadow Calculators!'",
+      "image-text": "A confident young magic dragon receiving a mystical key, perfect advanced algebraic spells swirling around them",
+      "collectItem": "Magic Dragon Key",
+      "choices": [
+        {
+          "text": "Head to the Shadow Calculator fortress",
+          "next": "magic_fortress_approach"
+        }
+      ]
+    },
+    "magic_fortress_approach": {
+      "text": "At the fortress, you face variable cipher locks. The first lock shows: 'x + 3 = 8. What is x?' A Shadow Calculator whispers: 'Magic should be easy - just cast random spells!'",
+      "image-text": "A magic dragon facing cipher locks with simple algebraic variables, a shadow figure suggesting magical shortcuts",
+      "choices": [
+        {
+          "text": "Answer '5' (8 - 3)",
+          "next": "magic_cipher_test_2"
+        },
+        {
+          "text": "Answer '11' (8 + 3)",
+          "next": "magic_systematic_failure"
+        },
+        {
+          "text": "Answer '-5 (3 - 8)",
+          "next": "magic_corruption_path"
+        }
+      ]
+    },
+    "magic_systematic_failure": {
+      "text": "The cipher lock rejects your answer! 'Magic Dragons must solve systematically,' echoes through the fortress. 'Random spells create magical chaos!' The lock gives you one more chance.",
+      "image-text": "A cipher lock glowing red with rejection, emphasizing the need for systematic algebraic solutions",
+      "choices": [
+        {
+          "text": "Answer '5' (8 - 3)",
+          "next": "magic_cipher_test_2"
+        }
+      ]
+    },
+    "magic_cipher_test_2": {
+      "text": "Excellent! The second cipher appears: '2x + 4 = 12. Solve for x.' Your magical training is being tested!",
+      "image-text": "A cipher requiring basic equation solving skills",
+      "choices": [
+        {
+          "text": "Answer '4' (2x = 8, so x = 4)",
+          "next": "magic_final_fortress_test"
+        },
+        {
+          "text": "Answer '8' (12 - 4)",
+          "next": "magic_distribution_skip_error"
+        },
+        {
+          "text": "Answer '16' (12 + 4)",
+          "next": "magic_wrong_answer_ending"
+        }
+      ]
+    },
+    "magic_distribution_skip_error": {
+      "text": "The cipher buzzes with magical distress! 'You forgot to divide by 2! When 2x = 8, you must divide both sides by 2 to get x = 4!' The cipher gives you another chance.",
+      "image-text": "A cipher showing the importance of proper equation solving steps",
+      "choices": [
+        {
+          "text": "Answer '4' (2x = 8, so x = 4)",
+          "next": "magic_final_fortress_test"
+        }
+      ]
+    },
+    "magic_final_fortress_test": {
+      "text": "The final cipher appears: 'A spell needs y bottles. If y + 5 = 12, how many bottles?' This tests your magical equation skills!",
+      "image-text": "The final cipher with a practical magical application",
+      "choices": [
+        {
+          "text": "Answer '7 bottles' (12 - 5)",
+          "next": "magic_ultimate_success"
+        },
+        {
+          "text": "Answer '17 bottles' (12 + 5)",
+          "next": "magic_wrong_answer_ending"
+        }
+      ]
+    },
+    "magic_ultimate_success": {
+      "text": "The final cipher locks guard the fortress entrance with the most complex variable equations you've ever seen! You remember the algebraic formulas from your Magic Equation Scroll. Will you use your systematic mathematical spells to decode these ultimate mysteries?",
+      "image-text": "A magic dragon facing complex cipher locks at the fortress entrance, with a shimmering scroll visible in their claws",
+      "choices": [
+        {
+          "text": "Use Magic Equation Scroll to decode the cipher locks with algebraic spells",
+          "next": "convergence_point",
+          "item": "Magic Equation Scroll"
+        }
+      ]
+    },
+    "magic_corruption_path": {
+      "text": "Your magic becomes chaotic and unpredictable as you listen to the Shadow Calculator! But you can still remember the precision of true mathematical magic. Think of all your systematic training!",
+      "image-text": "A magic dragon with chaotic, unpredictable magical effects, but still with hope for redemption",
+      "choices": [
+        {
+          "text": "Remember your systematic training and solve properly",
+          "next": "magic_cipher_test_2"
+        },
+        {
+          "text": "Accept that random magic is easier",
+          "next": "shadow_dragon_ending"
+        }
+      ]
+    },
+    "convergence_point": {
+      "text": "Inside the fortress, you finally see them - the three stolen Dragon Eggs, glowing weakly in magical cages! Standing guard is the Shadow Calculator Leader. 'Your approach determines how this final confrontation unfolds, young dragon!'",
+      "image-text": "Three glowing dragon eggs in cages with the Shadow Calculator Leader, the atmosphere tense with possibility",
+      "roll": {
+        "text": "🎲 Roll to see how your dragon instincts guide your approach!",
+        "outcomes": [
+          {
+            "range": "1-2",
+            "text": "Your dragon courage leads you to challenge them directly to mathematical combat!",
+            "next": "ultimate_challenge"
+          },
+          {
+            "range": "3-4",
+            "text": "Your dragon wisdom guides you to understand their motivations first.",
+            "next": "leader_motivation"
+          },
+          {
+            "range": "5-6",
+            "text": "Your dragon compassion leads you to show them the beauty of mathematics!",
+            "next": "redemption_path"
+          }
+        ]
+      }
+    },
+    "leader_motivation": {
+      "text": "The Shadow Leader's expression softens slightly. 'We stole the eggs because we wanted math to be feared and respected, not loved and enjoyed. But seeing your journey... maybe we were wrong.'",
+      "image-text": "A shadow leader looking conflicted, mathematical symbols around them shifting from dark to light",
+      "choices": [
+        {
+          "text": "Show them that math can be both powerful AND joyful",
+          "next": "redemption_path"
+        },
+        {
+          "text": "Insist they return the eggs immediately",
+          "next": "ultimate_challenge"
+        }
+      ]
+    },
+    "redemption_path": {
+      "text": "You demonstrate a beautiful mathematical pattern with your dragon abilities. The Shadow Leader watches in wonder. 'I... I had forgotten math could be beautiful!'",
+      "image-text": "A young dragon creating beautiful mathematical patterns while a shadow leader watches in amazement",
+      "choices": [
+        {
+          "text": "Invite them to remember the joy of learning",
+          "next": "peaceful_resolution"
+        }
+      ]
+    },
+    "peaceful_resolution": {
+      "text": "The Shadow Calculator Leader begins to glow with soft light instead of darkness. 'You're right, young dragon. Math should bring wonder, not fear.' They release the Dragon Eggs willingly. 'Thank you for reminding us who we used to be.'",
+      "image-text": "A former shadow leader glowing with light, releasing dragon eggs from their cages peacefully",
+      "choices": [
+        {
+          "text": "Take the eggs back to restore Mathematica",
+          "next": "hero_celebration"
+        }
+      ]
+    },
+    "ultimate_challenge": {
+      "text": "The Shadow Leader presents a complex problem: 'Solve this combining all math types: (3 × 4) + (1/2 of 10) - (x where x + 1 = 4) = ?' This tests multiplication, fractions, and algebra together!",
+      "image-text": "A massive mathematical equation floating in dark energy, combining all types of mathematical operations",
+      "choices": [
+        {
+          "text": "Answer '14'",
+          "next": "ultimate_solution"
+        },
+        {
+          "text": "Answer '20'",
+          "next": "ultimate_failure_ending"
+        }
+      ]
+    },
+    "ultimate_failure_ending": {
+      "text": "The Shadow Leader shakes their head sadly. 'You haven't truly mastered mathematics if you guess instead of solve. The Dragon Eggs remain with us, and Mathematica will fade into darkness.'",
+      "image-text": "A disappointed shadow leader with the dragon eggs remaining locked, mathematical symbols fading",
+      "isEnd": true,
+      "badEnding": true
+    },
+    "ultimate_solution": {
+      "text": "Perfect! You work through each part correctly. The Shadow Leader staggers back. 'Impossible! You've mastered ALL of mathematics!' The Dragon Eggs break free, glowing brightly!",
+      "image-text": "Mathematical solutions appearing step by step as dragon eggs break free from their cages, glowing with restored power",
+      "choices": [
+        {
+          "text": "Take the eggs back to restore Mathematica",
+          "next": "hero_celebration"
+        }
+      ]
+    },
+    "hero_celebration": {
+      "text": "You fly back to the Kingdom of Mathematica carrying the three precious Dragon Eggs. As you arrive, the mathematical magic returns - numbers dance in the air again, equations glow brightly, and geometric shapes regain their perfect forms! Elder Pythagoras and all the dragons of Mathematica cheer as you return the eggs to their sacred resting place. 'Charlie, you have grown from a tiny hatchling into a true Mathematical Dragon Hero!' The kingdom's magic is fully restored!",
+      "image-text": "A celebration scene with a young dragon returning with three glowing eggs as mathematical magic returns to the kingdom, with many dragons cheering",
+      "choices": [
+        {
+          "text": "Celebrate your growth and transformation",
+          "next": "determine_final_form"
+        }
+      ]
+    },
+    "determine_final_form": {
+      "text": "As the celebration continues, Elder Pythagoras leads you to four ancient treasure chests, each sealed with a different magical lock. 'These contain the final transformation crystals,' he explains. 'Use the Dragon Key you earned to unlock the chest that matches your mathematical mastery!' You are no longer a tiny baby dragon - you have become a magnificent Mathematical Dragon!",
+      "image-text": "Four ornate treasure chests with different magical locks (fire, ice, rock, magic themed), with a fully grown dragon holding a glowing key",
+      "choices": [
+        {
+          "text": "Use Fire Dragon Key to open the flame-sealed chest",
+          "next": "fire_dragon_ending",
+          "item": "Fire Dragon Key"
+        },
+        {
+          "text": "Use Ice Dragon Key to open the crystal-sealed chest",
+          "next": "ice_dragon_ending",
+          "item": "Ice Dragon Key"
+        },
+        {
+          "text": "Use Rock Dragon Key to open the stone-sealed chest",
+          "next": "rock_dragon_ending",
+          "item": "Rock Dragon Key"
+        },
+        {
+          "text": "Use Magic Dragon Key to open the spell-sealed chest",
+          "next": "magic_dragon_ending",
+          "item": "Magic Dragon Key"
+        }
+      ]
+    },
+    "fire_dragon_ending": {
+      "text": "Your Fire Dragon Key unlocks the flame-sealed chest with a burst of mathematical fire! Inside, a brilliant red crystal transforms you completely. You have become a magnificent Fire Dragon of Mathematica! Your scales shimmer with red and gold, and when you breathe, mathematical equations appear in flames. You use the power of multiplication and exponential growth to solve problems quickly and help other young dragons learn that math can be as exciting as fire itself!",
+      "image-text": "A majestic fire dragon with red and gold scales emerging from an opened treasure chest, breathing mathematical equations made of flame",
+      "isEnd": true
+    },
+    "ice_dragon_ending": {
+      "text": "Your Ice Dragon Key unlocks the crystal-sealed chest with a chime of perfect precision! Inside, a brilliant blue crystal transforms you completely. You have become a beautiful Ice Dragon of Mathematica! Your scales sparkle like frost, and your breath creates intricate mathematical patterns in ice. You use the precision of fractions and decimals to show others that math can be as beautiful and exact as a perfect snowflake!",
+      "image-text": "An elegant ice dragon with sparkling blue scales emerging from an opened crystal chest, creating beautiful mathematical ice patterns",
+      "isEnd": true
+    },
+    "rock_dragon_ending": {
+      "text": "Your Rock Dragon Key unlocks the stone-sealed chest with a rumble of geometric power! Inside, a brilliant green crystal transforms you completely. You have become a mighty Rock Dragon of Mathematica! Your scales are strong as stone, and you can create geometric formations with your earth powers. You use the stability of geometry to build strong foundations and teach others that math is the bedrock of all knowledge!",
+      "image-text": "A powerful rock dragon with stone-like scales emerging from an opened stone chest, creating geometric crystal formations",
+      "isEnd": true
+    },
+    "magic_dragon_ending": {
+      "text": "Your Magic Dragon Key unlocks the spell-sealed chest with a burst of algebraic energy! Inside, a brilliant purple crystal transforms you completely. You have become a mystical Magic Dragon of Mathematica! Your scales shimmer with all colors of the rainbow, and you can turn mathematical equations into real spells. You use algebraic magic to solve mysteries and show others that math is the most powerful magic of all!",
+      "image-text": "A mystical dragon with rainbow-colored scales emerging from an opened magical chest, casting spells made of mathematical equations",
+      "isEnd": true
+    },
+    "shadow_dragon_ending": {
+      "text": "You become a Shadow Dragon, spreading confusion and making math scary for everyone. The Dragon Eggs remain stolen, and the Kingdom of Mathematica fades into darkness forever. Sometimes the easy path leads to the worst endings.",
+      "image-text": "A dark dragon surrounded by twisted mathematical symbols, a kingdom fading into shadow",
+      "isEnd": true,
+      "badEnding": true
+    }
+  }
+}

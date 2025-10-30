@@ -8,7 +8,8 @@
     "build": "vite build",
     "preview": "vite preview",
     "generate-images": "node generate-images.js",
-    "generate-pdf": "node generate-pdf.js"
+    "generate-pdf": "node generate-pdf.js",
+    "deploy": "netlify deploy --prod"
   },
   "dependencies": {
     "@aws-sdk/client-bedrock-runtime": "^3.490.0",
