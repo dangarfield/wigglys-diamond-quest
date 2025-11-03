@@ -1247,8 +1247,8 @@ ollection animation */
 
 .item-collection-notice {
     animation: itemCollected 0.6s ease-out;
-}/
-* Congratulations message animation */
+}
+/* Congratulations message animation */
 @keyframes congratsAppear {
     0% {
         opacity: 0;
