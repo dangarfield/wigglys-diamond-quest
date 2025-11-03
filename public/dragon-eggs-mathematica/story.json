@@ -977,77 +977,77 @@
       "badEnding": true
     },
     "equation_gardens_entrance": {
-      "text": "Perfect! Inside the gardens, the Arcane Magic Dragon teaches you: 'Now try this spell: If 2y - 5 = 9, what is y?' Your magical powers are awakening!",
+      "text": "Perfect! Inside the gardens, the Arcane Magic Dragon teaches you: 'Now try this spell: If y + 2 = 5, what is y?' Your magical powers are awakening!",
       "image-text": "An arcane magic dragon teaching algebra with equations floating like magical butterflies",
       "choices": [
         {
-          "text": "Answer 'y = 7' (2y = 14)",
+          "text": "Answer 'y = 3' (5 - 2)",
           "next": "magic_mastery_success"
         },
         {
-          "text": "Answer 'y = 4' (2×4-5=3)",
+          "text": "Answer 'y = 7' (5 + 2)",
           "next": "magic_wrong_answer_ending"
         }
       ]
     },
     "magic_mastery_success": {
-      "text": "Excellent! But the Arcane Magic Dragon has more advanced spells to teach: 'Now for equations with variables on both sides! Solve: 3x + 5 = 2x + 11.' Your magical powers are growing stronger!",
-      "image-text": "An arcane magic dragon teaching advanced algebra with complex equations floating like magical butterflies",
+      "text": "Excellent! But the Arcane Magic Dragon has more spells to teach: 'Now try: 2x = 6. What is x?' Your magical powers are growing stronger!",
+      "image-text": "An arcane magic dragon teaching simple algebra with equations floating like magical butterflies",
       "choices": [
         {
-          "text": "Answer 'x = 6' (3x - 2x = 11 - 5)",
+          "text": "Answer 'x = 3' (6 ÷ 2)",
           "next": "magic_advanced_lesson"
         },
         {
-          "text": "Answer 'x = 16' (3×6+5=23)",
+          "text": "Answer 'x = 8' (6 + 2)",
           "next": "magic_wrong_answer_ending"
         }
       ]
     },
     "magic_advanced_lesson": {
-      "text": "Perfect! Now for distributive property magic: 'Solve: 2(x + 3) = 14.' You must expand the parentheses first! Your spell-casting is becoming more sophisticated!",
-      "image-text": "A young magic dragon learning to expand magical parentheses with distributive property spells",
+      "text": "Perfect! Now for a trickier spell: 'If x - 4 = 1, what is x?' Your spell-casting is becoming more sophisticated!",
+      "image-text": "A young magic dragon learning subtraction equations with magical symbols",
       "choices": [
         {
-          "text": "Answer 'x = 4' (2x + 6 = 14, so 2x = 8)",
+          "text": "Answer 'x = 5' (1 + 4)",
           "next": "magic_distribution_mastery"
         },
         {
-          "text": "Answer 'x = 7' (2×7+3=17)",
+          "text": "Answer 'x = 3' (4 - 1)",
           "next": "magic_wrong_answer_ending"
         }
       ]
     },
     "magic_distribution_mastery": {
-      "text": "Excellent! Now for your most challenging spell: 'Solve: 3(2x - 1) + 4 = 2(x + 5) + 1.' This combines distribution with variables on both sides! Your magical mastery is being tested!",
-      "image-text": "A confident young magic dragon facing the most complex algebraic spell yet, with intricate magical equation patterns",
+      "text": "Excellent! Now for your most challenging spell: 'If 3x = 12, what is x?' Your magical mastery is being tested!",
+      "image-text": "A confident young magic dragon facing a multiplication equation with glowing magical numbers",
       "choices": [
         {
-          "text": "Answer 'x = 2.5'",
+          "text": "Answer 'x = 4' (12 ÷ 3)",
           "next": "magic_complex_mastery"
         },
         {
-          "text": "Answer 'x = 5'",
+          "text": "Answer 'x = 15' (12 + 3)",
           "next": "magic_wrong_answer_ending"
         }
       ]
     },
     "magic_complex_mastery": {
-      "text": "Incredible! You solved the most complex algebraic spell! Now for your final test: 'A magic potion needs x bottles. If 4x - 7 = 2x + 9, how many bottles?' This tests real-world magical application!",
+      "text": "Incredible! Now for your final test: 'A magic potion needs x bottles. If x + 3 = 7, how many bottles?' This tests real-world magical application!",
       "image-text": "A young magic dragon applying algebra to practical magical problems, with potion bottles and spell ingredients",
       "choices": [
         {
-          "text": "Answer '8 bottles' (4x - 2x = 9 + 7, so 2x = 16)",
+          "text": "Answer '4 bottles' (7 - 3)",
           "next": "magic_application_mastery"
         },
         {
-          "text": "Answer '2 bottles' (4×2-7=1)",
+          "text": "Answer '10 bottles' (7 + 3)",
           "next": "magic_wrong_answer_ending"
         }
       ]
     },
     "magic_application_mastery": {
-      "text": "Perfect! You've mastered practical algebraic magic! The Arcane Magic Dragon grants you the Magic Dragon Key. 'Your advanced spells will decode the most complex variable ciphers that protect the Shadow Calculators!'",
+      "text": "Perfect! You've mastered basic algebraic magic! The Arcane Magic Dragon grants you the Magic Dragon Key. 'Your simple but powerful spells will decode the variable ciphers that protect the Shadow Calculators!'",
       "image-text": "A confident young magic dragon receiving a mystical key, perfect advanced algebraic spells swirling around them",
       "collectItem": "Magic Dragon Key",
       "choices": [
@@ -1233,6 +1233,7 @@
     "ultimate_solution": {
       "text": "Perfect! You work through each part correctly. The Shadow Leader staggers back. 'Impossible! You've mastered ALL of mathematics!' The Dragon Eggs break free, glowing brightly!",
       "image-text": "Mathematical solutions appearing step by step as dragon eggs break free from their cages, glowing with restored power",
+      "collectItem": "Dragon Eggs",
       "choices": [
         {
           "text": "Take the eggs back to restore Mathematica",
@@ -1246,7 +1247,8 @@
       "choices": [
         {
           "text": "Celebrate your growth and transformation",
-          "next": "determine_final_form"
+          "next": "determine_final_form",
+          "item": "Dragon Eggs"
         }
       ]
     },

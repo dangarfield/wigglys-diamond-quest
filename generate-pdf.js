@@ -458,29 +458,49 @@ class StoryBookGenerator {
             });
         } else if (node.isEnd) {
             // Add decorative border for ending
-            let endingText = ''
             if (node.badEnding) {
                 this.pdf.setDrawColor(215, 30, 0); // Red color
-                endingText = 'Better luck next time!'
             } else {
                 this.pdf.setDrawColor(255, 215, 0); // Gold color
-                endingText = 'Thanks for playing!'
             }
 
             this.pdf.setLineWidth(1);
-            this.pdf.rect(this.margin, yPos - 5, this.contentWidth, 25);
+            this.pdf.rect(this.margin, yPos - 5, this.contentWidth, 35);
 
             this.pdf.setTextColor(0, 0, 0); // Black color
             this.pdf.setFontSize(16);
             const endFont = this.getChelseaMarketFont('bold');
             this.pdf.setFont(endFont.font, endFont.style);
-            this.pdf.text('THE END', this.pageWidth / 2, yPos + 8, { align: 'center' });
+            this.pdf.text(node.badEnding ? 'THE END' : 'CONGRATULATIONS', this.pageWidth / 2, yPos + 8, { align: 'center' });
             yPos += 15;
-            this.pdf.setTextColor(0, 0, 0); // Black color
-            this.pdf.setFontSize(12);
-            const thankFont = this.getChelseaMarketFont('normal');
-            this.pdf.setFont(thankFont.font, thankFont.style);
-            this.pdf.text('Thank you for playing!', this.pageWidth / 2, yPos, { align: 'center' });
+
+            // Add congratulations message for good endings
+            if (!node.badEnding) {
+                this.pdf.setTextColor(0, 0, 0); // Black color
+                this.pdf.setFontSize(18);
+                const congratsFont = this.getChelseaMarketFont('bold');
+                this.pdf.setFont(congratsFont.font, congratsFont.style);
+                // this.pdf.text('Congratulations!', this.pageWidth / 2, yPos, { align: 'center' });
+                // yPos += 8;
+
+                this.pdf.setFontSize(12);
+                const successFont = this.getChelseaMarketFont('normal');
+                this.pdf.setFont(successFont.font, successFont.style);
+                this.pdf.text('You have successfully completed the story!', this.pageWidth / 2, yPos, { align: 'center' });
+                yPos += 6;
+
+                // Count total good endings in the story
+                const goodEndingsCount = Object.values(this.story.nodes)
+                    .filter(n => n.isEnd && !n.badEnding).length;
+                this.pdf.text(`Have you found all ${goodEndingsCount} good endings?`, this.pageWidth / 2, yPos, { align: 'center' });
+                yPos += 8;
+            } else {
+                this.pdf.setTextColor(0, 0, 0); // Black color
+                this.pdf.setFontSize(12);
+                const thankFont = this.getChelseaMarketFont('normal');
+                this.pdf.setFont(thankFont.font, thankFont.style);
+                this.pdf.text('Better luck next time!', this.pageWidth / 2, yPos, { align: 'center' });
+            }
         }
     }
 

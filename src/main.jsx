@@ -1098,7 +1098,28 @@ class StoryGame {
     if (!node) return
 
     // Update story text
-    document.getElementById('storyText').textContent = node.text
+    const storyTextElement = document.getElementById('storyText')
+    storyTextElement.textContent = node.text
+
+    // Add item collection notification if applicable
+    if (node.collectItem) {
+      const itemNotification = document.createElement('div')
+      itemNotification.className = 'item-collection-notice'
+      itemNotification.style.cssText = `
+        margin-top: 15px;
+        padding: 10px 15px;
+        background: linear-gradient(135deg, rgba(159, 122, 234, 0.2) 0%, rgba(128, 90, 213, 0.2) 100%);
+        border: 1px solid rgba(159, 122, 234, 0.4);
+        border-radius: 8px;
+        color: white;
+        font-size: 14px;
+        font-weight: bold;
+        text-align: center;
+        animation: itemCollected 0.6s ease-out;
+      `
+      itemNotification.innerHTML = `🎒 You found: <span style="color: white;">${this.getItemDisplayName(node.collectItem)}</span>`
+      storyTextElement.appendChild(itemNotification)
+    }
 
     // Update or add image if available
     this.updateNodeImage(this.currentNode)
@@ -1134,7 +1155,10 @@ class StoryGame {
         if (choice.item) {
           const badge = document.createElement('span')
           badge.className = hasRequiredItem ? 'item-badge uses-badge' : 'item-badge requires-badge'
-          badge.textContent = hasRequiredItem ? `${this.getItemDisplayName(choice.item)} is used` : `${this.getItemDisplayName(choice.item)} is needed`
+          const itemName = this.getItemDisplayName(choice.item)
+          const isPlural = itemName.endsWith('s')
+          const verb = isPlural ? 'are' : 'is'
+          badge.textContent = hasRequiredItem ? `${itemName} ${verb} used` : `${itemName} ${verb} needed`
           buttonContent.appendChild(badge)
         }
 
@@ -1152,6 +1176,46 @@ class StoryGame {
         choicesContainer.appendChild(button)
       })
     } else if (node.isEnd) {
+      // Add congratulations message for good endings
+      if (!node.badEnding) {
+        // Count total good endings in the story
+        const allNodes = Object.values(this.story.nodes)
+        const goodEndings = allNodes.filter(n => n.isEnd && !n.badEnding)
+        const totalGoodEndings = goodEndings.length
+
+        const congratsMessage = document.createElement('div')
+        congratsMessage.className = 'congratulations-message'
+        congratsMessage.style.cssText = `
+          margin-top: 20px;
+          padding: 20px;
+          background: linear-gradient(135deg, rgba(72, 187, 120, 0.2) 0%, rgba(56, 161, 105, 0.2) 100%);
+          border: 2px solid rgba(72, 187, 120, 0.6);
+          border-radius: 12px;
+          color: white;
+          font-size: 16px;
+          font-weight: bold;
+          text-align: center;
+          animation: congratsAppear 0.8s ease-out;
+        `
+
+        let messageContent = `
+          🎉 <span style="color: #48bb78;">Congratulations!</span> 🎉<br>
+          <span style="font-size: 14px; margin-top: 10px; display: block;">You have successfully completed the story!</span>
+        `
+
+        // Add challenge message if there are multiple good endings
+        if (totalGoodEndings > 1) {
+          messageContent += `
+            <span style="font-size: 13px; color: #68d391; margin-top: 15px; display: block;">
+              🌟 Have you found all ${totalGoodEndings} good endings? 🌟
+            </span>
+          `
+        }
+
+        congratsMessage.innerHTML = messageContent
+        choicesContainer.appendChild(congratsMessage)
+      }
+
       // Show restart button for end nodes
       document.getElementById('restartBtn').style.display = 'block'
     }
@@ -1234,15 +1298,15 @@ class StoryGame {
     secretButton.style.color = 'rgba(255, 255, 255, 0.7)'
     secretButton.style.cursor = 'pointer'
     secretButton.style.transition = 'opacity 0.3s ease'
-    
+
     secretButton.addEventListener('mouseenter', () => {
       secretButton.style.opacity = '0.8'
     })
-    
+
     secretButton.addEventListener('mouseleave', () => {
       secretButton.style.opacity = '0.1'
     })
-    
+
     secretButton.addEventListener('click', () => {
       this.showOutcomeSelector(roll.outcomes, diceButton, outcomesContainer)
     })
@@ -1273,30 +1337,30 @@ class StoryGame {
     const existingOutcomes = outcomesContainer.querySelectorAll('.dice-outcome')
     existingOutcomes.forEach((outcomeDiv, index) => {
       const outcome = outcomes[index]
-      
+
       // Add hover effect to show they're clickable
       outcomeDiv.style.cursor = 'pointer'
       outcomeDiv.style.transition = 'all 0.3s ease'
-      
+
       outcomeDiv.addEventListener('mouseenter', () => {
         outcomeDiv.style.transform = 'translateX(5px)'
         outcomeDiv.style.backgroundColor = 'rgba(102, 126, 234, 0.1)'
       })
-      
+
       outcomeDiv.addEventListener('mouseleave', () => {
         outcomeDiv.style.transform = 'translateX(0)'
         outcomeDiv.style.backgroundColor = 'transparent'
       })
-      
+
       outcomeDiv.addEventListener('click', () => {
         // Simulate the selected outcome
         button.textContent = `🎯 Selected: ${outcome.range} - ${outcome.text}`
         this.speakText(outcome.text)
-        
+
         // Highlight the selected outcome
         outcomeDiv.style.backgroundColor = 'rgba(72, 187, 120, 0.3)'
         outcomeDiv.style.transform = 'scale(1.05)'
-        
+
         // Continue to next node after delay
         setTimeout(() => {
           this.makeChoice(outcome.next)
